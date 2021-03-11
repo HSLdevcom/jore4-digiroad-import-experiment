@@ -1,0 +1,12 @@
+*.zip
+*.pgdump
+*.shp
+*.shp.xml
+*.shx
+*.sbn
+*.sbx
+*.shn
+*.prj
+*.dbf
+*.cpg
+*.qix
