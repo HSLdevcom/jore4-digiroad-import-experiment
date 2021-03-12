@@ -34,3 +34,29 @@ echo "Restoring Digiroad links from ${PGDUMP_FILE}"
 
 pg_restore -v -Fc -j8 -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" \
  --no-security-labels --no-owner --no-privileges --clean --if-exists "${PGDUMP_FILE}"
+
+echo "Migrating Digiroad links to Hasura/SQL schema."
+
+psql --set=AUTOCOMMIT=off -v ON_ERROR_STOP=1 -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" <<-EOSQL
+    BEGIN;
+
+    UPDATE infrastructure_network.infrastructure_links AS dst
+    SET infrastructure_link_geog = src.geog
+    FROM import.dr_links AS src
+    WHERE src.digiroad_id = dst.infrastructure_link_digiroad_id;
+
+    -- A 'road' row is required to exist in infrastructure_network.infrastructure_network_types tables.
+    INSERT INTO infrastructure_network.infrastructure_links (infrastructure_link_geog, infrastructure_link_digiroad_id, infrastructure_network_type_id)
+    SELECT src.geog,
+        src.digiroad_id,
+        (
+            SELECT infrastructure_network_type_id
+            FROM infrastructure_network.infrastructure_network_types
+            WHERE infrastructure_network_type_name = 'road'
+        )
+    FROM import.dr_links src
+    LEFT OUTER JOIN infrastructure_network.infrastructure_links dst ON src.digiroad_id = dst.infrastructure_link_digiroad_id
+    WHERE dst.infrastructure_link_digiroad_id IS NULL;
+
+    COMMIT;
+EOSQL
