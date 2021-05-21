@@ -35,7 +35,26 @@ SELECT
     src.mtk_tie_lk,
     src.tien_kasvu,
     src.geom AS geom_orig
-FROM digiroad.dr_linkki_k src;
+FROM digiroad.dr_linkki_k src
+WHERE
+    src.linkkityyp IN (
+        1, -- Moottoritien osa
+        2, -- Moniajorataisen tien osa, joka ei ole moottoritie
+        3, -- Yksiajorataisen tien osa
+        4, -- Moottoriliikennetien osa
+        5, -- Kiertoliittymän osa
+        6, -- Ramppi
+    --  7, -- Levähdysalue
+    --  8, -- Pyörätie tai yhdistetty pyörätie ja jalkakäytävä
+    --  9, -- Jalankulkualueen osa, esim. kävelykatu tai jalkakäytävä
+    -- 10, -- Huolto- tai pelastustien osa
+       11, -- Liitännäisliikennealueen osa
+    -- 12, -- Ajopolku, maastoajoneuvolla ajettavissa olevat tiet
+    -- 13, -- Huoltoaukko moottoritiellä
+    -- 14, -- Erikoiskuljetusyhteys ilman puomia
+    -- 15, -- Erikoiskuljetusyhteys puomilla
+       21  -- Lossi
+    );
 
 UPDATE digiroad.dr_linkki_out SET geom_orig = ST_SetSRID(geom_orig, 3067);
 
