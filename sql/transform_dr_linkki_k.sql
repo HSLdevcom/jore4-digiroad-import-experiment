@@ -52,3 +52,13 @@ ALTER TABLE digiroad.dr_linkki_out DROP COLUMN geom_orig;
 -- Replace input table with transformed output.
 DROP TABLE digiroad.dr_linkki_k;
 ALTER TABLE digiroad.dr_linkki_out RENAME TO dr_linkki_k;
+
+-- Add data integrity constraints.
+ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN link_id SET NOT NULL;
+ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN segm_id SET NOT NULL;
+ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN kuntakoodi SET NOT NULL;
+ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN linkkityyp SET NOT NULL;
+ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN ajosuunta SET NOT NULL;
+
+ALTER TABLE digiroad.dr_linkki_k ADD CONSTRAINT dr_linkki_k_pkey PRIMARY KEY (gid);
+ALTER TABLE digiroad.dr_linkki_k ADD CONSTRAINT uk_dr_linkki_k_segm_id UNIQUE (segm_id);
