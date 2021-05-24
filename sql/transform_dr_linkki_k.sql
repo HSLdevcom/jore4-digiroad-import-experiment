@@ -34,6 +34,13 @@ SELECT
     src.geom_lahde,
     src.mtk_tie_lk,
     src.tien_kasvu,
+
+    -- custom segment order
+    row_number() OVER (
+        PARTITION BY src.link_id
+        ORDER BY src.segm_id ASC
+     )::int AS segm_order,
+
     src.geom
 FROM :schema.dr_linkki_k src
 -- Municipality filtering is done into `dr_link_id` table.
