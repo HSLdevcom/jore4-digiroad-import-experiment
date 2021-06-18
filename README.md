@@ -27,3 +27,15 @@ Thirdly, a pg_dump file created in previous step can be imported into a database
 ```
 
 The import script can be given database connection details as arguments.
+
+## Target database initialisation
+
+Before importing pg_dump file into target database the database must be added postgis extension. E.g. the following commands create database and user named "digiroad" and add postgis extension to the newly-created database. Remember to set up passwords as you wish.
+
+```
+CREATE DATABASE digiroad;
+CREATE USER digiroad;
+GRANT ALL PRIVILEGES ON DATABASE digiroad TO digiroad;
+\c digiroad
+CREATE EXTENSION postgis;
+```
