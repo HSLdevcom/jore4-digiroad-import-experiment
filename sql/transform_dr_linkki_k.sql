@@ -54,6 +54,18 @@ WHERE
     -- 14, -- Erikoiskuljetusyhteys ilman puomia
     -- 15, -- Erikoiskuljetusyhteys puomilla
        21  -- Lossi
+    )
+    -- Filter in nine HSL member municipalities.
+    AND src.kuntakoodi IN (
+       49, -- Espoo,
+       91, -- Helsinki
+      235, -- Kauniainen
+      245, -- Kerava
+      257, -- Kirkkonummi
+      753, -- Sipoo
+      755, -- Siuntio
+      858, -- Tuusula
+       92  -- Vantaa
     );
 
 UPDATE digiroad.dr_linkki_out SET geom_orig = ST_SetSRID(geom_orig, 3067);
