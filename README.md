@@ -11,19 +11,19 @@ This repository provides scripts to download Digiroad shapefiles for road geomet
 Initially, you need to build the Docker image containing PostGIS database with:
 
 ```
-./build-tool-images.sh
+./build_docker_image.sh
 ```
 
 Secondly, Digiroad shapefile can be downloaded and processed into a pg_dump file with:
 
 ```
-./create-digiroad-pgdump.sh
+./create_digiroad_pgdump.sh
 ```
 
 Thirdly, a pg_dump file created in previous step can be imported into a database with:
 
 ```
-./import-digiroad-links.sh
+./import_digiroad_links.sh
 ```
 
 The import script can be given database connection details as arguments.
