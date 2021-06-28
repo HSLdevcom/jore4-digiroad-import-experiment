@@ -6,10 +6,10 @@ set -euxo pipefail
 # Source common environment variables.
 source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 
-SHP_URL="https://aineistot.vayla.fi/digiroad/latest/Maakuntajako_DIGIROAD_K_EUREF-FIN/UUSIMAA.zip"
+SHP_URL="https://aineistot.vayla.fi/digiroad/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/UUSIMAA.zip"
 
 DOWNLOAD_TARGET_DIR="${WORK_DIR}/zip"
-DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/UUSIMAA_K.zip"
+DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/UUSIMAA_R.zip"
 
 # Load zip file containing Digiroad shapefiles if it does not exist.
 if [[ ! -f "$DOWNLOAD_TARGET_FILE" ]]; then
@@ -20,7 +20,7 @@ fi
 SHP_AREAS="ITA-UUSIMAA UUSIMAA_1 UUSIMAA_2"
 SHP_FILE_DIR="${WORK_DIR}/shp"
 
-LINK_BASENAME="DR_LINKKI_K"
+LINK_BASENAME="DR_LINKKI"
 LINK_FILENAME="${LINK_BASENAME}.shp"
 
 for SHP_AREA in $SHP_AREAS
@@ -45,7 +45,7 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$
 # Create digiroad import schema into database.
 docker exec "${DOCKER_CONTAINER}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_IMPORT_SCHEMA_NAME};\""
 
-TABLE_REF="${DB_IMPORT_SCHEMA_NAME}.dr_linkki_k"
+TABLE_REF="${DB_IMPORT_SCHEMA_NAME}.dr_linkki"
 SHP2PGSQL="shp2pgsql -D -i -s 3067 -S -N abort -W $SHP_ENCODING"
 
 # Only creates a table based on one shapefile. Relies on `SHP_AREA` variable that is declared previously.
@@ -58,7 +58,7 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tm
 
 # Process road geometries and filtering properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki_k.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Create separate schema for exporting data in MBTiles format.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \

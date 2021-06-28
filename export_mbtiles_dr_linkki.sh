@@ -6,7 +6,7 @@ set -euxo pipefail
 # Source common environment variables.
 source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 
-DB_TABLE_NAME="dr_linkki_k"
+DB_TABLE_NAME="dr_linkki"
 
 MBTILES_MAX_ZOOM_LEVEL=16
 MBTILES_LAYER_NAME=$DB_TABLE_NAME
