@@ -18,7 +18,7 @@ mkdir -p ${WORK_DIR}/pgdump
 
 # Export pg_dump file.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${WORK_DIR}/pgdump/:/tmp/pgdump $DOCKER_IMAGE \
-  sh -c "$PG_DUMP -Fc --clean -f /tmp/pgdump/${PGDUMP_OUTPUT} --table ${DB_SCHEMA_NAME}.dr_linkki_k"
+  sh -c "$PG_DUMP -Fc --clean -f /tmp/pgdump/${PGDUMP_OUTPUT} --table ${DB_IMPORT_SCHEMA_NAME}.dr_linkki_k"
 
 # Stop Docker container.
 docker stop $DOCKER_CONTAINER

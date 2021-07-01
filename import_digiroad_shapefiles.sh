@@ -42,10 +42,10 @@ docker run --name $DOCKER_CONTAINER -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKE
 # Wait for PostgreSQL to start.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
 
-# Create digiroad schema into database.
-docker exec "${DOCKER_CONTAINER}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_SCHEMA_NAME};\""
+# Create digiroad import schema into database.
+docker exec "${DOCKER_CONTAINER}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_IMPORT_SCHEMA_NAME};\""
 
-TABLE_REF="${DB_SCHEMA_NAME}.dr_linkki_k"
+TABLE_REF="${DB_IMPORT_SCHEMA_NAME}.dr_linkki_k"
 SHP2PGSQL="shp2pgsql -D -i -s 3067 -S -N abort -W $SHP_ENCODING"
 
 # Only creates a table based on one shapefile. Relies on `SHP_AREA` variable that is declared previously.
@@ -58,7 +58,11 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tm
 
 # Process road geometries and filtering properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki_k.sql -v schema=${DB_SCHEMA_NAME}"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki_k.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+
+# Create separate schema for exporting data in MBTiles format.
+docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/create_mbtiles_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_MBTILES_SCHEMA_NAME}"
 
 # Stop Docker container.
 docker stop $DOCKER_CONTAINER

@@ -30,6 +30,12 @@ A pg_dump file containing imported and processed data from shapefiles can be exp
 
 At the moment, there is no specific use case for the dump generated with the above command. However, it is planned that a separate schema will be generated later that will contain the infrastructure tables and columns used in JORE4 database.
 
+An MBTiles files containing road links can be exported with (given that Digiroad material has already been imported):
+
+```
+./export_mbtiles_dr_linkki.sh
+```
+
 ## Target database initialisation
 
 Before importing pg_dump file into target database the database must be added postgis extension. E.g. the following commands create database and user named "digiroad" and add postgis extension to the newly-created database. Remember to set up passwords as you wish.
