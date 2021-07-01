@@ -53,7 +53,7 @@ docker run -it --rm --link "${DOCKER_CONTAINER_NAME}":postgres $DOCKER_IMAGE_NAM
 
 SCHEMA_NAME="digiroad"
 TABLE_REF="${SCHEMA_NAME}.dr_linkki_k"
-PGDUMP_OUTPUT="dr_links_$(date "+%Y-%m-%d").pgdump"
+PGDUMP_OUTPUT="digiroad_k_$(date "+%Y-%m-%d").pgdump"
 SHP2PGSQL="shp2pgsql -D -i -s 3067 -N abort -W UTF-8"
 
 docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PSQL -nt -c 'CREATE SCHEMA ${SCHEMA_NAME};'"

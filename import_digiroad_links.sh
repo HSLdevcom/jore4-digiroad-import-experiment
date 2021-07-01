@@ -21,7 +21,7 @@ PGDUMP_DIR="$(pwd)/workdir/pgdump"
 set -eu
 
 # Find pg_dump file having date suffix for current day.
-PGDUMP_FILE_PATTERN="dr_links_$(date "+%Y-%m-%d").pgdump"
+PGDUMP_FILE_PATTERN="digiroad_k_$(date "+%Y-%m-%d").pgdump"
 PGDUMP_FILE=$(find ${PGDUMP_DIR} -iname "${PGDUMP_FILE_PATTERN}")
 
 if [[ ! -f "${PGDUMP_FILE}" ]]; then
