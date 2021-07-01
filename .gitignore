@@ -10,3 +10,5 @@
 *.dbf
 *.cpg
 *.qix
+*.geojson
+*.mbtiles
