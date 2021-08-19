@@ -1,15 +1,16 @@
-FROM postgis/postgis:13-master
+FROM pgrouting/pgrouting:13-3.1-3.2.0
 
 ENV TZ Europe/Helsinki
 ENV LANG fi_FI.UTF-8
 ENV LANGUAGE fi_FI.UTF-8
 ENV LC_ALL fi_FI.UTF-8
 
-# Update system and install required packages for ogr2ogr and tippecanoe.
+# Update system and install required packages for shp2pgsql, ogr2ogr and tippecanoe.
 RUN set -ex \
  && apt-get update \
  && apt-get -y upgrade \
  && apt install -y \
+    postgis \
     gdal-bin \
     build-essential \
     git \
