@@ -37,7 +37,7 @@ DOCKER_CONTAINER_NAME="jore4-postgis-digiroad"
 
 # Remove possibly running/existing Docker container.
 docker kill $DOCKER_CONTAINER_NAME &> /dev/null || true
-docker rm $DOCKER_CONTAINER_NAME &> /dev/null || true
+docker rm -v $DOCKER_CONTAINER_NAME &> /dev/null || true
 
 # Start Docker container.
 docker run --name $DOCKER_CONTAINER_NAME -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE_NAME
