@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS digiroad.dr_linkki_out;
+DROP TABLE IF EXISTS :schema.dr_linkki_out;
 
-CREATE TABLE digiroad.dr_linkki_out AS
+CREATE TABLE :schema.dr_linkki_out AS
 SELECT
     src.gid,
     src.link_id,
@@ -35,7 +35,7 @@ SELECT
     src.mtk_tie_lk,
     src.tien_kasvu,
     src.geom AS geom_orig
-FROM digiroad.dr_linkki_k src
+FROM :schema.dr_linkki_k src
 WHERE
     src.linkkityyp IN (
         1, -- Moottoritien osa
@@ -69,28 +69,28 @@ WHERE
        92  -- Vantaa
     );
 
-UPDATE digiroad.dr_linkki_out SET geom_orig = ST_SetSRID(geom_orig, 3067);
+UPDATE :schema.dr_linkki_out SET geom_orig = ST_SetSRID(geom_orig, 3067);
 
-SELECT AddGeometryColumn('digiroad', 'dr_linkki_out', 'geom', 3067, 'LINESTRING', 3);
-UPDATE digiroad.dr_linkki_out SET geom = ST_Force3D(geom_orig);
-ALTER TABLE digiroad.dr_linkki_out ALTER COLUMN geom SET NOT NULL;
+SELECT AddGeometryColumn(:'schema', 'dr_linkki_out', 'geom', 3067, 'LINESTRING', 3);
+UPDATE :schema.dr_linkki_out SET geom = ST_Force3D(geom_orig);
+ALTER TABLE :schema.dr_linkki_out ALTER COLUMN geom SET NOT NULL;
 
-ALTER TABLE digiroad.dr_linkki_out ADD COLUMN geog geography(LINESTRINGZ, 4326);
-UPDATE digiroad.dr_linkki_out SET geog = Geography(ST_Transform(geom, 4326));
-ALTER TABLE digiroad.dr_linkki_out ALTER COLUMN geog SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_out ADD COLUMN geog geography(LINESTRINGZ, 4326);
+UPDATE :schema.dr_linkki_out SET geog = Geography(ST_Transform(geom, 4326));
+ALTER TABLE :schema.dr_linkki_out ALTER COLUMN geog SET NOT NULL;
 
-ALTER TABLE digiroad.dr_linkki_out DROP COLUMN geom_orig;
+ALTER TABLE :schema.dr_linkki_out DROP COLUMN geom_orig;
 
 -- Replace input table with transformed output.
-DROP TABLE digiroad.dr_linkki_k;
-ALTER TABLE digiroad.dr_linkki_out RENAME TO dr_linkki_k;
+DROP TABLE :schema.dr_linkki_k;
+ALTER TABLE :schema.dr_linkki_out RENAME TO dr_linkki_k;
 
 -- Add data integrity constraints.
-ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN link_id SET NOT NULL;
-ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN segm_id SET NOT NULL;
-ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN kuntakoodi SET NOT NULL;
-ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN linkkityyp SET NOT NULL;
-ALTER TABLE digiroad.dr_linkki_k ALTER COLUMN ajosuunta SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN link_id SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN segm_id SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN kuntakoodi SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN linkkityyp SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN ajosuunta SET NOT NULL;
 
-ALTER TABLE digiroad.dr_linkki_k ADD CONSTRAINT dr_linkki_k_pkey PRIMARY KEY (gid);
-ALTER TABLE digiroad.dr_linkki_k ADD CONSTRAINT uk_dr_linkki_k_segm_id UNIQUE (segm_id);
+ALTER TABLE :schema.dr_linkki_k ADD CONSTRAINT dr_linkki_k_pkey PRIMARY KEY (gid);
+ALTER TABLE :schema.dr_linkki_k ADD CONSTRAINT uk_dr_linkki_k_segm_id UNIQUE (segm_id);

@@ -57,8 +57,8 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tm
   sh -c "for SHP_AREA in ${SHP_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SHP_AREA}/${LINK_FILENAME} $TABLE_REF | $PSQL -v ON_ERROR_STOP=1; done"
 
 # Process road geometries and filtering properties in database.
-docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql ${DOCKER_IMAGE} \
-  sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki_k.sql"
+docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki_k.sql -v schema=${DB_SCHEMA_NAME}"
 
 # Stop Docker container.
 docker stop $DOCKER_CONTAINER
