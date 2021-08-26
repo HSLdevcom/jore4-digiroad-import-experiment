@@ -56,7 +56,7 @@ TABLE_REF="${SCHEMA_NAME}.dr_linkki_k"
 PGDUMP_OUTPUT="digiroad_k_$(date "+%Y-%m-%d").pgdump"
 SHP2PGSQL="shp2pgsql -D -i -s 3067 -S -N abort -W UTF-8"
 
-docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PSQL -nt -c 'CREATE SCHEMA ${SCHEMA_NAME};'"
+docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${SCHEMA_NAME};\""
 
 echo "Creating database table..."
 
