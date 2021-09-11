@@ -46,7 +46,8 @@ docker kill $DOCKER_CONTAINER &> /dev/null || true
 docker rm -v $DOCKER_CONTAINER &> /dev/null || true
 
 # Create and start new Docker container.
-docker run --name $DOCKER_CONTAINER -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
+# Open port 5432 so ogr2ogr can access the db and we don't have to build an own docker image.
+docker run -p 127.0.0.1:5432:5432/tcp --name $DOCKER_CONTAINER -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
 
 # Wait for PostgreSQL to start.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
@@ -69,6 +70,9 @@ do
     docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
+
+# Import fixup layer if fixup package exists.
+[ -f fixup/fixup.gpkg ] && ogr2ogr -append -f PostgreSQL "PG:host=localhost user=digiroad dbname=digiroad schemas=digiroad" fixup/fixup.gpkg -nln dr_linkki
 
 # Process road geometries and filtering properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
