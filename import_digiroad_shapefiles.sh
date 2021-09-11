@@ -70,6 +70,12 @@ do
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
 
+# Import "fixup" layer if the fixup file (GeoPackage) exists.
+if [ -f fixup/digiroad/fixup.gpkg ]; then
+  docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
+    sh -c "exec ogr2ogr -f PostgreSQL \"PG:host=\$POSTGRES_PORT_5432_TCP_ADDR port=\$POSTGRES_PORT_5432_TCP_PORT dbname=$DB_NAME user=digiroad schemas=$DB_IMPORT_SCHEMA_NAME\" -append /tmp/gpkg/fixup.gpkg -nln dr_linkki fixup"
+fi
+
 # Process road geometries and filtering properties in database.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki.sql -v schema=${DB_IMPORT_SCHEMA_NAME} -v sql_dir=/tmp/sql"
