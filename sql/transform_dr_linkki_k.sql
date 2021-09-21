@@ -55,10 +55,11 @@ WHERE
     -- 15, -- Erikoiskuljetusyhteys puomilla
        21  -- Lossi
     )
-    -- Filter in nine HSL member municipalities.
+    -- Filter in municipalities relevant to HSL.
     AND src.kuntakoodi IN (
        49, -- Espoo,
        91, -- Helsinki
+      186, -- Järvenpää
       235, -- Kauniainen
       245, -- Kerava
       257, -- Kirkkonummi
