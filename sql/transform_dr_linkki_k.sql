@@ -34,7 +34,7 @@ SELECT
     src.geom_lahde,
     src.mtk_tie_lk,
     src.tien_kasvu,
-    src.geom AS geom_orig
+    src.geom
 FROM :schema.dr_linkki_k src
 WHERE
     src.linkkityyp IN (
@@ -68,18 +68,6 @@ WHERE
       858, -- Tuusula
        92  -- Vantaa
     );
-
-UPDATE :schema.dr_linkki_out SET geom_orig = ST_SetSRID(geom_orig, 3067);
-
-SELECT AddGeometryColumn(:'schema', 'dr_linkki_out', 'geom', 3067, 'LINESTRING', 3);
-UPDATE :schema.dr_linkki_out SET geom = ST_Force3D(geom_orig);
-ALTER TABLE :schema.dr_linkki_out ALTER COLUMN geom SET NOT NULL;
-
-ALTER TABLE :schema.dr_linkki_out ADD COLUMN geog geography(LINESTRINGZ, 4326);
-UPDATE :schema.dr_linkki_out SET geog = Geography(ST_Transform(geom, 4326));
-ALTER TABLE :schema.dr_linkki_out ALTER COLUMN geog SET NOT NULL;
-
-ALTER TABLE :schema.dr_linkki_out DROP COLUMN geom_orig;
 
 -- Replace input table with transformed output.
 DROP TABLE :schema.dr_linkki_k;

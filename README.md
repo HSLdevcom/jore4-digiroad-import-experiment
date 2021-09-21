@@ -4,7 +4,7 @@
 
 This repository provides scripts to download Digiroad shapefiles for road geometries and make transformations required by JORE4 components/services.
 
-Firstly, Digiroad links and other related information is downloaded and imported from shapefiles into a PostGIS database (contained in a Docker container) by executing an import script. Within import process and after downloading is finished, the data is further processed in the database. After import and processing stage, the data can be exported from the database in a couple of formats relevant to JORE4 services.
+Firstly, Digiroad links and other related information is downloaded and imported from shapefiles into a PostGIS database (contained in a Docker container) by executing `import_digiroad_shapefiles.sh` script. Within script execution the data is further processed in the database after which the data can be exported in a couple of formats relevant to JORE4 services.
 
 The database is used only locally for processing data. Each invocation of main import script will recreate the Docker container and reset the state of database.
 
@@ -22,19 +22,13 @@ Secondly, Digiroad shapefiles are downloaded and imported into PostGIS database 
 ./import_digiroad_shapefiles.sh
 ```
 
-A pg_dump file containing all data can be exported with (given that Digiroad material has already been imported):
+A pg_dump file containing imported and processed data from shapefiles can be exported with (given that Digiroad material has already been imported):
 
 ```
 ./export_pgdump.sh
 ```
 
-The exported pg_dump can be imported into a target database with:
-
-```
-./import_links_from_pgdump.sh
-```
-
-The above import script is given database connection details as arguments.
+At the moment, there is no specific use case for the dump generated with the above command. However, it is planned that a separate schema will be generated later that will contain the infrastructure tables and columns used in JORE4 database.
 
 ## Target database initialisation
 
