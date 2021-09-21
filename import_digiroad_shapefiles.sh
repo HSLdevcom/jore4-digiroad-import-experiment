@@ -71,8 +71,11 @@ do
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
 
-# Import fixup layer if fixup package exists.
-[ -f fixup/fixup.gpkg ] && ogr2ogr -append -f PostgreSQL "PG:host=localhost user=digiroad dbname=digiroad schemas=digiroad" fixup/fixup.gpkg -nln dr_linkki
+# Import fixup layer and removed links layer if fixup package exists.
+if [ -f fixup/fixup.gpkg ]; then
+  ogr2ogr -append -f PostgreSQL "PG:host=localhost user=digiroad dbname=digiroad schemas=digiroad" fixup/fixup.gpkg -nln dr_linkki fixup
+  ogr2ogr -append -f PostgreSQL "PG:host=localhost user=digiroad dbname=digiroad schemas=digiroad" fixup/fixup.gpkg -nln removed_links removed
+fi
 
 # Process road geometries and filtering properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
@@ -89,6 +92,10 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql
 # Process turn restrictions and filter properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_kaantymisrajoitus.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+
+# Remove links that have been marked "removed" in the fixup package
+docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/remove_removed_links.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Create routing schema containing pgRouting topology.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
