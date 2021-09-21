@@ -70,10 +70,15 @@ do
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
 
-# Import "fixup" layer if the fixup file (GeoPackage) exists.
+# Import "fixup" and "removed-links" layers from Digiroad fixup file if it exists.
 if [ -f fixup/digiroad/fixup.gpkg ]; then
+  OGR2OGR="exec ogr2ogr -f PostgreSQL \"PG:host=\$POSTGRES_PORT_5432_TCP_ADDR port=\$POSTGRES_PORT_5432_TCP_PORT dbname=$DB_NAME user=digiroad schemas=$DB_IMPORT_SCHEMA_NAME\""
+
   docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
-    sh -c "exec ogr2ogr -f PostgreSQL \"PG:host=\$POSTGRES_PORT_5432_TCP_ADDR port=\$POSTGRES_PORT_5432_TCP_PORT dbname=$DB_NAME user=digiroad schemas=$DB_IMPORT_SCHEMA_NAME\" -append /tmp/gpkg/fixup.gpkg -nln dr_linkki fixup"
+    sh -c "$OGR2OGR -append /tmp/gpkg/fixup.gpkg -nln dr_linkki fixup"
+
+  docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
+    sh -c "$OGR2OGR -append /tmp/gpkg/fixup.gpkg -nln removed_links removed"
 fi
 
 # Process road geometries and filtering properties in database.
@@ -91,6 +96,10 @@ docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sq
 # Process turn restrictions and filter properties in database.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_kaantymisrajoitus.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+
+# Remove Digiroad links that were marked for removal in "removed" layer in the fixup file (Geopackage).
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/remove_removed_links.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Create separate schema for exporting data in MBTiles format.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
