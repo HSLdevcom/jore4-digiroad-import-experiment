@@ -5,6 +5,7 @@ SELECT
     src.gid,
     src.link_id,
     src.link_mmlid,
+    src.segm_id,
     src.kuntakoodi,
     src.hallinn_lk,
     src.toiminn_lk,
@@ -34,7 +35,9 @@ SELECT
     src.mtk_tie_lk,
     src.tien_kasvu,
     src.geom
-FROM :schema.dr_linkki src
+FROM :schema.dr_linkki_k src
+-- Municipality filtering is done into `dr_link_id` table.
+INNER JOIN :schema.dr_link_id l USING (link_id)
 WHERE
     src.linkkityyp IN (
         1, -- Moottoritien osa
@@ -53,30 +56,19 @@ WHERE
     -- 14, -- Erikoiskuljetusyhteys ilman puomia
     -- 15, -- Erikoiskuljetusyhteys puomilla
        21  -- Lossi
-    )
-    -- Filter in municipalities relevant to HSL.
-    AND src.kuntakoodi IN (
-       49, -- Espoo,
-       91, -- Helsinki
-      186, -- Järvenpää
-      235, -- Kauniainen
-      245, -- Kerava
-      257, -- Kirkkonummi
-      753, -- Sipoo
-      755, -- Siuntio
-      858, -- Tuusula
-       92  -- Vantaa
     );
 
 -- Replace input table with transformed output.
-DROP TABLE :schema.dr_linkki;
-ALTER TABLE :schema.dr_linkki_out RENAME TO dr_linkki;
+DROP TABLE :schema.dr_linkki_k;
+ALTER TABLE :schema.dr_linkki_out RENAME TO dr_linkki_k;
 
 -- Add data integrity constraints.
-ALTER TABLE :schema.dr_linkki ALTER COLUMN link_id SET NOT NULL;
-ALTER TABLE :schema.dr_linkki ALTER COLUMN kuntakoodi SET NOT NULL;
-ALTER TABLE :schema.dr_linkki ALTER COLUMN linkkityyp SET NOT NULL;
-ALTER TABLE :schema.dr_linkki ALTER COLUMN ajosuunta SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN link_id SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN segm_id SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN kuntakoodi SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN linkkityyp SET NOT NULL;
+ALTER TABLE :schema.dr_linkki_k ALTER COLUMN ajosuunta SET NOT NULL;
 
-ALTER TABLE :schema.dr_linkki ADD CONSTRAINT dr_linkki_pkey PRIMARY KEY (gid);
-ALTER TABLE :schema.dr_linkki ADD CONSTRAINT uk_dr_linkki_link_id UNIQUE (link_id);
+ALTER TABLE :schema.dr_linkki_k ADD CONSTRAINT dr_linkki_k_pkey PRIMARY KEY (gid);
+ALTER TABLE :schema.dr_linkki_k ADD CONSTRAINT uk_dr_linkki_k_segm_id UNIQUE (segm_id);
+ALTER TABLE :schema.dr_linkki_k ADD CONSTRAINT fk_dr_linkki_k_link_id FOREIGN KEY (link_id) REFERENCES :schema.dr_link_id (link_id);

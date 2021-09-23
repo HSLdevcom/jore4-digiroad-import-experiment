@@ -6,12 +6,12 @@ set -euxo pipefail
 # Source common environment variables.
 source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 
-SHP_URL="https://aineistot.vayla.fi/digiroad/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/UUSIMAA.zip"
-
 AREA="UUSIMAA"
 
+SHP_URL="https://aineistot.vayla.fi/digiroad/latest/Maakuntajako_DIGIROAD_K_EUREF-FIN/${AREA}.zip"
+
 DOWNLOAD_TARGET_DIR="${WORK_DIR}/zip"
-DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/${AREA}_R.zip"
+DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/${AREA}_K.zip"
 
 # Load zip file containing Digiroad shapefiles if it does not exist.
 if [[ ! -f "$DOWNLOAD_TARGET_FILE" ]]; then
@@ -20,7 +20,7 @@ if [[ ! -f "$DOWNLOAD_TARGET_FILE" ]]; then
 fi
 
 SUB_AREAS="ITA-UUSIMAA UUSIMAA_1 UUSIMAA_2"
-SUB_AREA_SHP_TYPES="DR_LINKKI DR_KAANTYMISRAJOITUS"
+SUB_AREA_SHP_TYPES="DR_LINKKI_K DR_KAANTYMISRAJOITUS_K"
 SHP_FILE_DIR="${WORK_DIR}/shp/${AREA}"
 
 for SUB_AREA in $SUB_AREAS
@@ -70,9 +70,13 @@ do
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
 
+# Create dr_link_id table in database.
+docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/create_table_dr_link_id.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+
 # Process road geometries and filtering properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki_k.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Load DR_PYSAKKI shapefile into database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
@@ -84,7 +88,7 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql
 
 # Process turn restrictions and filter properties in database.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_kaantymisrajoitus.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_kaantymisrajoitus_k.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Create separate schema for exporting data in MBTiles format.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
