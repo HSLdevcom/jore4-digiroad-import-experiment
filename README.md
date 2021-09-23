@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides scripts to download Digiroad shapefiles for road geometries and make transformations required by JORE4 components/services.
+This repository provides scripts to download Digiroad shapefiles for road and stop geometries and make transformations required by JORE4 components/services.
 
 Firstly, Digiroad links and other related information is downloaded and imported from shapefiles into a PostGIS database (contained in a Docker container) by executing `import_digiroad_shapefiles.sh` script. Within script execution the data is further processed in the database after which the data can be exported in a couple of formats relevant to JORE4 services.
 
@@ -34,6 +34,12 @@ An MBTiles files containing road links can be exported with (given that Digiroad
 
 ```
 ./export_mbtiles_dr_linkki.sh
+```
+
+An MBTiles files containing stops can be exported with (given that Digiroad material has already been imported):
+
+```
+./export_mbtiles_dr_pysakki.sh
 ```
 
 ## Target database initialisation
