@@ -77,6 +77,15 @@ As a result, two database dump files will be created: one in SQL format, named
 named `digiroad_r_routing_<date>.pgdump`. Both files will be written into
 `workdir/pgdump` subdirectory.
 
+The SQL dump artifact can be uploaded to Azure Blob Storage with the command
+below. An active Azure subscription associated with JORE4 is required. Azure CLI
+is also required to be installed. In addition, the SQL dump file needs to be
+created on current day.
+
+```
+./upload_routing_dump_to_azure.sh
+```
+
 A couple of toc list (table of contents) files are generated as sidecars to the
 custom-format dump file. A toc file may be passed as an argument to `pg_restore`
 command. The toc files can be used to selectively apply what is being restored
