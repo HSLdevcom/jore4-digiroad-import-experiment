@@ -36,7 +36,21 @@ A pg_dump file containing links, stops and routing topology can be exported with
 ./export_pgdump_routing.sh
 ```
 
-An MBTiles files containing road links can be exported with (given that Digiroad material has already been imported):
+A sql file containing links, stops and routing topology can be exported with
+(given that Digiroad material has already been imported):
+
+```
+./export_routing_as_sql.sh
+```
+
+Upload digiroad exported artifacts to Azure blob storage:
+
+```
+./upload_to_azure.sh
+```
+
+An MBTiles files containing road links can be exported with (given that Digiroad
+material has already been imported):
 
 ```
 ./export_mbtiles_dr_linkki.sh

@@ -1,0 +1,30 @@
+name: Test import-export flow
+
+on:
+  push:
+  pull_request:
+    branches: [master]
+
+jobs:
+  test-routing:
+    name:
+      Verifies whether routing data can be imported and exported from Digiroad
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: ./build_docker_image.sh
+
+      - name: Import from digiroad
+        run: ./import_digiroad_shapefiles.sh
+
+      - name: Export routing data as SQL
+        run: ./export_routing_as_sql.sh
+
+      - name: Validating that the exported routing data existing and is valid
+        run: |
+          FILENAME=./workdir/output/digiroad_r_routing_$(date "+%Y-%m-%d").sql
+          [ "$(sed -n 2,2p "$FILENAME")" == "-- PostgreSQL database dump" ]
