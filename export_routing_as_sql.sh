@@ -10,7 +10,7 @@ source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 docker start $DOCKER_CONTAINER
 
 # Wait for PostgreSQL to start.
-docker run -it --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
+docker exec "${DOCKER_CONTAINER}" sh -c "$PG_WAIT_LOCAL"
 
 # Export sql file.
 SQL_OUTPUT="digiroad_r_routing_$(date "+%Y-%m-%d").sql"
