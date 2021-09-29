@@ -41,7 +41,7 @@ docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_OUTPUT_DIR}/:
 
 rm -f ${GEOJSON_OUTPUT_DIR}/$GEOJSON_OUTPUT_FILE || true
 docker run -it --rm -v ${SHP_OUTPUT_DIR}/:/tmp/shp -v ${GEOJSON_OUTPUT_DIR}:/tmp/geojson ${DOCKER_IMAGE} \
-  sh -c "ogr2ogr --config SHAPE_ENCODING UTF-8 -f GeoJSON -lco COORDINATE_PRECISION=7 /tmp/geojson/$GEOJSON_OUTPUT_FILE /tmp/shp/$SHP_OUTPUT_FILE"
+  sh -c "ogr2ogr --config SHAPE_ENCODING $SHP_ENCODING -f GeoJSON -lco COORDINATE_PRECISION=7 /tmp/geojson/$GEOJSON_OUTPUT_FILE /tmp/shp/$SHP_OUTPUT_FILE"
 
 # Convert from GeoJSON to MBTiles.
 

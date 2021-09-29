@@ -6,9 +6,9 @@ set -euxo pipefail
 # Source common environment variables.
 source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 
-SHP_URL="https://aineistot.vayla.fi/digiroad/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/UUSIMAA.zip"
-
 AREA="UUSIMAA"
+
+SHP_URL="https://aineistot.vayla.fi/digiroad/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/${AREA}.zip"
 
 DOWNLOAD_TARGET_DIR="${WORK_DIR}/zip"
 DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/${AREA}_R.zip"
