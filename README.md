@@ -22,6 +22,12 @@ Secondly, Digiroad shapefiles are downloaded and imported into PostGIS database 
 ./import_digiroad_shapefiles.sh
 ```
 
+Export a json file containing infrastructure link data using the jore4 data schema:
+
+```
+./export_infra_network.sh
+```
+
 A pg_dump file containing imported and processed data from shapefiles can be exported with (given that Digiroad material has already been imported):
 
 ```
@@ -29,6 +35,12 @@ A pg_dump file containing imported and processed data from shapefiles can be exp
 ```
 
 At the moment, there is no specific use case for the dump generated with the above command. However, it is planned that a separate schema will be generated later that will contain the infrastructure tables and columns used in JORE4 database.
+
+Upload the generated dumps to Azure blob storage:
+
+```
+./upload_dumps_to_azure.sh
+```
 
 An MBTiles files containing road links can be exported with (given that Digiroad material has already been imported):
 
