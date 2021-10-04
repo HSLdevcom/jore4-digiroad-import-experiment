@@ -12,3 +12,6 @@
 *.qix
 *.geojson
 *.mbtiles
+workdir
+docker/*
+!docker/docker-compose.custom.yml

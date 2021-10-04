@@ -49,6 +49,30 @@ A pg_dump file containing links, stops and routing topology can be exported with
 ./export_pgdump_routing.sh
 ```
 
+To export a CSV containing intrastructure network links' data, run:
+
+```
+./export_infra_network_csv.sh
+```
+
+You may import this CSV data into an existing database, using the command below.
+Note that the `infrastructure_network.infrastructure_link` table schema has to
+exist in the target database. Also note that the importer user must have
+read-write access to this table.
+
+The script will interactively ask for the connection parameters of the target
+database. They default to the parameters defined in the `jore4-flux` repository
+for the `jore4e2e` database. You may set up the `jore4e2e` database locally with
+the `./start_dependencies.sh` script.
+
+Note: This script is currently only a proof of concept. It will create new links
+if they didn't exist or update them if they do. But links deleted in digiroad
+won't be deleted here.
+
+```
+./import_infra_network_csv.sh
+```
+
 An MBTiles files containing road links can be exported with (given that Digiroad
 material has already been imported):
 
