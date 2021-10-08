@@ -2,49 +2,97 @@ DROP SCHEMA IF EXISTS :schema CASCADE;
 
 CREATE SCHEMA :schema;
 
-CREATE TABLE :schema.dr_linkki AS
-SELECT
-    src.gid,
-    src.link_id,
-    src.kuntakoodi,
-    src.linkkityyp,
-    src.ajosuunta,
-    src.link_tila,
-    src.tienimi_su,
-    src.tienimi_ru,
-    src.tienimi_sa,
-    ST_Force3D(src.geom) AS geom_3d
-FROM :source_schema.dr_linkki src;
+--
+-- Import infrastructure links
+--
 
--- Add data integrity constraints to dr_linkki table after copying it from source schema.
-\i :sql_dir/add_dr_linkki_constraints.sql
-
--- Add columns required by pgRouting extension.
-SELECT AddGeometryColumn(:'schema', 'dr_linkki', 'geom', 3067, 'LINESTRING', 2);
-ALTER TABLE :schema.dr_linkki ADD COLUMN source INTEGER,
-                              ADD COLUMN target INTEGER,
-                              ADD COLUMN cost FLOAT,
-                              ADD COLUMN reverse_cost FLOAT;
-
--- Create indices to improve performance of pgRouting.
-CREATE INDEX dr_linkki_geom_idx ON :schema.dr_linkki USING GIST(geom);
-CREATE INDEX dr_linkki_source_idx ON :schema.dr_linkki (source);
-CREATE INDEX dr_linkki_target_idx ON :schema.dr_linkki (target);
-
--- Populate `geom` column before topology creation.
--- Note that pgRouting requires a 2D geometry.
-UPDATE :schema.dr_linkki SET geom = ST_Force2D(geom_3d);
-
--- Create pgRouting topology.
--- Need to use `gid` as ID column instead of `link_id` because pgRouting requires integer based ID column.
-SELECT pgr_createTopology(:'schema' || '.dr_linkki', 0.001, 'geom', 'gid');
-
--- Set up `cost` and `reverse_cost` parameters for pgRouting functions.
--- 
--- Valid `ajosuunta` values are:
+-- Valid `ajosuunta` codes in Digiroad are:
 --  `2` ~ bidirectional
 --  `3` ~ against digitised direction
 --  `4` ~ along digitised direction
+
+CREATE TABLE :schema.infrastructure_link AS
+SELECT
+    src.gid::bigint AS infrastructure_link_id,
+    'digiroad_r' AS external_link_source,
+    src.link_id::text AS external_link_id,
+    CASE
+        WHEN src.ajosuunta = 2 THEN 'bidirectional'
+        WHEN src.ajosuunta = 3 THEN 'backward'
+        WHEN src.ajosuunta = 4 THEN 'forward'
+    END AS traffic_flow_direction,
+    src.kuntakoodi AS municipality_code,
+    src.linkkityyp AS external_link_type,
+    src.link_tila AS external_link_state,
+    src.tienimi_su::text AS name_fi,
+    src.tienimi_ru::text AS name_sv,
+    ST_Force3D(src.geom) AS geom_3d
+FROM :source_schema.dr_linkki src
+WHERE src.ajosuunta IN (2, 3, 4); -- filter out links with possibly invalid direction of traffic flow
+
+COMMENT ON TABLE :schema.infrastructure_link IS
+    'The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453';
+COMMENT ON COLUMN :schema.infrastructure_link.infrastructure_link_id IS
+    'The local ID of the infrastructure link. The requirement of the ID being of integer type is imposed by pgRouting.';
+COMMENT ON COLUMN :schema.infrastructure_link.external_link_id IS
+    'The ID of the infrastructure link within the external source system providing the link data';
+COMMENT ON COLUMN :schema.infrastructure_link.municipality_code IS
+    'The official code of municipality in which the link is located';
+COMMENT ON COLUMN :schema.infrastructure_link.external_link_type IS
+    'The link type code defined within the external source system providing the link data';
+COMMENT ON COLUMN :schema.infrastructure_link.external_link_state IS
+    'The link state code defined within the external source system providing the link data';
+COMMENT ON COLUMN :schema.infrastructure_link.name_fi IS
+    'Name of road or street in Finnish';
+COMMENT ON COLUMN :schema.infrastructure_link.name_sv IS
+    'Name of road or street in Swedish';
+
+-- Add data integrity constraints to `infrastructure_link` table after transformation from the source schema.
+ALTER TABLE :schema.infrastructure_link
+    ALTER COLUMN external_link_id SET NOT NULL,
+    ALTER COLUMN external_link_source SET NOT NULL,
+    ALTER COLUMN traffic_flow_direction SET NOT NULL,
+
+    ADD CONSTRAINT infrastructure_link_pkey PRIMARY KEY (infrastructure_link_id),
+    ADD CONSTRAINT uk_infrastructure_link_external_link_id UNIQUE (external_link_id);
+
+--
+-- Create network topology for infrastructure links
+--
+
+-- Add columns required by pgRouting extension.
+SELECT AddGeometryColumn(:'schema', 'infrastructure_link', 'geom', 3067, 'LINESTRING', 2);
+ALTER TABLE :schema.infrastructure_link ADD COLUMN source BIGINT,
+                                        ADD COLUMN target BIGINT,
+                                        ADD COLUMN cost FLOAT,
+                                        ADD COLUMN reverse_cost FLOAT;
+
+COMMENT ON COLUMN :schema.infrastructure_link.geom IS
+    'The 2D linestring geometry describing the shape of the infrastructure link. The requirement of two-dimensionality and metric unit is imposed by pgRouting. The EPSG:3067 coordinate system applied is the same as is used in Digiroad.';
+COMMENT ON COLUMN :schema.infrastructure_link.source IS
+    'The ID of the start node for the infrastructure link based on its linestring geometry. The node points are resolved and generated by calling `pgr_createTopology` function of pgRouting.';
+COMMENT ON COLUMN :schema.infrastructure_link.target IS
+    'The ID of the end node for the infrastructure link based on its linestring geometry. The node points are resolved and generated by calling `pgr_createTopology` function of pgRouting.';
+COMMENT ON COLUMN :schema.infrastructure_link.cost IS
+    'The weight in terms of graph traversal for forward direction of the linestring geometry of the infrastructure link. When negative, the forward direction of the link (edge) will not be part of the graph within the shortest path calculation.';
+COMMENT ON COLUMN :schema.infrastructure_link.reverse_cost IS
+    'The weight in terms of graph traversal for reverse direction of the linestring geometry of the infrastructure link. When negative, the reverse direction of the link (edge) will not be part of the graph within the shortest path calculation.';
+
+-- Create indices to improve performance of pgRouting.
+CREATE INDEX infrastructure_link_geom_idx ON :schema.infrastructure_link USING GIST(geom);
+CREATE INDEX infrastructure_link_source_idx ON :schema.infrastructure_link (source);
+CREATE INDEX infrastructure_link_target_idx ON :schema.infrastructure_link (target);
+
+-- Populate `geom` column before topology creation.
+UPDATE :schema.infrastructure_link SET geom = ST_Force2D(geom_3d);
+
+-- Create pgRouting topology.
+SELECT pgr_createTopology(:'schema' || '.infrastructure_link', 0.001, 'geom', 'infrastructure_link_id');
+
+COMMENT ON TABLE :schema.infrastructure_link_vertices_pgr IS
+    'Topology nodes created for infrastructure links by pgRougting';
+
+-- Set up `cost` and `reverse_cost` parameters for pgRouting functions.
 -- 
 -- Negative `cost` effectively means pgRouting will not consider traversing the link along its digitised direction.
 -- Correspondingly, negative `reverse_cost` means pgRouting will not consider traversing the link against its
@@ -52,20 +100,73 @@ SELECT pgr_createTopology(:'schema' || '.dr_linkki', 0.001, 'geom', 'gid');
 -- one-way directionality constraints for road links.
 -- 
 -- TODO: Do cost calculation based on speed limits.
-UPDATE :schema.dr_linkki SET
-    cost = CASE WHEN ajosuunta IN (2,4) THEN ST_Length(geom_3d) ELSE -1 END,
-    reverse_cost = CASE WHEN ajosuunta IN (2,3) THEN ST_Length(geom_3d) ELSE -1 END;
+UPDATE :schema.infrastructure_link SET
+    cost = CASE WHEN traffic_flow_direction IN ('bidirectional', 'forward') THEN ST_3DLength(geom_3d) ELSE -1 END,
+    reverse_cost = CASE WHEN traffic_flow_direction IN ('bidirectional', 'backward') THEN ST_3DLength(geom_3d) ELSE -1 END;
 
-ALTER TABLE :schema.dr_linkki ALTER COLUMN geom SET NOT NULL,
-                              ALTER COLUMN source SET NOT NULL,
-                              ALTER COLUMN target SET NOT NULL,
-                              ALTER COLUMN cost SET NOT NULL,
-                              ALTER COLUMN reverse_cost SET NOT NULL;
+ALTER TABLE :schema.infrastructure_link ALTER COLUMN geom SET NOT NULL,
+                                        ALTER COLUMN source SET NOT NULL,
+                                        ALTER COLUMN target SET NOT NULL,
+                                        ALTER COLUMN cost SET NOT NULL,
+                                        ALTER COLUMN reverse_cost SET NOT NULL;
 
 -- Drop 3D geometry since it cannot be utilised by pgRouting.
-ALTER TABLE :schema.dr_linkki DROP COLUMN geom_3d;
+ALTER TABLE :schema.infrastructure_link DROP COLUMN geom_3d;
 
--- Copy `dr_pysakki` table from digiroad schema and add relevant constraints.
-CREATE TABLE :schema.dr_pysakki (LIKE :source_schema.dr_pysakki);
-INSERT INTO :schema.dr_pysakki SELECT * FROM :source_schema.dr_pysakki;
-\i :sql_dir/add_dr_pysakki_constraints.sql
+--
+-- Import public transport stops
+--
+
+CREATE TABLE :schema.public_transport_stop AS
+SELECT
+    src.gid::bigint AS public_transport_stop_id,
+    src.valtak_id AS public_transport_stop_national_id,
+    link.infrastructure_link_id AS located_on_infrastructure_link_id,
+    'digiroad_r' AS external_stop_source,
+    CASE
+        WHEN src.vaik_suunt = 2 THEN true
+        WHEN src.vaik_suunt = 3 THEN false
+        ELSE null
+    END AS is_on_direction_of_link_forward_traversal,
+    src.sijainti_m AS distance_from_link_start_in_meters,
+    src.kuntakoodi AS municipality_code,
+    src.nimi_su::text AS name_fi,
+    src.nimi_ru::text AS name_sv,
+    src.geom
+FROM :source_schema.dr_pysakki src
+INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id;
+
+COMMENT ON TABLE :schema.public_transport_stop IS
+    'The public transport stops imported from Digiroad export';
+COMMENT ON COLUMN :schema.public_transport_stop.public_transport_stop_id IS
+    'The local ID of the public transport stop';
+COMMENT ON COLUMN :schema.public_transport_stop.public_transport_stop_national_id IS
+    'The national (persistent) ID for the public transport stop';
+COMMENT ON COLUMN :schema.public_transport_stop.located_on_infrastructure_link_id IS
+    'The ID of the infrastructure link on which the stop is located';
+COMMENT ON COLUMN :schema.public_transport_stop.is_on_direction_of_link_forward_traversal IS
+    'Is the direction of traffic on this stop the same as the direction of the linestring describing the infrastructure link? If TRUE, the stop lies in the direction of the linestring. If FALSE, the stop lies in the reverse direction of the linestring. If NULL, the direction is undefined.';
+COMMENT ON COLUMN :schema.public_transport_stop.distance_from_link_start_in_meters IS
+    'The measure or M value of the stop from the start of the linestring (linear geometry) describing the infrastructure link. The SI unit is the meter.';
+COMMENT ON COLUMN :schema.public_transport_stop.municipality_code IS
+    'The official code of municipality in which the stop is located';
+COMMENT ON COLUMN :schema.public_transport_stop.name_fi IS
+    'Name in Finnish';
+COMMENT ON COLUMN :schema.public_transport_stop.name_sv IS
+    'Name in Swedish';
+COMMENT ON COLUMN :schema.public_transport_stop.geom IS
+    'The 2D point geometry describing the location of the public transport stop. The EPSG:3067 coordinate system applied is the same as is used in Digiroad.';
+
+-- Add data integrity constraints to `public_transport_stop` table after transformation from the source schema.
+ALTER TABLE :schema.public_transport_stop
+    ALTER COLUMN located_on_infrastructure_link_id SET NOT NULL,
+    ALTER COLUMN external_stop_source SET NOT NULL,
+    ALTER COLUMN distance_from_link_start_in_meters SET NOT NULL,
+    ALTER COLUMN geom SET NOT NULL,
+
+    ADD CONSTRAINT public_transport_stop_pkey PRIMARY KEY (public_transport_stop_id),
+    ADD CONSTRAINT public_transport_stop_infrastructure_link_fkey FOREIGN KEY (located_on_infrastructure_link_id)
+        REFERENCES :schema.infrastructure_link (infrastructure_link_id);
+
+CREATE INDEX public_transport_stop_infrastructure_link_idx ON :schema.public_transport_stop (located_on_infrastructure_link_id);
+CREATE INDEX public_transport_stop_geom_idx ON :schema.public_transport_stop USING GIST(geom);
