@@ -12,9 +12,12 @@ docker start $DOCKER_CONTAINER
 # Wait for PostgreSQL to start.
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
 
-PGDUMP_OUTPUT="digiroad_r_routing_$(date "+%Y-%m-%d").pgdump"
+# Create routing schema containing pgRouting topology.
+docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/routing/create_routing_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_ROUTING_SCHEMA_NAME} -v sql_dir=/tmp/sql"
 
 # Export pg_dump file.
+PGDUMP_OUTPUT="digiroad_r_routing_$(date "+%Y-%m-%d").pgdump"
 docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${WORK_DIR}/pgdump/:/tmp/pgdump $DOCKER_IMAGE \
   sh -c "$PG_DUMP -Fc --clean -f /tmp/pgdump/${PGDUMP_OUTPUT} --schema=${DB_ROUTING_SCHEMA_NAME} --no-owner"
 
