@@ -27,13 +27,31 @@ INSERT INTO :schema.traffic_flow_direction (traffic_flow_direction_type, traffic
     (4, 'forward', 'Along digitised direction');
 
 --
+-- Create table and populate data for infrastructure element sources
+--
+
+CREATE TABLE :schema.infrastructure_source (
+    infrastructure_source_id int PRIMARY KEY,
+    infrastructure_source_name text NOT NULL,
+    description text NOT NULL
+);
+COMMENT ON TABLE :schema.infrastructure_source IS
+    'The enumerated sources for infrastructure network entities';
+COMMENT ON COLUMN :schema.infrastructure_source.infrastructure_source_id IS
+    'The numeric enum value for the infrastructure element source. This enum code is only local to this routing schema. ATM, it is not intended to be distributed to or shared across other JORE4 services.';
+COMMENT ON COLUMN :schema.infrastructure_source.infrastructure_source_name IS
+    'The short name for the infrastructure element source';
+INSERT INTO :schema.infrastructure_source (infrastructure_source_id, infrastructure_source_name, description) VALUES
+    (1, 'digiroad_r', 'Digiroad R export made available by Finnish Transport Infrastructure Agency (https://vayla.fi)');
+
+--
 -- Import infrastructure links
 --
 
 CREATE TABLE :schema.infrastructure_link AS
 SELECT
     src.gid::bigint AS infrastructure_link_id,
-    'digiroad_r' AS external_link_source,
+    isrc.infrastructure_source_id,
     src.link_id::text AS external_link_id,
     dir.traffic_flow_direction_type,
     src.kuntakoodi AS municipality_code,
@@ -43,12 +61,15 @@ SELECT
     ST_Force3D(src.geom) AS geom_3d
 FROM :source_schema.dr_linkki src
 -- Filter out links with possibly invalid direction of traffic flow.
-INNER JOIN :schema.traffic_flow_direction dir ON dir.traffic_flow_direction_type = src.ajosuunta;
+INNER JOIN :schema.traffic_flow_direction dir ON dir.traffic_flow_direction_type = src.ajosuunta
+INNER JOIN :schema.infrastructure_source isrc ON isrc.infrastructure_source_id = 1;  -- Digiroad R
 
 COMMENT ON TABLE :schema.infrastructure_link IS
     'The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453';
 COMMENT ON COLUMN :schema.infrastructure_link.infrastructure_link_id IS
     'The local ID of the infrastructure link. The requirement of the ID being of integer type is imposed by pgRouting.';
+COMMENT ON COLUMN :schema.infrastructure_link.infrastructure_source_id IS
+    'The ID of the external source system providing the link data.';
 COMMENT ON COLUMN :schema.infrastructure_link.external_link_id IS
     'The ID of the infrastructure link within the external source system providing the link data';
 COMMENT ON COLUMN :schema.infrastructure_link.traffic_flow_direction_type IS
@@ -65,13 +86,15 @@ COMMENT ON COLUMN :schema.infrastructure_link.name IS
 -- Add data integrity constraints to `infrastructure_link` table after transformation from the source schema.
 ALTER TABLE :schema.infrastructure_link
     ALTER COLUMN external_link_id SET NOT NULL,
-    ALTER COLUMN external_link_source SET NOT NULL,
+    ALTER COLUMN infrastructure_source_id SET NOT NULL,
     ALTER COLUMN traffic_flow_direction_type SET NOT NULL,
 
     ADD CONSTRAINT infrastructure_link_pkey PRIMARY KEY (infrastructure_link_id),
-    ADD CONSTRAINT uk_infrastructure_link_external_link_id UNIQUE (external_link_id),
+    ADD CONSTRAINT uk_infrastructure_link_external_ref UNIQUE (infrastructure_source_id, external_link_id),
     ADD CONSTRAINT infrastructure_link_traffic_flow_direction_fkey FOREIGN KEY (traffic_flow_direction_type)
-        REFERENCES :schema.traffic_flow_direction (traffic_flow_direction_type);
+        REFERENCES :schema.traffic_flow_direction (traffic_flow_direction_type),
+    ADD CONSTRAINT infrastructure_link_infrastructure_source_fkey FOREIGN KEY (infrastructure_source_id)
+        REFERENCES :schema.infrastructure_source (infrastructure_source_id);
 
 --
 -- Create network topology for infrastructure links
@@ -139,7 +162,7 @@ SELECT
     src.gid::bigint AS public_transport_stop_id,
     src.valtak_id AS public_transport_stop_national_id,
     link.infrastructure_link_id AS located_on_infrastructure_link_id,
-    'digiroad_r' AS external_stop_source,
+    isrc.infrastructure_source_id,
     CASE
         WHEN src.vaik_suunt = 2 THEN true
         WHEN src.vaik_suunt = 3 THEN false
@@ -150,7 +173,8 @@ SELECT
     json_build_object('fi', src.nimi_su, 'sv', src.nimi_ru)::jsonb AS name,
     src.geom
 FROM :source_schema.dr_pysakki src
-INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id;
+INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id
+INNER JOIN :schema.infrastructure_source isrc ON isrc.infrastructure_source_id = 1;  -- Digiroad R
 
 COMMENT ON TABLE :schema.public_transport_stop IS
     'The public transport stops imported from Digiroad export';
@@ -160,6 +184,8 @@ COMMENT ON COLUMN :schema.public_transport_stop.public_transport_stop_national_i
     'The national (persistent) ID for the public transport stop';
 COMMENT ON COLUMN :schema.public_transport_stop.located_on_infrastructure_link_id IS
     'The ID of the infrastructure link on which the stop is located';
+COMMENT ON COLUMN :schema.public_transport_stop.infrastructure_source_id IS
+    'The ID of the external source system providing the stop data';
 COMMENT ON COLUMN :schema.public_transport_stop.is_on_direction_of_link_forward_traversal IS
     'Is the direction of traffic on this stop the same as the direction of the linestring describing the infrastructure link? If TRUE, the stop lies in the direction of the linestring. If FALSE, the stop lies in the reverse direction of the linestring. If NULL, the direction is undefined.';
 COMMENT ON COLUMN :schema.public_transport_stop.distance_from_link_start_in_meters IS
@@ -174,13 +200,15 @@ COMMENT ON COLUMN :schema.public_transport_stop.geom IS
 -- Add data integrity constraints to `public_transport_stop` table after transformation from the source schema.
 ALTER TABLE :schema.public_transport_stop
     ALTER COLUMN located_on_infrastructure_link_id SET NOT NULL,
-    ALTER COLUMN external_stop_source SET NOT NULL,
+    ALTER COLUMN infrastructure_source_id SET NOT NULL,
     ALTER COLUMN distance_from_link_start_in_meters SET NOT NULL,
     ALTER COLUMN geom SET NOT NULL,
 
     ADD CONSTRAINT public_transport_stop_pkey PRIMARY KEY (public_transport_stop_id),
     ADD CONSTRAINT public_transport_stop_infrastructure_link_fkey FOREIGN KEY (located_on_infrastructure_link_id)
-        REFERENCES :schema.infrastructure_link (infrastructure_link_id);
+        REFERENCES :schema.infrastructure_link (infrastructure_link_id),
+    ADD CONSTRAINT public_transport_stop_infrastructure_source_fkey FOREIGN KEY (infrastructure_source_id)
+        REFERENCES :schema.infrastructure_source (infrastructure_source_id);
 
 CREATE INDEX public_transport_stop_infrastructure_link_idx ON :schema.public_transport_stop (located_on_infrastructure_link_id);
 CREATE INDEX public_transport_stop_geom_idx ON :schema.public_transport_stop USING GIST(geom);
