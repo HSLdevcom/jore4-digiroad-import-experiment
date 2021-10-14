@@ -97,6 +97,72 @@ ALTER TABLE :schema.infrastructure_link
         REFERENCES :schema.infrastructure_source (infrastructure_source_id);
 
 --
+-- Create table and populate data for vehicle modes and types
+--
+
+CREATE TABLE :schema.vehicle_mode (
+    vehicle_mode text PRIMARY KEY
+);
+COMMENT ON TABLE :schema.vehicle_mode IS
+    'The vehicle modes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283';
+COMMENT ON COLUMN :schema.vehicle_mode.vehicle_mode IS
+    'The vehicle mode from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283';
+INSERT INTO :schema.vehicle_mode (vehicle_mode) VALUES
+    ('bus'),
+    ('tram'),
+    ('train'),
+    ('metro'),
+    ('ferry');
+
+CREATE TABLE :schema.vehicle_type (
+    vehicle_type text PRIMARY KEY,
+    belonging_to_vehicle_mode text NOT NULL REFERENCES :schema.vehicle_mode (vehicle_mode)
+);
+COMMENT ON TABLE :schema.vehicle_type IS
+    'The vehicle types from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:9:360';
+COMMENT ON COLUMN :schema.vehicle_type.vehicle_type IS
+    'The vehicle type from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:9:360';
+COMMENT ON COLUMN :schema.vehicle_type.belonging_to_vehicle_mode IS
+    'The vehicle mode the vehicle type belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283';
+INSERT INTO :schema.vehicle_type (vehicle_type, belonging_to_vehicle_mode) VALUES
+    ('generic_bus', 'bus'),
+    ('generic_tram', 'tram'),
+    ('generic_train', 'train'),
+    ('generic_metro', 'metro'),
+    ('generic_ferry', 'ferry'),
+    ('tall_electric_bus', 'bus');
+CREATE INDEX ON :schema.vehicle_type (belonging_to_vehicle_mode);
+
+--
+-- Create an assoiciation table and populate data for which infrastructure links can be safely traversed
+-- by which vehicle type
+--
+
+CREATE TABLE :schema.infrastructure_link_safely_traversed_by_vehicle_type (
+    infrastructure_link_id bigint REFERENCES :schema.infrastructure_link (infrastructure_link_id),
+    vehicle_type text REFERENCES :schema.vehicle_type (vehicle_type),
+    PRIMARY KEY (infrastructure_link_id, vehicle_type)
+);
+COMMENT ON TABLE :schema.infrastructure_link_safely_traversed_by_vehicle_type IS
+    'Which infrastructure links are safely traversed by which vehicle types?';
+COMMENT ON COLUMN :schema.infrastructure_link_safely_traversed_by_vehicle_type.infrastructure_link_id IS
+    'The infrastructure link that can be safely traversed by the vehicle type';
+COMMENT ON COLUMN :schema.infrastructure_link_safely_traversed_by_vehicle_type.vehicle_type IS
+    'The vehicle type that can safely traverse the infrastructure link';
+
+CREATE INDEX ON :schema.infrastructure_link_safely_traversed_by_vehicle_type (vehicle_type, infrastructure_link_id);
+
+-- TODO: Assign tall electric busses to infrastructure links based on greatest allowed height property.
+INSERT INTO :schema.infrastructure_link_safely_traversed_by_vehicle_type (infrastructure_link_id, vehicle_type)
+SELECT lnk.infrastructure_link_id, 'generic_bus'
+FROM :schema.infrastructure_link lnk
+WHERE lnk.infrastructure_source_id = 1 -- All Digiroad links are accepted as bus links
+UNION ALL
+SELECT lnk.infrastructure_link_id, 'generic_ferry'
+FROM :schema.infrastructure_link lnk
+WHERE lnk.infrastructure_source_id = 1 AND lnk.external_link_type = 21; -- cable ferry connection
+
+--
 -- Create network topology for infrastructure links
 --
 
