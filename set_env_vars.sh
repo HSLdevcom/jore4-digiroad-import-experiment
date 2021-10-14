@@ -19,4 +19,4 @@ export DB_ROUTING_SCHEMA_NAME="routing"
 export PSQL='exec psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U digiroad -d digiroad --no-password'
 export PG_WAIT='exec /wait-pg.sh "$DB_NAME" "$POSTGRES_PORT_5432_TCP_ADDR" "$POSTGRES_PORT_5432_TCP_PORT"'
 export PG_WAIT_LOCAL='exec /wait-pg.sh "$DB_NAME" localhost "$POSTGRES_PORT_5432_TCP_PORT"'
-export PG_DUMP='exec pg_dump -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U digiroad -d digiroad --no-password'
+export PG_DUMP='exec pg_dump -h ${POSTGRES_PORT_5432_TCP_ADDR} -p ${POSTGRES_PORT_5432_TCP_PORT} -d digiroad -U digiroad --no-password'

@@ -66,12 +66,35 @@ JORE4 database.
 
 ## Exporting routing schema
 
-A pg_dump file containing links, stops and routing topology can be exported with
-(given that Digiroad shapefiles have already been imported):
+One can export the schema definitions and/or table data for [JORE4 navigation
+and map-matching backend](https://github.com/HSLdevcom/jore4-map-matching).
 
-```
-./export_pgdump_routing.sh
-```
+By executing `export_routing_schema.sh`, a separate routing schema is created
+in the database. The data is read from the Digiroad schema and is transformed
+into a table structure defined in and used by the JORE4 map-matching backend.
+As a result, two database dump files will be created: one in SQL format, named
+`digiroad_r_routing_<date>.sql`, and another in PostgreSQL's custom format,
+named `digiroad_r_routing_<date>.pgdump`. Both files will be written into
+`workdir/pgdump` subdirectory.
+
+A couple of toc list (table of contents) files are generated as sidecars to the
+custom-format dump file. A toc file may be passed as an argument to `pg_restore`
+command. The toc files can be used to selectively apply what is being restored
+from the dump, e.g. the entire schema with data or table data for selected tables
+only.
+
+The table below describes the contents of each toc file generated.
+
+| ToC file                                                         | Description                              |
+| ---------------------------------------------------------------- | -----------------------------------------|
+| `digiroad_r_routing_<date>.pgdump.list`                          | Contains entire routing schema and data. |
+| `digiroad_r_routing_<date>.pgdump.no-enums.links-and-stops.list` | No schema item definitions at all. Contains table data for infrastructure links, topology and public transport stops. Does not include data for enum tables which is already included in the database migration scripts of the map-matching backend. |
+| `digiroad_r_routing_<date>.pgdump.no-enums.only-links.list`      | No schema item definitions at all. Contains table data for infrastructure links and topology. Does not include public transport stops. Does not include data for enum tables which is already included in the database migration scripts of the map-matching backend. |
+
+Which one should be used will depend on what deployment strategy with regard to
+database migrations and data population is currently chosen in the map-matching
+backend. Have a look at [README of map-matching backend](https://github.com/HSLdevcom/jore4-map-matching/blob/main/README.md)
+for more details.
 
 The target database is required to have `postgis` and `pgrouting` extensions.
 
