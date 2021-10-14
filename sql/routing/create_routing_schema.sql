@@ -3,31 +3,47 @@ DROP SCHEMA IF EXISTS :schema CASCADE;
 CREATE SCHEMA :schema;
 
 --
--- Import infrastructure links
+-- Create table and populate data for direction of traffic flow enumeration
 --
 
 -- Valid `ajosuunta` codes in Digiroad are:
 --  `2` ~ bidirectional
 --  `3` ~ against digitised direction
 --  `4` ~ along digitised direction
+CREATE TABLE :schema.traffic_flow_direction (
+    traffic_flow_direction_type int PRIMARY KEY,
+    traffic_flow_direction_name text NOT NULL,
+    description text NOT NULL
+);
+COMMENT ON TABLE :schema.traffic_flow_direction IS
+    'The possible directions of traffic flow on infrastructure links. Using code values from Digiroad codeset.';
+COMMENT ON COLUMN :schema.traffic_flow_direction.traffic_flow_direction_type IS
+    'Numeric enum value for direction of traffic flow. The code value originates from Digiroad codeset.';
+COMMENT ON COLUMN :schema.traffic_flow_direction.traffic_flow_direction_name IS
+    'The short name for direction of traffic flow. The text value originates from the JORE4 database schema.';
+INSERT INTO :schema.traffic_flow_direction (traffic_flow_direction_type, traffic_flow_direction_name, description) VALUES
+    (2, 'bidirectional', 'Bidirectional'),
+    (3, 'backward', 'Against digitised direction'),
+    (4, 'forward', 'Along digitised direction');
+
+--
+-- Import infrastructure links
+--
 
 CREATE TABLE :schema.infrastructure_link AS
 SELECT
     src.gid::bigint AS infrastructure_link_id,
     'digiroad_r' AS external_link_source,
     src.link_id::text AS external_link_id,
-    CASE
-        WHEN src.ajosuunta = 2 THEN 'bidirectional'
-        WHEN src.ajosuunta = 3 THEN 'backward'
-        WHEN src.ajosuunta = 4 THEN 'forward'
-    END AS traffic_flow_direction,
+    dir.traffic_flow_direction_type,
     src.kuntakoodi AS municipality_code,
     src.linkkityyp AS external_link_type,
     src.link_tila AS external_link_state,
     json_build_object('fi', src.tienimi_su, 'sv', src.tienimi_ru)::jsonb AS name,
     ST_Force3D(src.geom) AS geom_3d
 FROM :source_schema.dr_linkki src
-WHERE src.ajosuunta IN (2, 3, 4); -- filter out links with possibly invalid direction of traffic flow
+-- Filter out links with possibly invalid direction of traffic flow.
+INNER JOIN :schema.traffic_flow_direction dir ON dir.traffic_flow_direction_type = src.ajosuunta;
 
 COMMENT ON TABLE :schema.infrastructure_link IS
     'The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453';
@@ -35,6 +51,8 @@ COMMENT ON COLUMN :schema.infrastructure_link.infrastructure_link_id IS
     'The local ID of the infrastructure link. The requirement of the ID being of integer type is imposed by pgRouting.';
 COMMENT ON COLUMN :schema.infrastructure_link.external_link_id IS
     'The ID of the infrastructure link within the external source system providing the link data';
+COMMENT ON COLUMN :schema.infrastructure_link.traffic_flow_direction_type IS
+    'A numeric enum value for direction of traffic flow allowed on the infrastructure link';
 COMMENT ON COLUMN :schema.infrastructure_link.municipality_code IS
     'The official code of municipality in which the link is located';
 COMMENT ON COLUMN :schema.infrastructure_link.external_link_type IS
@@ -48,10 +66,12 @@ COMMENT ON COLUMN :schema.infrastructure_link.name IS
 ALTER TABLE :schema.infrastructure_link
     ALTER COLUMN external_link_id SET NOT NULL,
     ALTER COLUMN external_link_source SET NOT NULL,
-    ALTER COLUMN traffic_flow_direction SET NOT NULL,
+    ALTER COLUMN traffic_flow_direction_type SET NOT NULL,
 
     ADD CONSTRAINT infrastructure_link_pkey PRIMARY KEY (infrastructure_link_id),
-    ADD CONSTRAINT uk_infrastructure_link_external_link_id UNIQUE (external_link_id);
+    ADD CONSTRAINT uk_infrastructure_link_external_link_id UNIQUE (external_link_id),
+    ADD CONSTRAINT infrastructure_link_traffic_flow_direction_fkey FOREIGN KEY (traffic_flow_direction_type)
+        REFERENCES :schema.traffic_flow_direction (traffic_flow_direction_type);
 
 --
 -- Create network topology for infrastructure links
@@ -98,8 +118,8 @@ COMMENT ON TABLE :schema.infrastructure_link_vertices_pgr IS
 -- 
 -- TODO: Do cost calculation based on speed limits.
 UPDATE :schema.infrastructure_link SET
-    cost = CASE WHEN traffic_flow_direction IN ('bidirectional', 'forward') THEN ST_3DLength(geom_3d) ELSE -1 END,
-    reverse_cost = CASE WHEN traffic_flow_direction IN ('bidirectional', 'backward') THEN ST_3DLength(geom_3d) ELSE -1 END;
+    cost = CASE WHEN traffic_flow_direction_type IN (2, 4) THEN ST_3DLength(geom_3d) ELSE -1 END,
+    reverse_cost = CASE WHEN traffic_flow_direction_type IN (2, 3) THEN ST_3DLength(geom_3d) ELSE -1 END;
 
 ALTER TABLE :schema.infrastructure_link ALTER COLUMN geom SET NOT NULL,
                                         ALTER COLUMN start_node_id SET NOT NULL,
