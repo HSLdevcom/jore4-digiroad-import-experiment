@@ -47,22 +47,19 @@ route_terminal_info AS (
     -- Find terminal links on both route endpoints by first resolving closest Digiroad stop and then get links.
     SELECT
         rep.endpoint_type,
-        closest_dr_stop.stop_gid,
-        closest_dr_stop.dist,
-        link.gid AS link_gid,
-        link.link_id
+        closest_stop.public_transport_stop_id,
+        closest_stop.dist,
+        l.infrastructure_link_id
     FROM route_endpoints rep, match_params p
     CROSS JOIN LATERAL (
-        SELECT
-            dr_stop.gid AS stop_gid,
-            rep.geom <-> dr_stop.geom AS dist
-        FROM routing.dr_pysakki dr_stop
-        WHERE ST_DWithin(rep.geom, dr_stop.geom, p.route_endpoint_search_radius)
-        ORDER BY rep.geom <-> dr_stop.geom
+        SELECT s.public_transport_stop_id, rep.geom <-> s.geom AS dist
+        FROM routing.public_transport_stop s
+        WHERE ST_DWithin(rep.geom, s.geom, p.route_endpoint_search_radius)
+        ORDER BY dist
         LIMIT 1
-    ) AS closest_dr_stop
-    INNER JOIN routing.dr_pysakki stop ON stop.gid = closest_dr_stop.stop_gid
-    INNER JOIN routing.dr_linkki link USING (link_id)
+    ) AS closest_stop
+    INNER JOIN routing.public_transport_stop s USING (public_transport_stop_id)
+    INNER JOIN routing.infrastructure_link l ON l.infrastructure_link_id = s.located_on_infrastructure_link_id
 ),
 ordered_via_point_set AS (
     SELECT (dp).path, (dp).geom
@@ -75,77 +72,71 @@ ordered_via_point_set AS (
     ) x
     ORDER BY path
 ),
-via_point_closest_vertices AS (
-    -- Find closest vertex for each via point.
-    SELECT
-        vp.path,
-        closest_vertex.vertex_id,
-        closest_vertex.dist
+via_point_closest_nodes AS (
+    -- Find closest node for each via point.
+    SELECT vp.path, closest_node.node_id, closest_node.dist
     FROM ordered_via_point_set vp, match_params p
     CROSS JOIN LATERAL (
-        SELECT
-            vert.id AS vertex_id, 
-            vp.geom <-> vert.the_geom AS dist
-        FROM routing.dr_linkki_vertices_pgr vert
-        WHERE ST_DWithin(vp.geom, vert.the_geom, p.via_point_search_radius)
-        ORDER BY vp.geom <-> vert.the_geom
+        SELECT node.id AS node_id, vp.geom <-> node.the_geom AS dist
+        FROM routing.infrastructure_link_vertices_pgr node
+        WHERE ST_DWithin(vp.geom, node.the_geom, p.via_point_search_radius)
+        ORDER BY dist
         LIMIT 1
-    ) AS closest_vertex
-    INNER JOIN routing.dr_linkki_vertices_pgr vert ON vert.id = closest_vertex.vertex_id
+    ) AS closest_node
+    INNER JOIN routing.infrastructure_link_vertices_pgr node ON node.id = closest_node.node_id
     ORDER BY vp.path
 ),
-via_vertices AS (
-    -- XXX: Note the array cast (int vs bigint). Beware!
-    SELECT array_agg(vertex_id)::int[] AS id_arr FROM via_point_closest_vertices
+via_nodes AS (
+    SELECT array_agg(node_id)::bigint[] AS id_arr FROM via_point_closest_nodes
 ),
 edge_query AS (
     -- Construct edge query for pgr_dijkstra function.
     SELECT query.txt
     FROM (
-        SELECT array_to_string(array_agg(link_gid), ',') AS txt
+        SELECT array_to_string(array_agg(infrastructure_link_id), ',') AS txt
         FROM route_terminal_info
-    ) terminal_link_gids, match_params p
+    ) terminal_link_ids, match_params p
     CROSS JOIN LATERAL (
         -- Filtering edges in WHERE clause.
-        SELECT 'SELECT gid AS id, source, target, cost, reverse_cost'
-            || ' FROM routing.dr_linkki'
-            || ' WHERE gid IN (' || terminal_link_gids.txt || ')'
+        SELECT 'SELECT infrastructure_link_id AS id, start_node_id AS source, end_node_id AS target, cost, reverse_cost'
+            || ' FROM routing.infrastructure_link'
+            || ' WHERE infrastructure_link_id IN (' || terminal_link_ids.txt || ')'
             || ' OR ST_Contains(ST_Buffer(ST_Transform(ST_GeomFromEWKT(''' || ST_AsEWKT(geom) || '''), 3067), ' || p.route_expand_radius || '), geom)' AS txt
         FROM jore3_route
     ) query
 ),
 shortest_path_alternatives AS (
     SELECT paths.*
-    FROM edge_query query, via_vertices via
+    FROM edge_query query, via_nodes via
     CROSS JOIN (
         -- Produce 2 start points for both endpoints of the first link.
-        SELECT source AS vertex_id
+        SELECT start_node_id AS node_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l USING (infrastructure_link_id)
         WHERE rti.endpoint_type = 'start'
         UNION
-        SELECT target
+        SELECT end_node_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l USING (infrastructure_link_id)
         WHERE rti.endpoint_type = 'start'
-    ) AS start_vertices
+    ) AS start_nodes
     CROSS JOIN (
         -- Produce 2 end points for both endpoints of the last link.
-        SELECT source AS vertex_id
+        SELECT start_node_id AS node_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l USING (infrastructure_link_id)
         WHERE rti.endpoint_type = 'end'
         UNION
-        SELECT target
+        SELECT end_node_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l USING (infrastructure_link_id)
         WHERE rti.endpoint_type = 'end'
-    ) AS end_vertices
+    ) AS end_nodes
     CROSS JOIN LATERAL (
         -- Produce 4 path alternatives by 4 permutations on 2 different endpoints on both ends of the route.
         SELECT
-            start_vertices.vertex_id AS start_vertex,
-            end_vertices.vertex_id AS end_vertex,
+            start_nodes.node_id AS start_node_id,
+            end_nodes.node_id AS end_node_id,
             seq,
             path_seq,
             node,
@@ -155,29 +146,29 @@ shortest_path_alternatives AS (
             ST_AsText(geom) AS geom
         FROM pgr_dijkstraVia(
             query.txt,
-            ARRAY[start_vertices.vertex_id] || via.id_arr || ARRAY[end_vertices.vertex_id],
+            ARRAY[start_nodes.node_id] || via.id_arr || ARRAY[end_nodes.node_id],
             true, -- directed
             strict:=true,
             U_turn_on_edge:=true
         ) AS pt
-        INNER JOIN routing.dr_linkki link ON pt.edge = link.gid
+        INNER JOIN routing.infrastructure_link l ON pt.edge = l.infrastructure_link_id
     ) AS paths
 ),
 shortest_path_link_counts AS (
-    SELECT start_vertex, end_vertex, count(seq) AS link_count
+    SELECT start_node_id, end_node_id, count(seq) AS link_count
     FROM shortest_path_alternatives
-    GROUP BY start_vertex, end_vertex
+    GROUP BY start_node_id, end_node_id
 ),
 shortest_path_result AS (
     -- Select the longest path alternative.
     SELECT spa.seq, spa.path_seq, spa.node, spa.edge, spa.cost, spa.agg_cost, spa.geom
     FROM (
-        SELECT start_vertex, end_vertex
+        SELECT start_node_id, end_node_id
         FROM shortest_path_link_counts
         ORDER BY link_count DESC
         LIMIT 1
     ) t
-    INNER JOIN shortest_path_alternatives spa ON spa.start_vertex = t.start_vertex AND spa.end_vertex = t.end_vertex
+    INNER JOIN shortest_path_alternatives spa ON spa.start_node_id = t.start_node_id AND spa.end_node_id = t.end_node_id
     ORDER BY seq
 ),
 compound_line AS (
@@ -185,7 +176,7 @@ compound_line AS (
     FROM shortest_path_result
 )
 -- SELECT * FROM route_terminal_info;
--- SELECT * FROM via_vertices;
+-- SELECT * FROM via_nodes;
 -- SELECT * FROM edge_query;
 -- SELECT * FROM shortest_path_result;
 SELECT ST_AsGeoJSON(ST_Transform(geom, 4326)) AS geojson FROM compound_line;
