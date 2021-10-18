@@ -24,8 +24,7 @@ SELECT
     src.kuntakoodi AS municipality_code,
     src.linkkityyp AS external_link_type,
     src.link_tila AS external_link_state,
-    src.tienimi_su::text AS name_fi,
-    src.tienimi_ru::text AS name_sv,
+    json_build_object('fi', src.tienimi_su, 'sv', src.tienimi_ru)::jsonb AS name,
     ST_Force3D(src.geom) AS geom_3d
 FROM :source_schema.dr_linkki src
 WHERE src.ajosuunta IN (2, 3, 4); -- filter out links with possibly invalid direction of traffic flow
@@ -42,10 +41,8 @@ COMMENT ON COLUMN :schema.infrastructure_link.external_link_type IS
     'The link type code defined within the external source system providing the link data';
 COMMENT ON COLUMN :schema.infrastructure_link.external_link_state IS
     'The link state code defined within the external source system providing the link data';
-COMMENT ON COLUMN :schema.infrastructure_link.name_fi IS
-    'Name of road or street in Finnish';
-COMMENT ON COLUMN :schema.infrastructure_link.name_sv IS
-    'Name of road or street in Swedish';
+COMMENT ON COLUMN :schema.infrastructure_link.name IS
+    'JSON object containing name of road or street in different localisations';
 
 -- Add data integrity constraints to `infrastructure_link` table after transformation from the source schema.
 ALTER TABLE :schema.infrastructure_link
@@ -130,8 +127,7 @@ SELECT
     END AS is_on_direction_of_link_forward_traversal,
     src.sijainti_m AS distance_from_link_start_in_meters,
     src.kuntakoodi AS municipality_code,
-    src.nimi_su::text AS name_fi,
-    src.nimi_ru::text AS name_sv,
+    json_build_object('fi', src.nimi_su, 'sv', src.nimi_ru)::jsonb AS name,
     src.geom
 FROM :source_schema.dr_pysakki src
 INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id;
@@ -150,10 +146,8 @@ COMMENT ON COLUMN :schema.public_transport_stop.distance_from_link_start_in_mete
     'The measure or M value of the stop from the start of the linestring (linear geometry) describing the infrastructure link. The SI unit is the meter.';
 COMMENT ON COLUMN :schema.public_transport_stop.municipality_code IS
     'The official code of municipality in which the stop is located';
-COMMENT ON COLUMN :schema.public_transport_stop.name_fi IS
-    'Name in Finnish';
-COMMENT ON COLUMN :schema.public_transport_stop.name_sv IS
-    'Name in Swedish';
+COMMENT ON COLUMN :schema.public_transport_stop.name IS
+    'JSON object containing name in different localisations';
 COMMENT ON COLUMN :schema.public_transport_stop.geom IS
     'The 2D point geometry describing the location of the public transport stop. The EPSG:3067 coordinate system applied is the same as is used in Digiroad.';
 
