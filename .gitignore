@@ -15,3 +15,4 @@
 workdir
 docker/*
 !docker/docker-compose.custom.yml
+.DS_Store
