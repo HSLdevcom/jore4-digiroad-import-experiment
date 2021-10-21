@@ -22,4 +22,4 @@ source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 # Import dump from csv file.
 INPUT_FILENAME="infra_network_digiroad.csv"
 PGPASSWORD="${PGPASSWORD}" psql -h "${PGHOSTNAME}" -p "${PGPORT}" -U "${PGUSERNAME}" -d "${PGDATABASE}" \
-  -v ON_ERROR_STOP=1 -f ${CWD}/sql/import_infra_links_from_csv.sql -v csvfile="${WORK_DIR}/jore4_infra/${INPUT_FILENAME}"
+  -v ON_ERROR_STOP=1 -f ${CWD}/sql/import_infra_links_from_csv.sql -v csvfile="${WORK_DIR}/csv/${INPUT_FILENAME}"
