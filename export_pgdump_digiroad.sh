@@ -10,7 +10,7 @@ source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 docker start $DOCKER_CONTAINER
 
 # Wait for PostgreSQL to start.
-docker run -it --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
+docker run --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
 
 PGDUMP_OUTPUT="digiroad_r_$(date "+%Y-%m-%d").pgdump"
 OUTPUT_TABLES="dr_linkki dr_pysakki dr_kaantymisrajoitus"
@@ -19,7 +19,7 @@ OUTPUT_TABLE_OPTIONS="`echo ${OUTPUT_TABLES[@]} | sed \"s/dr_/-t ${DB_IMPORT_SCH
 mkdir -p ${WORK_DIR}/pgdump
 
 # Export pg_dump file.
-docker run -it --rm --link "${DOCKER_CONTAINER}":postgres -v ${WORK_DIR}/pgdump/:/tmp/pgdump $DOCKER_IMAGE \
+docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${WORK_DIR}/pgdump/:/tmp/pgdump $DOCKER_IMAGE \
   sh -c "$PG_DUMP -Fc --clean -f /tmp/pgdump/${PGDUMP_OUTPUT} $OUTPUT_TABLE_OPTIONS"
 
 # Stop Docker container.
