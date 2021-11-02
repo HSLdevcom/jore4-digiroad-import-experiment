@@ -1,0 +1,57 @@
+name: Test import and export scripts
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'sql/routing/map-matching-*/**'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'sql/routing/map-matching-*/**'
+
+jobs:
+  test-import-digiroad-export-routing-schema:
+    name:
+      Verifies that Digiroad shapefiles are successfully downloaded and routing schema exported
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: ${{ github.workspace }}/build_docker_image.sh
+
+      - name: Import Digiroad shapefiles
+        run: ${{ github.workspace }}/import_digiroad_shapefiles.sh
+
+      - name: Verify that main shapefiles are extracted from downloaded zip file
+        run: |
+          SHP_DIR="${{ github.workspace }}/workdir/shp/UUSIMAA"
+          STOP_SHP_FILE="${SHP_DIR}/DR_PYSAKKI.shp"
+          LINK_SHP_FILE_1="${SHP_DIR}/ITA-UUSIMAA/DR_LINKKI.shp"
+          LINK_SHP_FILE_2="${SHP_DIR}/UUSIMAA_1/DR_LINKKI.shp"
+          LINK_SHP_FILE_3="${SHP_DIR}/UUSIMAA_2/DR_LINKKI.shp"
+          [[ -f "${STOP_SHP_FILE}" && -f "${LINK_SHP_FILE_1}" && -f "${LINK_SHP_FILE_2}" && -f "${LINK_SHP_FILE_3}" ]]
+
+      - name: Export routing schema in both SQL and PostgreSQL's custom format
+        run: ${{ github.workspace }}/export_routing_schema.sh
+
+      - name: Verify that routing schema is exported in SQL format
+        run: |
+          SQL_FILE=${{ github.workspace }}/workdir/pgdump/digiroad_r_routing_$(date "+%Y-%m-%d").sql
+          [ "$(sed -n 2,2p ${SQL_FILE})" == "-- PostgreSQL database dump" ]
+
+      - name: Verify that routing schema is exported in PostgreSQL's custom format
+        run: |
+          PGDUMP_FILE=${{ github.workspace }}/workdir/pgdump/digiroad_r_routing_$(date "+%Y-%m-%d").pgdump
+          [[ "$(file ${PGDUMP_FILE})" == *"PostgreSQL custom database dump"* ]]
+
+      - name: Verify that toc files for PostgreSQL's custom format are created
+        run: |
+          PGDUMP_FILE=${{ github.workspace }}/workdir/pgdump/digiroad_r_routing_$(date "+%Y-%m-%d").pgdump
+          TOC_FILE_1="${PGDUMP_FILE}.list"
+          TOC_FILE_2="${PGDUMP_FILE}.no-enums.links-and-stops.list"
+          TOC_FILE_3="${PGDUMP_FILE}.no-enums.only-links.list"
+          [[ -f "${TOC_FILE_1}" && -f "${TOC_FILE_2}" && -f "${TOC_FILE_3}" ]]
