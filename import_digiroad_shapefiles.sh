@@ -49,7 +49,7 @@ docker rm -v $DOCKER_CONTAINER &> /dev/null || true
 docker run --name $DOCKER_CONTAINER -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
 
 # Wait for PostgreSQL to start.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
+docker exec "${DOCKER_CONTAINER}" sh -c "$PG_WAIT_LOCAL"
 
 # Create digiroad import schema into database.
 docker exec "${DOCKER_CONTAINER}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_IMPORT_SCHEMA_NAME};\""

@@ -15,7 +15,7 @@ docker exec "${DOCKER_CONTAINER}" sh -c "$PG_WAIT_LOCAL"
 # Export csv file to output directory.
 OUTPUT_FILENAME="digiroad_stops.csv"
 mkdir -p ${WORK_DIR}/csv
-docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql -v ${CWD}/workdir/csv:/tmp/csv ${DOCKER_IMAGE} \
+docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql -v ${WORK_DIR}/csv:/tmp/csv ${DOCKER_IMAGE} \
   sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/select_stops_as_csv.sql -v schema=${DB_IMPORT_SCHEMA_NAME} -o /tmp/csv/${OUTPUT_FILENAME}"
 
 # Stop Docker container.
