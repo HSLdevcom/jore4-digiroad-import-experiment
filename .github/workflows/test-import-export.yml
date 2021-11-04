@@ -2,11 +2,12 @@ name: Test import and export scripts
 
 on:
   push:
+    branches:
+      - main
     paths-ignore:
       - '**.md'
       - 'sql/routing/map-matching-*/**'
   pull_request:
-    branches: [main]
     paths-ignore:
       - '**.md'
       - 'sql/routing/map-matching-*/**'
