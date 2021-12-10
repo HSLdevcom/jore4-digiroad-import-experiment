@@ -10,7 +10,7 @@ via_points AS (
 match_params AS (
     SELECT
         -- Digiroad stops on both ends of Jore3 route are searched within this given radius (in meters).
-        40 AS route_endpoint_search_radius,
+        50 AS route_endpoint_search_radius,
         -- Digiroad link endpoints (vertices in topology) are searched for each via point within this given radius (in meters).
         20 AS via_point_search_radius,
         -- The radius (in meters) used to expand Jore3 route to filter applicable Digiroad links.
@@ -28,22 +28,21 @@ route_terminal_info AS (
     -- Find terminal links on both route endpoints by first resolving closest Digiroad stop and then get links.
     SELECT
         rep.endpoint_type,
-        closest_dr_stop.stop_gid,
-        closest_dr_stop.dist,
-        link.gid AS link_gid,
-        link.link_id
+        closest_stop.public_transport_stop_id,
+        closest_stop.dist,
+        link.infrastructure_link_id
     FROM route_endpoints rep, match_params p
     CROSS JOIN LATERAL (
         SELECT
-            dr_stop.gid AS stop_gid, 
-            rep.geom <-> dr_stop.geom AS dist
-        FROM routing.dr_pysakki dr_stop
-        WHERE ST_DWithin(rep.geom, dr_stop.geom, p.route_endpoint_search_radius)
-        ORDER BY rep.geom <-> dr_stop.geom
+            s.public_transport_stop_id, 
+            rep.geom <-> s.geom AS dist
+        FROM routing.public_transport_stop s
+        WHERE ST_DWithin(rep.geom, s.geom, p.route_endpoint_search_radius)
+        ORDER BY rep.geom <-> s.geom
         LIMIT 1
-    ) AS closest_dr_stop
-    INNER JOIN routing.dr_pysakki stop ON stop.gid = closest_dr_stop.stop_gid
-    INNER JOIN routing.dr_linkki link USING (link_id)
+    ) AS closest_stop
+    INNER JOIN routing.public_transport_stop stop ON stop.public_transport_stop_id = closest_stop.public_transport_stop_id
+    INNER JOIN routing.infrastructure_link link ON link.infrastructure_link_id = stop.located_on_infrastructure_link_id
 ),
 ordered_via_point_set AS (
     SELECT (dp).path, (dp).geom
@@ -67,31 +66,30 @@ via_point_closest_vertices AS (
         SELECT
             vert.id AS vertex_id, 
             vp.geom <-> vert.the_geom AS dist
-        FROM routing.dr_linkki_vertices_pgr vert
+        FROM routing.infrastructure_link_vertices_pgr vert
         WHERE ST_DWithin(vp.geom, vert.the_geom, p.via_point_search_radius)
         ORDER BY vp.geom <-> vert.the_geom
         LIMIT 1
     ) AS closest_vertex
-    INNER JOIN routing.dr_linkki_vertices_pgr vert ON vert.id = closest_vertex.vertex_id
+    INNER JOIN routing.infrastructure_link_vertices_pgr vert ON vert.id = closest_vertex.vertex_id
     ORDER BY vp.path
 ),
 via_vertices AS (
-    -- XXX: Note the array cast (int vs bigint). Beware!
-    SELECT array_agg(vertex_id)::int[] AS id_arr FROM via_point_closest_vertices
+    SELECT array_agg(vertex_id) AS id_arr FROM via_point_closest_vertices
 ),
 edge_query AS (
     -- Construct edge query for pgr_dijkstra function.
     SELECT query.txt
     FROM (
-        SELECT array_to_string(array_agg(link_gid), ',') AS txt
+        SELECT array_to_string(array_agg(infrastructure_link_id), ',') AS txt
         FROM route_terminal_info
-    ) terminal_link_gids, match_params p
+    ) terminal_link_ids, match_params p
     CROSS JOIN LATERAL (
         -- Filtering edges in WHERE clause.
-        SELECT 'SELECT gid AS id, source, target, cost, reverse_cost'
-            || ' FROM routing.dr_linkki'
-            || ' WHERE gid IN (' || terminal_link_gids.txt || ')'
-            || ' OR ST_Contains(ST_Buffer(ST_Transform(ST_GeomFromEWKT(''' || ST_AsEWKT(geom) || '''), 3067), ' || p.route_expand_radius || '), geom)' AS txt
+        SELECT 'SELECT infrastructure_link_id AS id, start_node_id As source, end_node_id AS target, cost, reverse_cost'
+            || ' FROM routing.infrastructure_link'
+            || ' WHERE infrastructure_link_id IN (' || terminal_link_ids.txt || ')'
+            || ' OR ST_Contains(ST_Buffer(ST_Transform(ST_GeomFromEWKB(''' || ST_AsEWKB(geom) || '''), 3067), ' || p.route_expand_radius || '), geom)' AS txt
         FROM jore3_route
     ) query
 ),
@@ -100,26 +98,26 @@ shortest_path_alternatives AS (
     FROM edge_query query, via_vertices via
     CROSS JOIN (
         -- Produce 2 start points for both endpoints of the first link.
-        SELECT source AS vertex_id
+        SELECT start_node_id AS vertex_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l ON l.infrastructure_link_id = rti.infrastructure_link_id
         WHERE rti.endpoint_type = 'start'
         UNION
-        SELECT target
+        SELECT end_node_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l ON l.infrastructure_link_id = rti.infrastructure_link_id
         WHERE rti.endpoint_type = 'start'
     ) AS start_vertices
     CROSS JOIN (
         -- Produce 2 end points for both endpoints of the last link.
-        SELECT source AS vertex_id
+        SELECT start_node_id AS vertex_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l ON l.infrastructure_link_id = rti.infrastructure_link_id
         WHERE rti.endpoint_type = 'end'
         UNION
-        SELECT target
+        SELECT end_node_id
         FROM route_terminal_info rti
-        INNER JOIN routing.dr_linkki l ON l.gid = rti.link_gid
+        INNER JOIN routing.infrastructure_link l ON l.infrastructure_link_id = rti.infrastructure_link_id
         WHERE rti.endpoint_type = 'end'
     ) AS end_vertices
     CROSS JOIN LATERAL (
@@ -141,7 +139,7 @@ shortest_path_alternatives AS (
             strict:=true,
             U_turn_on_edge:=true
         ) AS pt
-        INNER JOIN routing.dr_linkki link ON pt.edge = link.gid
+        INNER JOIN routing.infrastructure_link link ON pt.edge = link.infrastructure_link_id
     ) AS paths
 ),
 shortest_path_link_counts AS (
