@@ -8,7 +8,7 @@ ENV LC_ALL fi_FI.UTF-8
 # Update system and install required packages for shp2pgsql, ogr2ogr and tippecanoe.
 RUN set -ex \
  && apt-get update \
- && apt-get -y upgrade \
+ && apt-get -y --with-new-pkgs upgrade \
  && apt install -y \
     postgis \
     gdal-bin \
