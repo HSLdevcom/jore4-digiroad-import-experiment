@@ -12,4 +12,4 @@ COPY (
         source.nimi_ru as swedish_name,
         'digiroad_r' as external_stop_source
     FROM :schema.dr_pysakki source
-) TO STDOUT WITH (FORMAT CSV, HEADER)
+) TO STDOUT WITH (FORMAT CSV, DELIMITER ';', HEADER)
