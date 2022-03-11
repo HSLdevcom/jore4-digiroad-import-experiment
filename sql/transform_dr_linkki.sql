@@ -56,16 +56,23 @@ WHERE
     )
     -- Filter in municipalities relevant to HSL.
     AND src.kuntakoodi IN (
+       18, -- Askola
        49, -- Espoo,
        91, -- Helsinki
+       92, -- Vantaa
       186, -- Järvenpää
       235, -- Kauniainen
       245, -- Kerava
       257, -- Kirkkonummi
+      444, -- Lohja
+      505, -- Mäntsälä
+      543, -- Nurmijärvi
+      611, -- Pornainen
+      638, -- Porvoo 
       753, -- Sipoo
       755, -- Siuntio
       858, -- Tuusula
-       92  -- Vantaa
+      927  -- Vihti
     );
 
 -- Replace input table with transformed output.
