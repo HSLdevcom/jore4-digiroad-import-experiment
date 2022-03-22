@@ -26,15 +26,15 @@ GEOJSON_OUTPUT_FILE="${OUTPUT_FILE_BASENAME}.geojson"
 MBTILES_OUTPUT_FILE="${OUTPUT_FILE_BASENAME}.mbtiles"
 
 # Start Docker container. The container is expected to exist and contain required database table to be exported.
-docker start $DOCKER_CONTAINER
+docker start $DOCKER_CONTAINER_NAME
 
 # Wait for PostgreSQL to start.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres $DOCKER_IMAGE sh -c "$PG_WAIT"
 
 PGSQL2SHP='pgsql2shp -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -u digiroad'
 
 # Export pg_dump file from database.
-time docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_OUTPUT_DIR}/:/tmp/shp $DOCKER_IMAGE \
+time docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${SHP_OUTPUT_DIR}/:/tmp/shp $DOCKER_IMAGE \
   sh -c "$PGSQL2SHP -f /tmp/shp/${SHP_OUTPUT_FILE} digiroad ${DB_MBTILES_SCHEMA_NAME}.${DB_TABLE_NAME}"
 
 # Convert from Shapefile to GeoJSON.
@@ -51,4 +51,4 @@ docker run --rm -v ${MBTILES_OUTPUT_DIR}/:/tmp/mbtiles -v ${GEOJSON_OUTPUT_DIR}:
   sh -c "tippecanoe /tmp/geojson/$GEOJSON_OUTPUT_FILE -o /tmp/$MBTILES_OUTPUT_FILE -z$MBTILES_MAX_ZOOM_LEVEL -X -l $MBTILES_LAYER_NAME -n \"$MBTILES_DESCRIPTION\" -f; mv /tmp/$MBTILES_OUTPUT_FILE /tmp/mbtiles/$MBTILES_OUTPUT_FILE"
 
 # Stop Docker container.
-docker stop $DOCKER_CONTAINER
+docker stop $DOCKER_CONTAINER_NAME

@@ -42,17 +42,17 @@ if [[ ! -f "${SHP_FILE_DIR}/DR_PYSAKKI.shp" ]]; then
 fi
 
 # Remove possibly running/existing Docker container.
-docker kill $DOCKER_CONTAINER &> /dev/null || true
-docker rm -v $DOCKER_CONTAINER &> /dev/null || true
+docker kill $DOCKER_CONTAINER_NAME &> /dev/null || true
+docker rm -v $DOCKER_CONTAINER_NAME &> /dev/null || true
 
 # Create and start new Docker container.
-docker run --name $DOCKER_CONTAINER -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
+docker run --name $DOCKER_CONTAINER_NAME -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
 
 # Wait for PostgreSQL to start.
-docker exec "${DOCKER_CONTAINER}" sh -c "$PG_WAIT_LOCAL"
+docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PG_WAIT_LOCAL"
 
 # Create digiroad import schema into database.
-docker exec "${DOCKER_CONTAINER}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_IMPORT_SCHEMA_NAME};\""
+docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_IMPORT_SCHEMA_NAME};\""
 
 SHP2PGSQL="shp2pgsql -D -i -s 3067 -S -N abort -W $SHP_ENCODING"
 
@@ -62,33 +62,33 @@ do
     TABLE_NAME="${DB_IMPORT_SCHEMA_NAME}.`echo ${SUB_AREA_SHP_TYPE} | awk '{print tolower($0)}'`"
 
     # Create database table for each shape type.
-    docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
+    docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
       sh -c "$SHP2PGSQL -p /tmp/shp/${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1 -q"
 
     # Populate database table from multiple shapefiles from sub areas.
-    docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
+    docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
 
 # Process road geometries and filtering properties in database.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki.sql -v schema=${DB_IMPORT_SCHEMA_NAME} -v sql_dir=/tmp/sql"
 
 # Load DR_PYSAKKI shapefile into database.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${SHP_FILE_DIR}:/tmp/shp $DOCKER_IMAGE \
   sh -c "$SHP2PGSQL -c /tmp/shp/DR_PYSAKKI.shp ${DB_IMPORT_SCHEMA_NAME}.dr_pysakki | $PSQL -v ON_ERROR_STOP=1"
 
 # Process stops and filter properties in database.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_pysakki.sql -v schema=${DB_IMPORT_SCHEMA_NAME} -v sql_dir=/tmp/sql"
 
 # Process turn restrictions and filter properties in database.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_kaantymisrajoitus.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Create separate schema for exporting data in MBTiles format.
-docker run --rm --link "${DOCKER_CONTAINER}":postgres -v ${CWD}/sql:/tmp/sql \
+docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
   ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/create_mbtiles_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_MBTILES_SCHEMA_NAME} -v sql_dir=/tmp/sql"
 
 # Stop Docker container.
-docker stop $DOCKER_CONTAINER
+docker stop $DOCKER_CONTAINER_NAME

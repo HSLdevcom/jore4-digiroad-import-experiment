@@ -7,7 +7,7 @@ export WORK_DIR="${CWD}/workdir"
 export SHP_ENCODING="UTF-8"
 
 export DOCKER_IMAGE="jore4/postgis-digiroad"
-export DOCKER_CONTAINER="jore4-postgis-digiroad"
+export DOCKER_CONTAINER_NAME="jore4-postgis-digiroad"
 
 # Database details
 export DB_NAME="digiroad"
