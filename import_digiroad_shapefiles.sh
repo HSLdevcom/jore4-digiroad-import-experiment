@@ -20,26 +20,23 @@ if [[ ! -f "$DOWNLOAD_TARGET_FILE" ]]; then
 fi
 
 SUB_AREAS="ITA-UUSIMAA UUSIMAA_1 UUSIMAA_2"
-SUB_AREA_SHP_TYPES="DR_LINKKI DR_KAANTYMISRAJOITUS"
 SHP_FILE_DIR="${WORK_DIR}/shp/${AREA}"
 
 for SUB_AREA in $SUB_AREAS
 do
-    for SUB_AREA_SHP_TYPE in $SUB_AREA_SHP_TYPES
-    do
-        if [[ ! -f "${SHP_FILE_DIR}/${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp" ]]; then
-            mkdir -p "$SHP_FILE_DIR/${SUB_AREA}"
-            # Extract shapefile.
-            unzip -u $DOWNLOAD_TARGET_FILE ${SUB_AREA}/${SUB_AREA_SHP_TYPE}.* -d $SHP_FILE_DIR
-        fi
-    done
+    mkdir -p "$SHP_FILE_DIR/${SUB_AREA}"
+    # Extract all shapefiles within sub-area.
+    unzip -u $DOWNLOAD_TARGET_FILE ${SUB_AREA}/* -d $SHP_FILE_DIR
 done
 
-# Extract stop shapefile (common to Uusimaa).
-if [[ ! -f "${SHP_FILE_DIR}/DR_PYSAKKI.shp" ]]; then
-    unzip -u $DOWNLOAD_TARGET_FILE PYSAKIT.zip -d $DOWNLOAD_TARGET_DIR/$AREA
-    unzip -u $DOWNLOAD_TARGET_DIR/${AREA}/PYSAKIT.zip -d $SHP_FILE_DIR
-fi
+# Extract shapefile for public transport stops (common to all sub-areas of Uusimaa).
+unzip -u $DOWNLOAD_TARGET_FILE PYSAKIT.zip -d $DOWNLOAD_TARGET_DIR/$AREA
+unzip -u $DOWNLOAD_TARGET_DIR/${AREA}/PYSAKIT.zip -d $SHP_FILE_DIR
+rm $DOWNLOAD_TARGET_DIR/${AREA}/PYSAKIT.zip
+rmdir $DOWNLOAD_TARGET_DIR/${AREA}
+
+# Extract general Digiroad documents.
+unzip -u $DOWNLOAD_TARGET_FILE Dokumentit/* -d $DOWNLOAD_TARGET_DIR
 
 # Remove possibly running/existing Docker container.
 docker kill $DOCKER_CONTAINER_NAME &> /dev/null || true
@@ -55,6 +52,9 @@ docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PG_WAIT_LOCAL"
 docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PSQL -nt -c \"CREATE SCHEMA ${DB_IMPORT_SCHEMA_NAME};\""
 
 SHP2PGSQL="shp2pgsql -D -i -s 3067 -S -N abort -W $SHP_ENCODING"
+
+# Load only selected shapefiles into database.
+SUB_AREA_SHP_TYPES="DR_LINKKI DR_KAANTYMISRAJOITUS"
 
 for SUB_AREA_SHP_TYPE in $SUB_AREA_SHP_TYPES
 do
