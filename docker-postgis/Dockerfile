@@ -5,11 +5,30 @@ ENV LANG fi_FI.UTF-8
 ENV LANGUAGE fi_FI.UTF-8
 ENV LC_ALL fi_FI.UTF-8
 
-# Update system and install required packages for shp2pgsql, ogr2ogr and tippecanoe.
-RUN set -ex \
- && apt-get update \
- && apt-get -y --with-new-pkgs upgrade \
- && apt install -y \
+RUN `#1. Update current packages.` \
+ && set -ex \
+ && apt-get -y update \
+ && apt-get -y upgrade \
+ && apt-get -y dist-upgrade \
+ && apt-get -y autoremove \
+ && apt-get -y clean \
+ && `#2. Modify the repositories.` \
+ && echo 'deb http://deb.debian.org/debian/ bullseye main contrib non-free\n\
+deb-src http://deb.debian.org/debian/ bullseye main contrib non-free\n\
+\n\
+deb http://security.debian.org/debian-security bullseye-security main contrib non-free\n\
+deb-src http://security.debian.org/debian-security bullseye-security main contrib non-free\n\
+\n\
+deb http://deb.debian.org/debian/ bullseye-updates main\n\
+deb-src http://deb.debian.org/debian/ bullseye-updates main'\
+ > /etc/apt/sources.list \
+ && `#3. Upgrade to Debian 11.` \
+ && echo '* libraries/restart-without-asking boolean true' | debconf-set-selections \ 
+ && apt-get -y update \
+ && apt-get -y upgrade \
+ && apt-get -y dist-upgrade \
+ && `#4. Install required packages for shp2pgsql, ogr2ogr and tippecanoe.` \
+ && apt -y install \
     postgis \
     gdal-bin \
     build-essential \
@@ -23,8 +42,10 @@ RUN set -ex \
  && make install \
  && cd / \
  && rm -rf /tmp/tippecanoe-src \
+ && `#5. Clean and remove unneeded build dependencies.` \
  && apt-get -y remove --purge build-essential git \
- && apt-get -y autoremove
+ && apt-get -y autoremove \
+ && apt-get -y clean
 
 # Set locales.
 
