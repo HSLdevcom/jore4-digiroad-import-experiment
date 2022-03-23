@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker build -t jore4/postgis-digiroad ./docker-postgis/
+docker build --no-cache -t jore4/postgis-digiroad ./docker-postgis/
