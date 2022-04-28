@@ -160,3 +160,11 @@ shapefiles have already been imported):
 ```
 ./export_mbtiles_dr_pysakki.sh
 ```
+
+## License
+
+The project license is in [`LICENSE`](./LICENSE).
+
+Digiroad data has been licensed with Creative Commons BY 4.0 license by the [Finnish Transport Infrastructure Agency](https://vayla.fi/en/transport-network/data/digiroad/data).
+
+The Jore4 fix layer in [`./fixup`](./fixup) is licensed under Creative Commons BY 4.0 by Helsinki Regional Transport Authority (HSL).
