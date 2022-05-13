@@ -223,6 +223,8 @@ SELECT pgr_createTopology(:'schema' || '.infrastructure_link', 0.001, 'geom', 'i
 COMMENT ON TABLE :schema.infrastructure_link_vertices_pgr IS
     'Topology nodes created for infrastructure links by pgRougting';
 
+SELECT pgr_analyzeGraph(:'schema' || '.infrastructure_link', 0.001, 'geom', 'infrastructure_link_id', 'start_node_id', 'end_node_id');
+
 -- Set up `cost` and `reverse_cost` parameters for pgRouting functions.
 -- 
 -- Negative `cost` effectively means pgRouting will not consider traversing the link along its digitised direction.
@@ -240,6 +242,24 @@ ALTER TABLE :schema.infrastructure_link ALTER COLUMN geom SET NOT NULL,
                                         ALTER COLUMN end_node_id SET NOT NULL,
                                         ALTER COLUMN cost SET NOT NULL,
                                         ALTER COLUMN reverse_cost SET NOT NULL;
+
+-- Add temporary column for the purpose of analysing one-way streets.
+ALTER TABLE :schema.infrastructure_link ADD COLUMN pgr_dir TEXT;
+
+UPDATE :schema.infrastructure_link SET
+    pgr_dir = CASE WHEN (cost > 0 AND reverse_cost > 0) THEN 'B'   -- bidirectional
+                   WHEN (cost > 0 AND reverse_cost < 0) THEN 'FT'  -- direction of the LINESSTRING
+                   WHEN (cost < 0 AND reverse_cost > 0) THEN 'TF'  -- reverse direction of the LINESTRING
+                   ELSE '' END;                                    -- unknown
+
+ALTER TABLE :schema.infrastructure_link ALTER COLUMN pgr_dir SET NOT NULL;
+
+-- Analyse one-way streets. A couple of columns in `infrastructure_link_vertices_pgr` table are
+-- populated as side effect.
+SELECT pgr_analyzeOneWay(:'schema' || '.infrastructure_link', ARRAY['', 'B', 'TF'], ARRAY['', 'B', 'FT'], ARRAY['', 'B', 'FT'], ARRAY['', 'B', 'TF'], oneway:='pgr_dir', source:='start_node_id', target:='end_node_id');
+
+-- Drop temporary column used for analysing one-way streets.
+ALTER TABLE :schema.infrastructure_link DROP COLUMN pgr_dir;
 
 -- Drop 3D geometry since it cannot be utilised by pgRouting.
 ALTER TABLE :schema.infrastructure_link DROP COLUMN geom_3d;
