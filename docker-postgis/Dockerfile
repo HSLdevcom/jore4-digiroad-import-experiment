@@ -45,28 +45,35 @@ RUN set -ex \
     gdal-bin \
  && rm -rf /var/lib/apt/lists/*
 
-ENV TIPPECANOE_GIT_HASH 18e53cd7fb9ae6be8b89d817d69d3ce06f30eb9d
+ENV TIPPECANOE_VERSION 1.36.0
+ENV TIPPECANOE_SHA256 0e385d1244a0d836019f64039ea6a34463c3c2f49af35d02c3bf241aec41e71b
 
 # Build and install tippecanoe from source.
 RUN set -ex \
  && apt-get update \
  && apt-get install -y \
     build-essential \
-    git \
     libsqlite3-dev \
+    wget \
     zlib1g-dev \
+ && wget -O tippecanoe.tar.gz "https://github.com/mapbox/tippecanoe/archive/refs/tags/${TIPPECANOE_VERSION}.tar.gz" \
+ && echo "$TIPPECANOE_SHA256 *tippecanoe.tar.gz" | sha256sum -c - \
  && mkdir -p /usr/src/tippecanoe \
- && git clone https://github.com/mapbox/tippecanoe.git /usr/src/tippecanoe \
+ && tar \
+  --extract \
+  --file tippecanoe.tar.gz \
+  --directory /usr/src/tippecanoe \
+  --strip-components 1 \
+ && rm tippecanoe.tar.gz \
  && cd /usr/src/tippecanoe \
- && git checkout ${TIPPECANOE_GIT_HASH} \
  && make \
  && make install \
  && cd / \
  && rm -rf /usr/src/tippecanoe \
  && apt-get purge -y --autoremove \
     build-essential \
-    git \
     libsqlite3-dev \
+    wget \
     zlib1g-dev \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
