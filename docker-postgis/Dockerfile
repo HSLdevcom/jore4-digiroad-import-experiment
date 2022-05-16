@@ -5,6 +5,9 @@ ENV LANG fi_FI.UTF-8
 ENV LANGUAGE fi_FI.UTF-8
 ENV LC_ALL fi_FI.UTF-8
 
+# Stop apt-get upgrade asking questions.
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN `#1. Update current packages.` \
  && set -ex \
  && apt-get update \
