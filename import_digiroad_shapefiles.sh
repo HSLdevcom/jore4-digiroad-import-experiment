@@ -91,11 +91,11 @@ docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sq
 
 # Process road geometries and filtering properties in database.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki.sql -v schema=${DB_IMPORT_SCHEMA_NAME} -v sql_dir=/tmp/sql"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_linkki.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Process stops and filter properties in database.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_pysakki.sql -v schema=${DB_IMPORT_SCHEMA_NAME} -v sql_dir=/tmp/sql"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/transform_dr_pysakki.sql -v schema=${DB_IMPORT_SCHEMA_NAME}"
 
 # Process turn restrictions and filter properties in database.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
@@ -103,7 +103,7 @@ docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sq
 
 # Create separate schema for exporting data in MBTiles format.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql \
-  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/create_mbtiles_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_MBTILES_SCHEMA_NAME} -v sql_dir=/tmp/sql"
+  ${DOCKER_IMAGE} sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/create_mbtiles_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_MBTILES_SCHEMA_NAME}"
 
 # Stop Docker container.
 docker stop $DOCKER_CONTAINER_NAME

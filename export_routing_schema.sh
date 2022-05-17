@@ -17,7 +17,7 @@ docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PG_WAIT_LOCAL"
 
 # Create routing schema. pgRouting topology is created as well.
 docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/sql:/tmp/sql ${DOCKER_IMAGE} \
-  sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/routing/create_routing_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_ROUTING_SCHEMA_NAME} -v sql_dir=/tmp/sql"
+  sh -c "$PSQL -v ON_ERROR_STOP=1 -f /tmp/sql/routing/create_routing_schema.sql -v source_schema=${DB_IMPORT_SCHEMA_NAME} -v schema=${DB_ROUTING_SCHEMA_NAME}"
 
 DUMP_DIR="${WORK_DIR}/pgdump"
 DUMP_FILE_BASENAME="digiroad_r_routing_$(date "+%Y-%m-%d")"
