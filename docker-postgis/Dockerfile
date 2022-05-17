@@ -8,13 +8,12 @@ ENV LC_ALL fi_FI.UTF-8
 # Stop apt-get upgrade asking questions.
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN `#1. Update current packages.` \
- && set -ex \
+# Upgrade to Debian 11.
+RUN set -ex \
  && apt-get update \
- && apt-get -y upgrade \
- && apt-get -y dist-upgrade \
- && apt-get -y --purge autoremove \
- && `#2. Modify the repositories.` \
+ && apt-get upgrade -y \
+ && apt-get dist-upgrade -y \
+ && apt-get purge -y --autoremove \
  && echo 'deb http://deb.debian.org/debian/ bullseye main contrib non-free\n\
 deb-src http://deb.debian.org/debian/ bullseye main contrib non-free\n\
 \n\
@@ -24,30 +23,53 @@ deb-src http://security.debian.org/debian-security bullseye-security main contri
 deb http://deb.debian.org/debian/ bullseye-updates main\n\
 deb-src http://deb.debian.org/debian/ bullseye-updates main'\
  > /etc/apt/sources.list \
- && `#3. Upgrade to Debian 11.` \
  && echo '* libraries/restart-without-asking boolean true' | debconf-set-selections \ 
  && apt-get update \
- && apt-get -y --without-new-pkgs upgrade \
- && apt-get -y dist-upgrade \
- && `#4. Install required packages for shp2pgsql, ogr2ogr and tippecanoe.` \
- && apt-get -y install \
+ && apt-get upgrade -y --without-new-pkgs \
+ && apt-get dist-upgrade -y \
+ && apt-get purge -y --autoremove \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# "Re-install" PostGIS in order to get shp2pgsql.
+RUN set -ex \
+ && apt-get update \
+ && apt-get install -y \
     postgis \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install GDAL command line utilities (e.g. ogr2ogr).
+RUN set -ex \
+ && apt-get update \
+ && apt-get install -y \
     gdal-bin \
+ && rm -rf /var/lib/apt/lists/*
+
+ENV TIPPECANOE_GIT_HASH 18e53cd7fb9ae6be8b89d817d69d3ce06f30eb9d
+
+# Build and install tippecanoe from source.
+RUN set -ex \
+ && apt-get update \
+ && apt-get install -y \
     build-essential \
     git \
     libsqlite3-dev \
     zlib1g-dev \
- && mkdir -p /tmp/tippecanoe-src \
- && git clone https://github.com/mapbox/tippecanoe.git /tmp/tippecanoe-src \
- && cd /tmp/tippecanoe-src \
+ && mkdir -p /usr/src/tippecanoe \
+ && git clone https://github.com/mapbox/tippecanoe.git /usr/src/tippecanoe \
+ && cd /usr/src/tippecanoe \
+ && git checkout ${TIPPECANOE_GIT_HASH} \
  && make \
  && make install \
  && cd / \
- && rm -rf /tmp/tippecanoe-src \
- && `#5. Clean and remove unneeded build dependencies.` \
- && apt-get -y --purge remove build-essential git \
- && apt-get -y --purge autoremove \
- && apt-get -y clean
+ && rm -rf /usr/src/tippecanoe \
+ && apt-get purge -y --autoremove \
+    build-essential \
+    git \
+    libsqlite3-dev \
+    zlib1g-dev \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
 
 # Set locales.
 
