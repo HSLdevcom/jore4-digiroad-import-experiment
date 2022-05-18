@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS :schema.dr_kaantymisrajoitus_out;
 CREATE TABLE :schema.dr_kaantymisrajoitus_out AS
 SELECT
     src.id,
-    src.lahd_id,
-    src.kohd_id,
+    src.lahd_id::text,
+    src.kohd_id::text,
     src.kuntakoodi,
     src.poikkeus,
     src.voim_aika,

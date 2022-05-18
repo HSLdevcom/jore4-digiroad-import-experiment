@@ -52,7 +52,7 @@ CREATE TABLE :schema.infrastructure_link AS
 SELECT
     src.gid::bigint AS infrastructure_link_id,
     isrc.infrastructure_source_id,
-    src.link_id::text AS external_link_id,
+    src.link_id AS external_link_id,
     dir.traffic_flow_direction_type,
     src.kuntakoodi AS municipality_code,
     src.linkkityyp AS external_link_type,

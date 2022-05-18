@@ -43,6 +43,12 @@ WHERE
       927  -- Vihti
     );
 
+ALTER TABLE :schema.dr_linkki_out
+    ALTER COLUMN link_id TYPE text,
+    ALTER COLUMN tienimi_su TYPE text,
+    ALTER COLUMN tienimi_ru TYPE text,
+    ALTER COLUMN tienimi_sa TYPE text;
+
 -- Replace input table with transformed output.
 DROP TABLE :schema.dr_linkki;
 ALTER TABLE :schema.dr_linkki_out RENAME TO dr_linkki;

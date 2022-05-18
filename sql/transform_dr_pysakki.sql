@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS :schema.dr_pysakki_out;
 CREATE TABLE :schema.dr_pysakki_out AS
 SELECT
     src.gid,
-    src.link_id,
+    src.link_id::text,
     src.link_mmlid,
     src.valtak_id::int,
     src.kuntakoodi::int,
