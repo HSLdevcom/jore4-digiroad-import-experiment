@@ -44,6 +44,58 @@ The schema name can be changed in `set_env_vars.sh` script.
 
 Within the script execution further processing for Digiroad data is done as well.
 
+## JORE4 fix layer on top of Digiroad links (a.k.a. _QGIS fixup layer_)
+
+JORE4 project involves a "QGIS fixup layer" in the form of QGIS project. The
+project file (`fixup/jore4-digiroad-fix-project.qgs`) contains several layers or layer groups:
+* Background map tiles from an online service (currently Digitransit)
+* Digiroad infrastructure links (_DR_LINKKI_) from shapefiles covering Uusimaa (administrative region)
+* Digiroad public transport stops (_DR_PYSAKKI_) from shapefiles covering Uusimaa (administrative region)
+* JORE4 fix layer
+
+With _JORE4 fix layer_ HSL-specific customisations to infrastructure network can
+be achieved. In JORE4, there is a need for more fine-grained infrastructure link
+modeling at some places (e.g. public transport terminals) than what Digiroad
+(eventually
+[Maastotietokanta](https://www.maanmittauslaitos.fi/en/maps-and-spatial-data/expert-users/product-descriptions/topographic-database)
+of [MML](https://www.maanmittauslaitos.fi/en)) currently provides. These
+customisations can be defined in the fix layer of the QGIS project.
+
+JORE4 fix layer in the QGIS project is actually a QGIS layer group consisting
+of the QGIS layers that are described in the table below. The data for these
+layers is stored in and read from a separate GeoPackage file
+(`fixup/digiroad/fixup.gpkg`). This GeoPackage file will be updated and
+maintained in the daily operational use of JORE4 "ecosystem".
+
+| QGIS layer | Description |
+| ---------- | ----------- |
+| `fixup`    | Contains data for new infrastructure links to be added on top of Digiroad links. A `LINESTRING` geometry is a mandatory part of each link to be added. All the geometries defined on this layer must seamlessly join to each other and/or existing Digiroad links. Seamlessness can be achieved by using the snapping tool in QGIS while drawing new links. |
+| `removed`  | Contains geometries that are used to mark intersecting Digiroad links for removal. The links marked for removal will be filtered out when exporting data in later stages. The Digiroad public transport stops along the links marked for removal are also filtered out in data exports. It is recommended to use `LINESTRING` type in intersection geometries but currently this is not strictly required. |
+
+### GeoPackage _fixup_ layer contents
+
+The table below describes the columns of the `fixup` layer in the QGIS
+project. The data types are as they appear in the GeoPackage format (SQLite).
+
+| Column name            | Data type  | Not null | Description |
+| ---------------------- | ---------- | -------- | ----------- |
+| `fid`                  | INTEGER    | X        | The primary key generated internally in GeoPackage. |
+| `geometry`             | LINESTRING | -        | The `LINESTRING` geometry describing the shape of this infrastructure link |
+| `link_id`              | TEXT       | -        | Manually maintained infrastructure link identifier that must be kept unique. |
+| `kuntakoodi`           | MEDIUMINT  | -        | Official Finnish municipality code |
+| `linkkityyp`           | MEDIUMINT  | -        | The link type as code value from the corresponding Digiroad code set |
+| `ajosuunta`            | MEDIUMINT  | -        | The direction of traffic flow as code value from the corresponding Digiroad code set |
+
+### GeoPackage _removed_ layer contents
+
+The table below describes the columns of the `removed` layer in the QGIS
+project. The data types are as they appear in the GeoPackage format (SQLite).
+
+| Column name | Data type | Not null | Description |
+| ----------- | --------- | -------- | ----------- |
+| `fid`       | INTEGER   | X        | The primary key generated internally in GeoPackage |
+| `geometry`  | GEOMETRY  | -        | The geometry used to find all infrastructure links whose geometry intersects with it. The affected infrastructure links will be marked for removal and will not be included in data exports. | 
+
 ## Exporting Digiroad data
 
 ```sh
