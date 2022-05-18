@@ -1,39 +1,7 @@
 DROP TABLE IF EXISTS :schema.dr_linkki_out;
 
 CREATE TABLE :schema.dr_linkki_out AS
-SELECT
-    src.gid,
-    src.link_id,
-    src.link_mmlid,
-    src.kuntakoodi,
-    src.hallinn_lk,
-    src.toiminn_lk,
-    src.linkkityyp,
-    src.tienumero,
-    src.tieosanro,
-    src.silta_alik,
-    src.ajorata,
-    src.aet,
-    src.let,
-    src.ajosuunta,
-    src.tienimi_su,
-    src.tienimi_ru,
-    src.tienimi_sa,
-    src.ens_talo_o,
-    src.ens_talo_v,
-    src.viim_tal_o,
-    src.viim_tal_v,
-    src.muokkauspv,
-    src.sij_tark,
-    src.kor_tark,
-    src.alku_paalu,
-    src.lopp_paalu,
-    src.geom_flip,
-    src.link_tila,
-    src.geom_lahde,
-    src.mtk_tie_lk,
-    src.tien_kasvu,
-    src.geom
+SELECT src.*
 FROM :schema.dr_linkki src
 WHERE
     src.linkkityyp IN (
