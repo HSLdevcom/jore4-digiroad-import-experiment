@@ -43,7 +43,7 @@ WHERE
         4, -- Moottoriliikennetien osa
         5, -- Kiertoliittymän osa
         6, -- Ramppi
-    --  7, -- Levähdysalue
+        7, -- Levähdysalue
     --  8, -- Pyörätie tai yhdistetty pyörätie ja jalkakäytävä
     --  9, -- Jalankulkualueen osa, esim. kävelykatu tai jalkakäytävä
     -- 10, -- Huolto- tai pelastustien osa
