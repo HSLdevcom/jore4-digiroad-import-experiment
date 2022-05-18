@@ -1,54 +1,26 @@
 DROP TABLE IF EXISTS :schema.dr_pysakki_out;
 
 CREATE TABLE :schema.dr_pysakki_out AS
-SELECT
-    src.gid,
-    src.link_id::text,
-    src.link_mmlid,
-    src.valtak_id::int,
-    src.kuntakoodi::int,
-    src.koord_x,
-    src.koord_y,
-    src.sijainti_m,
-    src.vaik_suunt::int,
-    src.nimi_su,
-    src.nimi_ru,
-    src.yllapitaja::int,
-    src.yllap_tunn,
-    src.livi_tunn,
-    src.matk_tunn,
-    src.maast_x,
-    src.maast_y,
-    src.maast_z,
-    src.liik_suunt,
-    src.l_suuntima,
-    src.ens_vo_pv,
-    src.viim_vo_pv,
-    src.pys_tyyppi,
-    src.aikataulu::int,
-    src.katos::int,
-    src.penkki::int,
-    src.mainoskat::int,
-    src.pyoratelin::int,
-    src.s_aikataul::int,
-    src.valaistus::int,
-    src.estettomyy,
-    src.saattomahd::int,
-    src.liit_lkm,
-    src.liit_lisat,
-    src.pys_omist,
-    src.palaute_os,
-    src.lisatiedot,
-    src.irti_geom::int,
-    src.muokkauspv,
-    src.laiturinum,
-    src.liit_term,
-    src.vyohyktiet,
-    src.palvelutas,
-    src.geom
+SELECT src.*
 FROM :schema.dr_pysakki src
 -- Municipality filtering is done into `dr_linkki` table.
 INNER JOIN :schema.dr_linkki link USING (link_id);
+
+ALTER TABLE :schema.dr_pysakki_out
+    ALTER COLUMN link_id TYPE text,
+    ALTER COLUMN valtak_id TYPE int,
+    ALTER COLUMN kuntakoodi TYPE int,
+    ALTER COLUMN vaik_suunt TYPE int,
+    ALTER COLUMN yllapitaja TYPE int,
+    ALTER COLUMN aikataulu TYPE int,
+    ALTER COLUMN katos TYPE int,
+    ALTER COLUMN penkki TYPE int,
+    ALTER COLUMN mainoskat TYPE int,
+    ALTER COLUMN pyoratelin TYPE int,
+    ALTER COLUMN s_aikataul TYPE int,
+    ALTER COLUMN valaistus TYPE int,
+    ALTER COLUMN saattomahd TYPE int,
+    ALTER COLUMN irti_geom TYPE int;
 
 -- Replace input table with transformed output.
 DROP TABLE :schema.dr_pysakki;
