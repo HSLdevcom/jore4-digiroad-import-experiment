@@ -43,6 +43,8 @@ COMMENT ON COLUMN :schema.infrastructure_source.infrastructure_source_name IS
     'The short name for the infrastructure element source';
 INSERT INTO :schema.infrastructure_source (infrastructure_source_id, infrastructure_source_name, description) VALUES
     (1, 'digiroad_r', 'Digiroad R export made available by Finnish Transport Infrastructure Agency (https://vayla.fi)');
+INSERT INTO :schema.infrastructure_source (infrastructure_source_id, infrastructure_source_name, description) VALUES
+    (2, 'hsl_fixup', 'HSL additions on top of Digiroad infrastructure network');
 
 --
 -- Import infrastructure links
@@ -50,19 +52,21 @@ INSERT INTO :schema.infrastructure_source (infrastructure_source_id, infrastruct
 
 CREATE TABLE :schema.infrastructure_link AS
 SELECT
-    src.gid::bigint AS infrastructure_link_id,
+    src.id::bigint AS infrastructure_link_id,
     isrc.infrastructure_source_id,
     src.link_id AS external_link_id,
     dir.traffic_flow_direction_type,
     src.kuntakoodi AS municipality_code,
     src.linkkityyp AS external_link_type,
     src.link_tila AS external_link_state,
-    json_build_object('fi', src.tienimi_su, 'sv', src.tienimi_ru)::jsonb AS name,
+    json_build_object('fi', src.tienimi_su,
+                      'sv', src.tienimi_ru
+    )::jsonb AS name,
     ST_Force3D(src.geom) AS geom_3d
-FROM :source_schema.dr_linkki src
+FROM :source_schema.dr_linkki_fixup src
 -- Filter out links with possibly invalid direction of traffic flow.
 INNER JOIN :schema.traffic_flow_direction dir ON dir.traffic_flow_direction_type = src.ajosuunta
-INNER JOIN :schema.infrastructure_source isrc ON isrc.infrastructure_source_id = 1;  -- Digiroad R
+INNER JOIN :schema.infrastructure_source isrc ON isrc.infrastructure_source_name = src.hsl_infra_source;
 
 COMMENT ON TABLE :schema.infrastructure_link IS
     'The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453';
@@ -134,7 +138,7 @@ INSERT INTO :schema.vehicle_type (vehicle_type, belonging_to_vehicle_mode) VALUE
 CREATE INDEX ON :schema.vehicle_type (belonging_to_vehicle_mode);
 
 --
--- Create an assoiciation table and populate data for which infrastructure links can be safely traversed
+-- Create an association table and populate data for which infrastructure links can be safely traversed
 -- by which vehicle type
 --
 
@@ -152,15 +156,36 @@ COMMENT ON COLUMN :schema.infrastructure_link_safely_traversed_by_vehicle_type.v
 
 CREATE INDEX ON :schema.infrastructure_link_safely_traversed_by_vehicle_type (vehicle_type, infrastructure_link_id);
 
--- TODO: Assign tall electric busses to infrastructure links based on greatest allowed height property.
 INSERT INTO :schema.infrastructure_link_safely_traversed_by_vehicle_type (infrastructure_link_id, vehicle_type)
-SELECT lnk.infrastructure_link_id, 'generic_bus'
-FROM :schema.infrastructure_link lnk
-WHERE lnk.infrastructure_source_id = 1 -- All Digiroad links are accepted as bus links
-UNION ALL
-SELECT lnk.infrastructure_link_id, 'generic_ferry'
-FROM :schema.infrastructure_link lnk
-WHERE lnk.infrastructure_source_id = 1 AND lnk.external_link_type = 21; -- cable ferry connection
+    SELECT lnk.infrastructure_link_id, 'generic_bus'
+    FROM :schema.infrastructure_link lnk
+    INNER JOIN :source_schema.dr_linkki_fixup src_lnk ON src_lnk.id = lnk.infrastructure_link_id::int
+    WHERE src_lnk.is_generic_bus = true
+UNION
+    SELECT lnk.infrastructure_link_id, 'tall_electric_bus'
+    FROM :schema.infrastructure_link lnk
+    INNER JOIN :source_schema.dr_linkki_fixup src_lnk ON src_lnk.id = lnk.infrastructure_link_id::int
+    WHERE src_lnk.is_tall_electric_bus = true
+UNION
+    SELECT lnk.infrastructure_link_id, 'generic_tram'
+    FROM :schema.infrastructure_link lnk
+    INNER JOIN :source_schema.dr_linkki_fixup src_lnk ON src_lnk.id = lnk.infrastructure_link_id::int
+    WHERE src_lnk.is_tram = true
+UNION
+    SELECT lnk.infrastructure_link_id, 'generic_train'
+    FROM :schema.infrastructure_link lnk
+    INNER JOIN :source_schema.dr_linkki_fixup src_lnk ON src_lnk.id = lnk.infrastructure_link_id::int
+    WHERE src_lnk.is_train = true
+UNION
+    SELECT lnk.infrastructure_link_id, 'generic_metro'
+    FROM :schema.infrastructure_link lnk
+    INNER JOIN :source_schema.dr_linkki_fixup src_lnk ON src_lnk.id = lnk.infrastructure_link_id::int
+    WHERE src_lnk.is_metro = true
+UNION
+    SELECT lnk.infrastructure_link_id, 'generic_ferry'
+    FROM :schema.infrastructure_link lnk
+    INNER JOIN :source_schema.dr_linkki_fixup src_lnk ON src_lnk.id = lnk.infrastructure_link_id::int
+    WHERE src_lnk.is_ferry = true;
 
 --
 -- Create network topology for infrastructure links
@@ -225,10 +250,10 @@ ALTER TABLE :schema.infrastructure_link DROP COLUMN geom_3d;
 
 CREATE TABLE :schema.public_transport_stop AS
 SELECT
-    src.gid::bigint AS public_transport_stop_id,
+    src.id::bigint AS public_transport_stop_id,
     src.valtak_id AS public_transport_stop_national_id,
     link.infrastructure_link_id AS located_on_infrastructure_link_id,
-    isrc.infrastructure_source_id,
+    link.infrastructure_source_id,  -- inherit from link
     CASE
         WHEN src.vaik_suunt = 2 THEN true
         WHEN src.vaik_suunt = 3 THEN false
@@ -236,11 +261,12 @@ SELECT
     END AS is_on_direction_of_link_forward_traversal,
     src.sijainti_m AS distance_from_link_start_in_meters,
     src.kuntakoodi AS municipality_code,
-    json_build_object('fi', src.nimi_su, 'sv', src.nimi_ru)::jsonb AS name,
+    json_build_object('fi', src.nimi_su,
+                      'sv', src.nimi_ru
+    )::jsonb AS name,
     src.geom
-FROM :source_schema.dr_pysakki src
-INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id
-INNER JOIN :schema.infrastructure_source isrc ON isrc.infrastructure_source_id = 1;  -- Digiroad R
+FROM :source_schema.dr_pysakki_fixup src
+INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id;
 
 COMMENT ON TABLE :schema.public_transport_stop IS
     'The public transport stops imported from Digiroad export';

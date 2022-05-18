@@ -49,6 +49,8 @@ ALTER TABLE :schema.dr_linkki_out
     ALTER COLUMN tienimi_ru TYPE text,
     ALTER COLUMN tienimi_sa TYPE text;
 
+ALTER TABLE :schema.dr_linkki_out RENAME column gid TO id;
+
 -- Replace input table with transformed output.
 DROP TABLE :schema.dr_linkki;
 ALTER TABLE :schema.dr_linkki_out RENAME TO dr_linkki;
@@ -61,5 +63,5 @@ ALTER TABLE :schema.dr_linkki
     ALTER COLUMN linkkityyp SET NOT NULL,
     ALTER COLUMN ajosuunta SET NOT NULL,
 
-    ADD CONSTRAINT dr_linkki_pkey PRIMARY KEY (gid),
+    ADD CONSTRAINT dr_linkki_pkey PRIMARY KEY (id),
     ADD CONSTRAINT uk_dr_linkki_link_id UNIQUE (link_id);

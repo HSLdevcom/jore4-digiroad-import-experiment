@@ -22,6 +22,8 @@ ALTER TABLE :schema.dr_pysakki_out
     ALTER COLUMN saattomahd TYPE int,
     ALTER COLUMN irti_geom TYPE int;
 
+ALTER TABLE :schema.dr_pysakki_out RENAME COLUMN gid TO id;
+
 -- Replace input table with transformed output.
 DROP TABLE :schema.dr_pysakki;
 ALTER TABLE :schema.dr_pysakki_out RENAME TO dr_pysakki;
@@ -29,7 +31,7 @@ ALTER TABLE :schema.dr_pysakki_out RENAME TO dr_pysakki;
 -- Add data integrity constraints.
 ALTER TABLE :schema.dr_pysakki
 
-    ALTER COLUMN gid SET NOT NULL,
+    ALTER COLUMN id SET NOT NULL,
     ALTER COLUMN link_id SET NOT NULL,
     ALTER COLUMN valtak_id SET NOT NULL,
     ALTER COLUMN kuntakoodi SET NOT NULL,
@@ -39,5 +41,7 @@ ALTER TABLE :schema.dr_pysakki
     ALTER COLUMN vaik_suunt SET NOT NULL,
     ALTER COLUMN geom SET NOT NULL,
 
-    ADD CONSTRAINT dr_pysakki_pkey PRIMARY KEY (gid),
+    ADD CONSTRAINT dr_pysakki_pkey PRIMARY KEY (id),
     ADD CONSTRAINT fk_dr_pysakki_link_id FOREIGN KEY (link_id) REFERENCES :schema.dr_linkki (link_id);
+
+CREATE INDEX dr_pysakki_link_id_idx ON :schema.dr_pysakki (link_id);
