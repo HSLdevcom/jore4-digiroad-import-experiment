@@ -26,12 +26,12 @@
       <customproperties>
         <Option/>
       </customproperties>
-      <layer-tree-layer checked="Qt::Checked" legend_split_behavior="0" source="./digiroad/fixup.gpkg|layername=fixup" providerKey="ogr" name="fixup" id="fixup_e28c3518_4f5d_4439_a95d_b721dd33a87a" expanded="1" patch_size="-1,-1" legend_exp="">
+      <layer-tree-layer checked="Qt::Checked" legend_split_behavior="0" source="./digiroad/fixup.gpkg|layername=add_link" providerKey="ogr" name="add_link" id="add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a" expanded="1" patch_size="-1,-1" legend_exp="">
         <customproperties>
           <Option/>
         </customproperties>
       </layer-tree-layer>
-      <layer-tree-layer checked="Qt::Checked" legend_split_behavior="0" source="./digiroad/fixup.gpkg|layername=removed" providerKey="ogr" name="removed" id="removed_9cc9fccc_672c_4416_b2d0_59cfe25f2689" expanded="1" patch_size="-1,-1" legend_exp="">
+      <layer-tree-layer checked="Qt::Checked" legend_split_behavior="0" source="./digiroad/fixup.gpkg|layername=remove_link" providerKey="ogr" name="remove_link" id="remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689" expanded="1" patch_size="-1,-1" legend_exp="">
         <customproperties>
           <Option/>
         </customproperties>
@@ -654,8 +654,8 @@
       <item>DR_VAK_RAJOITUS_b722349f_bd30_4be4_9ff5_1aacb3a8db79</item>
       <item>DR_VALAISTU_TIE_7a220c8a_6078_4d4a_b4dc_5cbd330458f7</item>
       <item>DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_d0b3fe6c_6296_44fd_a319_0e0246becdfb</item>
-      <item>fixup_e28c3518_4f5d_4439_a95d_b721dd33a87a</item>
-      <item>removed_9cc9fccc_672c_4416_b2d0_59cfe25f2689</item>
+      <item>add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a</item>
+      <item>remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689</item>
       <item>DR_PYSAKKI_e4881884_1d15_4522_841e_854f2b250597</item>
     </custom-order>
   </layer-tree-group>
@@ -665,7 +665,7 @@
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_SUOJATIE_d75f88f9_9d5d_4f77_9a88_2fd97f5ef46b" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_9f6b8f66_c408_4836_bc5b_d1759dcf5791" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_PAALLYSTETTY_TIE_da13668f_b3d3_4dc2_9f01_492b217a87fc" maxScale="0" type="1" minScale="0"/>
-      <layer-setting tolerance="12" units="1" enabled="0" id="fixup_e28c3518_4f5d_4439_a95d_b721dd33a87a" maxScale="0" type="1" minScale="0"/>
+      <layer-setting tolerance="12" units="1" enabled="0" id="add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_KELIRIKKO_7349f73a_b89c_42a2_bc19_0980855481f7" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_HOITOLUOKAT_cb20df4d_bfa3_4362_9102_e47757664e1e" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_8ebb95bb_9fb2_4d9c_ac97_1f6a3c05f00c" maxScale="0" type="1" minScale="0"/>
@@ -698,7 +698,7 @@
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_KAISTOJEN_LUKUMAARA_d33aea75_4f5d_40de_a20c_74df888be577" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_LIIKENNEMERKIT_297d6d2d_f506_44a9_b634_cc3aee875785" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_LIITTYMANRO_d8c04da9_79ec_420b_8ebe_6932c9313c73" maxScale="0" type="1" minScale="0"/>
-      <layer-setting tolerance="12" units="1" enabled="0" id="removed_9cc9fccc_672c_4416_b2d0_59cfe25f2689" maxScale="0" type="1" minScale="0"/>
+      <layer-setting tolerance="12" units="1" enabled="0" id="remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_LEVEYS_055271d1_6af0_49c6_b5da_9ae122eedc6c" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_SUURIN_SALLITTU_KORKEUS_8ace40df_6a75_4d1b_a4bd_ff5039ee694d" maxScale="0" type="1" minScale="0"/>
       <layer-setting tolerance="12" units="1" enabled="0" id="DR_PALVELU_ba3af165_de76_4772_a204_d9973265cd1f" maxScale="0" type="1" minScale="0"/>
@@ -791,14 +791,14 @@
   <projectModels/>
   <legend updateDrawingOrder="true">
     <legendgroup checked="Qt::Checked" open="true" name="jore4-digiroad-fixes">
-      <legendlayer checked="Qt::Checked" open="true" name="fixup" drawingOrder="-1" showFeatureCount="0">
+      <legendlayer checked="Qt::Checked" open="true" name="add_link" drawingOrder="-1" showFeatureCount="0">
         <filegroup hidden="false" open="true">
-          <legendlayerfile visible="1" layerid="fixup_e28c3518_4f5d_4439_a95d_b721dd33a87a" isInOverview="0"/>
+          <legendlayerfile visible="1" layerid="add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a" isInOverview="0"/>
         </filegroup>
       </legendlayer>
-      <legendlayer checked="Qt::Checked" open="true" name="removed" drawingOrder="-1" showFeatureCount="0">
+      <legendlayer checked="Qt::Checked" open="true" name="remove_link" drawingOrder="-1" showFeatureCount="0">
         <filegroup hidden="false" open="true">
-          <legendlayerfile visible="1" layerid="removed_9cc9fccc_672c_4416_b2d0_59cfe25f2689" isInOverview="0"/>
+          <legendlayerfile visible="1" layerid="remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689" isInOverview="0"/>
         </filegroup>
       </legendlayer>
     </legendgroup>
@@ -33195,12 +33195,12 @@ def my_form_open(dialog, layer, feature):
         <xmax>24.93859396788414529</xmax>
         <ymax>60.17085789263180828</ymax>
       </wgs84extent>
-      <id>fixup_e28c3518_4f5d_4439_a95d_b721dd33a87a</id>
-      <datasource>./digiroad/fixup.gpkg|layername=fixup</datasource>
+      <id>add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a</id>
+      <datasource>./digiroad/fixup.gpkg|layername=add_link</datasource>
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>fixup</layername>
+      <layername>add_link</layername>
       <srs>
         <spatialrefsys nativeFormat="Wkt">
           <wkt>PROJCRS["ETRS89 / TM35FIN(E,N)",BASEGEOGCRS["ETRS89",ENSEMBLE["European Terrestrial Reference System 1989 ensemble",MEMBER["European Terrestrial Reference Frame 1989"],MEMBER["European Terrestrial Reference Frame 1990"],MEMBER["European Terrestrial Reference Frame 1991"],MEMBER["European Terrestrial Reference Frame 1992"],MEMBER["European Terrestrial Reference Frame 1993"],MEMBER["European Terrestrial Reference Frame 1994"],MEMBER["European Terrestrial Reference Frame 1996"],MEMBER["European Terrestrial Reference Frame 1997"],MEMBER["European Terrestrial Reference Frame 2000"],MEMBER["European Terrestrial Reference Frame 2005"],MEMBER["European Terrestrial Reference Frame 2014"],ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]],ENSEMBLEACCURACY[0.1]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4258]],CONVERSION["TM35FIN",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",27,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",0,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["Finland - onshore and offshore."],BBOX[58.84,19.08,70.09,31.59]],ID["EPSG",3067]]</wkt>
@@ -33597,12 +33597,12 @@ def my_form_open(dialog, layer, feature):
         <xmax>24.9379954089844631</xmax>
         <ymax>60.17043179307741241</ymax>
       </wgs84extent>
-      <id>removed_9cc9fccc_672c_4416_b2d0_59cfe25f2689</id>
-      <datasource>./digiroad/fixup.gpkg|layername=removed</datasource>
+      <id>remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689</id>
+      <datasource>./digiroad/fixup.gpkg|layername=remove_link</datasource>
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>removed</layername>
+      <layername>remove_link</layername>
       <srs>
         <spatialrefsys nativeFormat="Wkt">
           <wkt>PROJCRS["ETRS89 / TM35FIN(E,N)",BASEGEOGCRS["ETRS89",ENSEMBLE["European Terrestrial Reference System 1989 ensemble",MEMBER["European Terrestrial Reference Frame 1989"],MEMBER["European Terrestrial Reference Frame 1990"],MEMBER["European Terrestrial Reference Frame 1991"],MEMBER["European Terrestrial Reference Frame 1992"],MEMBER["European Terrestrial Reference Frame 1993"],MEMBER["European Terrestrial Reference Frame 1994"],MEMBER["European Terrestrial Reference Frame 1996"],MEMBER["European Terrestrial Reference Frame 1997"],MEMBER["European Terrestrial Reference Frame 2000"],MEMBER["European Terrestrial Reference Frame 2005"],MEMBER["European Terrestrial Reference Frame 2014"],ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]],ENSEMBLEACCURACY[0.1]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4258]],CONVERSION["TM35FIN",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",27,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",0,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["Finland - onshore and offshore."],BBOX[58.84,19.08,70.09,31.59]],ID["EPSG",3067]]</wkt>
@@ -34024,8 +34024,8 @@ def my_form_open(dialog, layer, feature):
     <layer id="DR_VAK_RAJOITUS_b722349f_bd30_4be4_9ff5_1aacb3a8db79"/>
     <layer id="DR_VALAISTU_TIE_7a220c8a_6078_4d4a_b4dc_5cbd330458f7"/>
     <layer id="DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_d0b3fe6c_6296_44fd_a319_0e0246becdfb"/>
-    <layer id="fixup_e28c3518_4f5d_4439_a95d_b721dd33a87a"/>
-    <layer id="removed_9cc9fccc_672c_4416_b2d0_59cfe25f2689"/>
+    <layer id="add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a"/>
+    <layer id="remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689"/>
     <layer id="DR_PYSAKKI_e4881884_1d15_4522_841e_854f2b250597"/>
   </layerorder>
   <properties>
