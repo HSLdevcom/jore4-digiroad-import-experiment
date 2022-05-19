@@ -1,21 +1,17 @@
--- Ensure `text` type (instead of `character varying`).
 -- `text` type is used consistently for `link_id` column.
-ALTER TABLE :schema.fix_layer_link ALTER COLUMN link_id TYPE text;
+ALTER TABLE :schema.fix_layer_link ALTER COLUMN link_id TYPE text USING link_id::text;
 
 -- Add internal ID for SQL view. Values will be derived from GeoPackage IDs.
 ALTER TABLE :schema.fix_layer_link ADD COLUMN internal_id int;
 
-ALTER TABLE :schema.fix_layer_link
-    ADD COLUMN is_generic_bus boolean,
-    ADD COLUMN is_tall_electric_bus boolean,
-    ADD COLUMN is_tram boolean,
-    ADD COLUMN is_train boolean,
-    ADD COLUMN is_metro boolean,
-    ADD COLUMN is_ferry boolean;
-
--- Force separate space (starting from one billion [US]) for ID values defined on fixup layer.
+-- Force separate ID value spaces for custom fixup links.
+-- 
+-- By adding 1_000_000_000 (one US billion) to `internal_id` value it is tried to keep ID spaces for
+-- (1) Digiroad-originated and (2) HSL-custom links apart from each other. Currently, `internal_id`
+-- is used e.g. as the internal primary key in JORE4 map-matching service.
+-- 
 UPDATE :schema.fix_layer_link
-SET link_id     = (1000000000 + link_id::int)::text,
+SET link_id     = 'hsl_' || link_id,
     internal_id =  1000000000 + fid;
 
 ALTER TABLE :schema.fix_layer_link
@@ -31,7 +27,7 @@ DROP TABLE IF EXISTS :schema.fix_layer_link_exclusion;
 CREATE TABLE :schema.fix_layer_link_exclusion AS
 SELECT l.link_id, exg.fid AS geometry_fid
 FROM :schema.fix_layer_link_exclusion_geometry exg
-INNER JOIN :schema.dr_linkki l ON ST_Intersects(l.geom, exg.geometry);
+INNER JOIN :schema.dr_linkki l ON ST_Intersects(l.geom, exg.geom);
 
 -- Add data integrity constraints for exclusion geometries.
 ALTER TABLE :schema.fix_layer_link_exclusion
@@ -88,17 +84,17 @@ SELECT
     linkkityyp,
     NULL AS link_tila,
     ajosuunta,
-    NULL AS silta_alik,
-    NULL AS tienimi_su,
-    NULL AS tienimi_ru,
+    silta_alik,
+    tienimi_su,
+    tienimi_ru,
     'hsl_fixup'::text AS hsl_infra_source,
-    true AS is_generic_bus,
+    is_generic_bus,
     is_tall_electric_bus,
     is_tram,
     is_train,
     is_metro,
     is_ferry,
-    geometry AS geom
+    geom
 FROM :schema.fix_layer_link fl
 WHERE
     -- filter out incorrect driving directions
@@ -108,7 +104,7 @@ WHERE
         -- operator
         SELECT 1
         FROM :schema.dr_linkki l
-        WHERE l.id = fl.internal_id OR l.link_id = fl.link_id
+        WHERE l.id = fl.internal_id
     );
 
 CREATE VIEW :schema.dr_pysakki_fixup AS

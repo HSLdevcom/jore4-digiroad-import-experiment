@@ -67,34 +67,43 @@ layers is stored in and read from a separate GeoPackage file
 (`fixup/digiroad/fixup.gpkg`). This GeoPackage file will be updated and
 maintained in the daily operational use of JORE4 "ecosystem".
 
-| QGIS layer | Description |
-| ---------- | ----------- |
-| `fixup`    | Contains data for new infrastructure links to be added on top of Digiroad links. A `LINESTRING` geometry is a mandatory part of each link to be added. All the geometries defined on this layer must seamlessly join to each other and/or existing Digiroad links. Seamlessness can be achieved by using the snapping tool in QGIS while drawing new links. |
-| `removed`  | Contains geometries that are used to mark intersecting Digiroad links for removal. The links marked for removal will be filtered out when exporting data in later stages. The Digiroad public transport stops along the links marked for removal are also filtered out in data exports. It is recommended to use `LINESTRING` type in intersection geometries but currently this is not strictly required. |
+| QGIS layer    | Description |
+| ------------- | ----------- |
+| `add_link`    | Contains data for HSL-specific infrastructure links to be added on top of or to replace existing Digiroad links (the latter case in tandem with `remove_link` layer). A `LINESTRING` geometry is a mandatory part of each link to be added. All the geometries defined on this layer must seamlessly join to each other and/or existing Digiroad links. Seamlessness can be achieved by using the _Snapping Tool_ in QGIS while drawing line features. |
+| `remove_link` | Contains geometries that are used to mark intersecting Digiroad links for removal. The links marked for removal will be filtered out when exporting data in later stages. The Digiroad public transport stops along the links marked for removal are also filtered out in data exports. It is recommended to use `LINESTRING` type in intersection geometries but currently this is not strictly required. |
 
-### GeoPackage _fixup_ layer contents
+### GeoPackage _add_link_ layer contents
 
-The table below describes the columns of the `fixup` layer in the QGIS
+The table below describes the columns of the `add_link` layer in the QGIS
 project. The data types are as they appear in the GeoPackage format (SQLite).
 
 | Column name            | Data type  | Not null | Description |
 | ---------------------- | ---------- | -------- | ----------- |
 | `fid`                  | INTEGER    | X        | The primary key generated internally in GeoPackage. |
-| `geometry`             | LINESTRING | -        | The `LINESTRING` geometry describing the shape of this infrastructure link |
-| `link_id`              | TEXT       | -        | Manually maintained infrastructure link identifier that must be kept unique. |
+| `geom`                 | LINESTRING | -        | The `LINESTRING` geometry describing the shape of this infrastructure link |
+| `link_id`              | MEDIUMINT  | -        | Manually maintained infrastructure link identifier that must be kept unique. |
 | `kuntakoodi`           | MEDIUMINT  | -        | Official Finnish municipality code |
 | `linkkityyp`           | MEDIUMINT  | -        | The link type as code value from the corresponding Digiroad code set |
 | `ajosuunta`            | MEDIUMINT  | -        | The direction of traffic flow as code value from the corresponding Digiroad code set |
+| `silta_alik`           | MEDIUMINT  | -        | Is this infrastructure link a bridge, tunnel or underpass? The code value must be selected from the ones available in the corresponding Digiroad code set. |
+| `tienimi_su`           | TEXT       | -        | The name of infrastructure link in Finnish |
+| `tienimi_ru`           | TEXT       | -        | The name of infrastructure link in Swedish |
+| `is_generic_bus`       | BOOLEAN    | -        | Is this infrastructure link safely traversable by _generic_bus_ vehicle type? |
+| `is_tall_electric_bus` | BOOLEAN    | -        | Is this infrastructure link safely traversable by _tall_electric_bus_ vehicle type? |
+| `is_tram`              | BOOLEAN    | -        | Is this infrastructure link traversable by tram? |
+| `is_train`             | BOOLEAN    | -        | Is this infrastructure link traversable by train? |
+| `is_metro`             | BOOLEAN    | -        | Is this infrastructure link traversable by metro? |
+| `is_ferry`             | BOOLEAN    | -        | Is this infrastructure link traversable by ferry? |
 
-### GeoPackage _removed_ layer contents
+### GeoPackage _remove_link_ layer contents
 
-The table below describes the columns of the `removed` layer in the QGIS
+The table below describes the columns of the `remove_link` layer in the QGIS
 project. The data types are as they appear in the GeoPackage format (SQLite).
 
 | Column name | Data type | Not null | Description |
 | ----------- | --------- | -------- | ----------- |
 | `fid`       | INTEGER   | X        | The primary key generated internally in GeoPackage |
-| `geometry`  | GEOMETRY  | -        | The geometry used to find all infrastructure links whose geometry intersects with it. The affected infrastructure links will be marked for removal and will not be included in data exports. | 
+| `geom`      | GEOMETRY  | -        | The geometry used to find all infrastructure links whose geometry intersects with it. The affected infrastructure links will be marked for removal and will not be included in data exports. | 
 
 ## Exporting Digiroad data
 
