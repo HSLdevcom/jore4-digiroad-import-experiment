@@ -80,11 +80,11 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 | Column name            | Data type  | Not null | Description |
 | ---------------------- | ---------- | -------- | ----------- |
 | `fid`                  | INTEGER    | X        | The primary key generated internally in GeoPackage. |
-| `geom`                 | LINESTRING | -        | The `LINESTRING` geometry describing the shape of this infrastructure link |
-| `link_id`              | MEDIUMINT  | -        | Manually maintained infrastructure link identifier that must be kept unique. |
+| `geom`                 | LINESTRING | X        | The `LINESTRING` geometry describing the shape of this infrastructure link |
+| `link_id`              | MEDIUMINT  | X        | Manually maintained infrastructure link identifier that must be kept unique. |
 | `kuntakoodi`           | MEDIUMINT  | -        | Official Finnish municipality code |
 | `linkkityyp`           | MEDIUMINT  | -        | The link type as code value from the corresponding Digiroad code set |
-| `ajosuunta`            | MEDIUMINT  | -        | The direction of traffic flow as code value from the corresponding Digiroad code set |
+| `ajosuunta`            | MEDIUMINT  | X        | The direction of traffic flow as code value from the corresponding Digiroad code set |
 | `silta_alik`           | MEDIUMINT  | -        | Is this infrastructure link a bridge, tunnel or underpass? The code value must be selected from the ones available in the corresponding Digiroad code set. |
 | `tienimi_su`           | TEXT       | -        | The name of infrastructure link in Finnish |
 | `tienimi_ru`           | TEXT       | -        | The name of infrastructure link in Swedish |

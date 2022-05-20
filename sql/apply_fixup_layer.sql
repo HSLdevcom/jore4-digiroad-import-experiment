@@ -14,9 +14,7 @@ UPDATE :schema.fix_layer_link
 SET link_id     = 'hsl_' || link_id,
     internal_id =  1000000000 + fid;
 
-ALTER TABLE :schema.fix_layer_link
-    ALTER COLUMN link_id SET NOT NULL,
-    ALTER COLUMN internal_id SET NOT NULL;
+ALTER TABLE :schema.fix_layer_link ALTER COLUMN internal_id SET NOT NULL;
 
 -- 
 -- Create link table between tables `dr_linkki` and `fix_layer_link_exclusion_geometry`.
