@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis saveDateTime="2022-06-09T11:53:38" saveUser="jarkko.kaura" version="3.24.3-Tisler" saveUserFull="Jarkko Kaura" projectname="">
+<qgis saveDateTime="2022-06-09T12:05:58" saveUser="jarkko.kaura" version="3.24.3-Tisler" saveUserFull="Jarkko Kaura" projectname="">
   <homePath path=""/>
   <title></title>
   <autotransaction active="0"/>
@@ -661,104 +661,104 @@
   </layer-tree-group>
   <snapping-settings self-snapping="0" enabled="0" scaleDependencyMode="0" type="1" unit="1" mode="2" tolerance="12" intersection-snapping="0" maxScale="0" minScale="0">
     <individual-layer-settings>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAANTYMISRAJOITUS_e0dc6205_9094_441a_862f_057b300ab27e" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUOJATIE_d75f88f9_9d5d_4f77_9a88_2fd97f5ef46b" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VALAISTU_TIE_b66018c6_807d_48be_8e32_ff8d28408a1f" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAISTOJEN_LUKUMAARA_d33aea75_4f5d_40de_a20c_74df888be577" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_NOPEUSRAJOITUS_bd69a6b8_978d_4d70_9627_73cecc0e432a" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMERKIT_297d6d2d_f506_44a9_b634_cc3aee875785" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMERKIT_6594f6eb_9b0d_4909_8c80_2a762ca2e574" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TALVINOPEUSRAJOITUS_34c5721e_9303_4a68_92e0_de229b00fa86" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMERKIT_82d7d45f_cf09_442b_9b5b_3d84521af691" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LEVEYS_055271d1_6af0_49c6_b5da_9ae122eedc6c" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_25ebc544_955e_4e32_a0bf_026ed40303d9" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAANTYMISRAJOITUS_a5054de3_4299_4d81_a98b_6c1c45c4b3eb" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PALVELU_24cd2d7b_460f_4cef_8b03_484b9808833d" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIEKUNNALLISET_YKSITYISTIET_5d8c5b98_e6f4_44b8_a8d1_8888b13958f4" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PALVELU_727af079_0dc9_40bd_9329_634acdaa2bbb" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_8ebb95bb_9fb2_4d9c_ac97_1f6a3c05f00c" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_RAUTATIEN_TASORISTEYS_ddf665f1_6f0d_41c9_bbe4_16b98e8edb8a" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_NOPEUSRAJOITUS_22f6c1d8_3ae1_410b_9f86_90f59908669e" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_OPASTUSTAULU_ea176245_ee42_4e90_95b4_ebd3d50afb67" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAISTOJEN_LUKUMAARA_b1c085ee_fdae_4924_8ccd_f109fd3bd0e4" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUOJATIE_1f96b56e_334d_47d9_a48c_5533dcf62227" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PAALLYSTETTY_TIE_b2bc8c1b_4086_49c0_9f4f_e75714e2ca81" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_MASSA_a9445c7c_33c9_44db_bd54_4ef42330ad44" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_EUROOPPATIENRO_66a30378_9167_4f60_949b_6006658a5ebb" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKOINTIKIELTO_fb2ee4bc_b19e_407b_958e_f096b49b0ff1" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_PITUUS_158efe39_936c_476d_8cdf_afed64c0ca34" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIITTYMANRO_da65e81e_71bb_4983_a593_7f956753e59c" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEVALO_cdee15df_7317_4687_8093_dc730fddbbe2" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMAARA_365fdec3_9528_417f_876b_46a6b8133034" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_RAUTATIEN_TASORISTEYS_0b87bde8_5af7_49c7_be25_5971977b7031" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TALVINOPEUSRAJOITUS_799ea491_4274_40a9_9b59_2ca9e2ee514e" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_RAUTATIEN_TASORISTEYS_9b3e4d94_eeb1_43a8_89cc_10b835814451" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_KORKEUS_8ace40df_6a75_4d1b_a4bd_ff5039ee694d" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_EUROOPPATIENRO_8afe0a13_babe_4714_8dcd_3e8fb04a35de" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_JOUKKOLIIKENNEKAISTA_5388253b_d20c_4cf4_ba4a_db5ff7de98c0" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_TELIMASSA_90fec60d_6963_41f3_9e6b_e90b6e21ffad" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_MASSA_d4e75c97_4f78_4cc6_b288_f2662ff49a9c" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_LEVEYS_2f1a38ae_fe1a_4d23_8dc6_aea3775b1773" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEVALO_62e5f401_83c7_4c26_bb91_dda58bc0c11a" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VAK_RAJOITUS_33626f37_6b2f_43cb_b4f6_3cfda9f23c74" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PAALLYSTETTY_TIE_da13668f_b3d3_4dc2_9f01_492b217a87fc" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TALVINOPEUSRAJOITUS_799ea491_4274_40a9_9b59_2ca9e2ee514e" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KELIRIKKO_8993a4d4_57d3_47a9_b68e_84f63a9650b9" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKOINTIKIELTO_f0e43e04_4d5b_4367_bb50_02b23ef01aee" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_TELIMASSA_f79e8c4b_ea95_4870_aef9_2d8f6a24dfce" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VAK_RAJOITUS_003d9590_1869_46eb_a1b9_cbd404722d26" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUOJATIE_90ec305e_1bdf_4ce6_aa7e_4f2f4e70c517" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKKI_e4881884_1d15_4522_841e_854f2b250597" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_NOPEUSRAJOITUS_bd69a6b8_978d_4d70_9627_73cecc0e432a" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TALVINOPEUSRAJOITUS_04868c40_e45b_4647_bc42_3af439fef910" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_TELIMASSA_e3f24dce_79a0_4bf3_a42f_6bdda20e3fda" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIEKUNNALLISET_YKSITYISTIET_835d789f_2c27_4952_8988_e24180334377" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUOJATIE_d75f88f9_9d5d_4f77_9a88_2fd97f5ef46b" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_LEVEYS_45a70d28_596c_49e9_8772_1925f9eeccd3" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_88d459b3_a906_471c_9768_2c9e543e7785" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIITTYMANRO_842031e4_5a14_44f9_91fd_05f1ab378083" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_418fc0b5_1592_4f31_8db9_e5ec100fb95b" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VALAISTU_TIE_a330850d_aaf1_485b_b3ae_7b0d9854bad1" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_KORKEUS_012639f3_32a0_4f6e_8d03_d59b3cdf8e65" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMAARA_d24d5b0c_3443_4aea_bfc9_9ad0ab4037d8" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_87f7da2e_b147_4f0d_bc94_59f67e1140e1" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKOINTIKIELTO_f77d4c5a_d13f_4dd5_9db0_e186e8b5c7ba" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_OPASTUSTAULU_89dfa47a_4915_4789_a0d7_f86aa8bc2936" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_PITUUS_fa0acf0c_1564_4f04_8844_8d299ddea657" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_MASSA_8f7a3d5b_3797_4442_85a0_8606addc0f02" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KELIRIKKO_d00f7d90_3bce_489c_8d4a_98cdad398f46" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TALVINOPEUSRAJOITUS_34c5721e_9303_4a68_92e0_de229b00fa86" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_280cdd8b_88e8_49dc_8202_376a160123d6" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LEVEYS_73f2e2dd_49ff_485a_a36b_d3aa99ef7828" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_d0b3fe6c_6296_44fd_a319_0e0246becdfb" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_NOPEUSRAJOITUS_22f6c1d8_3ae1_410b_9f86_90f59908669e" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LINKKI_dacad0b2_fd42_4181_92c4_6f4142dc0d5d" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PALVELU_ba3af165_de76_4772_a204_d9973265cd1f" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_OPASTUSTAULU_267d9ed4_77d7_47ae_91c7_b95f4da63cea" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PAALLYSTETTY_TIE_fa6c7c0c_e557_43f7_9b26_4e0abb2242cd" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_LEVEYS_fe647343_3b6f_4eee_92c6_b67c90e42c8e" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_EUROOPPATIENRO_f99fc4fb_4e5d_4602_8dd3_8f201559573f" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VALAISTU_TIE_7a220c8a_6078_4d4a_b4dc_5cbd330458f7" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_HOITOLUOKAT_d297f2fe_c0fd_4185_9199_414e076efd97" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_HOITOLUOKAT_eecef866_dfea_442b_a48b_f5a36f7cee09" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LINKKI_2ab5c56d_828d_40ef_b652_fc5c4d3b0b11" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VAK_RAJOITUS_b722349f_bd30_4be4_9ff5_1aacb3a8db79" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAANTYMISRAJOITUS_e5f7ceda_bd0a_481e_a273_f3a659213d52" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LINKKI_7bba952e_df4f_4c31_9528_adb7c3d12dea" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMERKIT_297d6d2d_f506_44a9_b634_cc3aee875785" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LEVEYS_f920b6c1_2c76_45b9_ac24_7a0aaf5c16e3" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_HOITOLUOKAT_cb20df4d_bfa3_4362_9102_e47757664e1e" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIITTYMANRO_d8c04da9_79ec_420b_8ebe_6932c9313c73" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VALAISTU_TIE_b66018c6_807d_48be_8e32_ff8d28408a1f" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_dfb605f4_2d14_47a6_9397_5cfc6c8470a1" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIEKUNNALLISET_YKSITYISTIET_31529d8a_9702_46e8_8471_62d0df6d43fb" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_ESTERAKENNELMA_ee024849_a407_406f_a545_af12415b25ef" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_KORKEUS_1d52164e_359c_417a_84c6_74cc6e4806e6" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_PITUUS_faff1774_5351_4e2c_87d9_c819521e690e" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIETYOT_7093c8f6_e6db_41db_a521_4acf6a94bf9d" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_9f6b8f66_c408_4836_bc5b_d1759dcf5791" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEVALO_eaa65623_c35b_42e8_b05a_9f189bca73b9" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAISTOJEN_LUKUMAARA_d33aea75_4f5d_40de_a20c_74df888be577" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMERKIT_6594f6eb_9b0d_4909_8c80_2a762ca2e574" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KELIRIKKO_7349f73a_b89c_42a2_bc19_0980855481f7" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_ESTERAKENNELMA_7750c77e_66c1_412c_8b2a_05e199a35e1f" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_ESTERAKENNELMA_f4f2d999_1c4d_4a20_9b82_55f47ea1967c" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_OPASTUSTAULU_89dfa47a_4915_4789_a0d7_f86aa8bc2936" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUOJATIE_90ec305e_1bdf_4ce6_aa7e_4f2f4e70c517" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PALVELU_727af079_0dc9_40bd_9329_634acdaa2bbb" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="remove_link_9cc9fccc_672c_4416_b2d0_59cfe25f2689" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_EUROOPPATIENRO_66a30378_9167_4f60_949b_6006658a5ebb" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMAARA_3afbf797_7d1d_4732_a5fb_5ef5f768fad3" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_NOPEUSRAJOITUS_3b4fbee2_630a_40d4_9070_f660d0ca5924" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAANTYMISRAJOITUS_e5f7ceda_bd0a_481e_a273_f3a659213d52" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_MASSA_d4e75c97_4f78_4cc6_b288_f2662ff49a9c" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_TELIMASSA_e3f24dce_79a0_4bf3_a42f_6bdda20e3fda" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAANTYMISRAJOITUS_e0dc6205_9094_441a_862f_057b300ab27e" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LINKKI_7bba952e_df4f_4c31_9528_adb7c3d12dea" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_LEVEYS_45a70d28_596c_49e9_8772_1925f9eeccd3" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_dfb605f4_2d14_47a6_9397_5cfc6c8470a1" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIITTYMANRO_842031e4_5a14_44f9_91fd_05f1ab378083" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_PITUUS_fa0acf0c_1564_4f04_8844_8d299ddea657" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_MASSA_a9445c7c_33c9_44db_bd54_4ef42330ad44" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_TELIMASSA_f79e8c4b_ea95_4870_aef9_2d8f6a24dfce" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUOJATIE_1f96b56e_334d_47d9_a48c_5533dcf62227" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKOINTIKIELTO_f77d4c5a_d13f_4dd5_9db0_e186e8b5c7ba" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_418fc0b5_1592_4f31_8db9_e5ec100fb95b" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_ESTERAKENNELMA_7750c77e_66c1_412c_8b2a_05e199a35e1f" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_MASSA_8f7a3d5b_3797_4442_85a0_8606addc0f02" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKKI_e4881884_1d15_4522_841e_854f2b250597" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VALAISTU_TIE_7a220c8a_6078_4d4a_b4dc_5cbd330458f7" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEVALO_eaa65623_c35b_42e8_b05a_9f189bca73b9" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PAALLYSTETTY_TIE_fa6c7c0c_e557_43f7_9b26_4e0abb2242cd" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_KORKEUS_1d52164e_359c_417a_84c6_74cc6e4806e6" minScale="0"/>
       <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAISTOJEN_LUKUMAARA_27004f6d_d7d7_412d_8c08_620be0c6eed3" minScale="0"/>
-      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_OPASTUSTAULU_ea176245_ee42_4e90_95b4_ebd3d50afb67" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_HOITOLUOKAT_d297f2fe_c0fd_4185_9199_414e076efd97" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_PITUUS_faff1774_5351_4e2c_87d9_c819521e690e" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIETYOT_7093c8f6_e6db_41db_a521_4acf6a94bf9d" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_HOITOLUOKAT_eecef866_dfea_442b_a48b_f5a36f7cee09" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KELIRIKKO_8993a4d4_57d3_47a9_b68e_84f63a9650b9" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LINKKI_2ab5c56d_828d_40ef_b652_fc5c4d3b0b11" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIEKUNNALLISET_YKSITYISTIET_31529d8a_9702_46e8_8471_62d0df6d43fb" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_LEVEYS_2f1a38ae_fe1a_4d23_8dc6_aea3775b1773" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_KORKEUS_012639f3_32a0_4f6e_8d03_d59b3cdf8e65" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_ESTERAKENNELMA_ee024849_a407_406f_a545_af12415b25ef" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KELIRIKKO_d00f7d90_3bce_489c_8d4a_98cdad398f46" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PALVELU_ba3af165_de76_4772_a204_d9973265cd1f" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_RAUTATIEN_TASORISTEYS_0b87bde8_5af7_49c7_be25_5971977b7031" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_EUROOPPATIENRO_f99fc4fb_4e5d_4602_8dd3_8f201559573f" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PALVELU_24cd2d7b_460f_4cef_8b03_484b9808833d" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PAALLYSTETTY_TIE_b2bc8c1b_4086_49c0_9f4f_e75714e2ca81" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LINKKI_dacad0b2_fd42_4181_92c4_6f4142dc0d5d" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_9f6b8f66_c408_4836_bc5b_d1759dcf5791" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LEVEYS_055271d1_6af0_49c6_b5da_9ae122eedc6c" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_88d459b3_a906_471c_9768_2c9e543e7785" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEVALO_cdee15df_7317_4687_8093_dc730fddbbe2" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_TELIMASSA_90fec60d_6963_41f3_9e6b_e90b6e21ffad" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VAK_RAJOITUS_b722349f_bd30_4be4_9ff5_1aacb3a8db79" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_ESTERAKENNELMA_f4f2d999_1c4d_4a20_9b82_55f47ea1967c" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKOINTIKIELTO_f0e43e04_4d5b_4367_bb50_02b23ef01aee" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMAARA_365fdec3_9528_417f_876b_46a6b8133034" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VALAISTU_TIE_a330850d_aaf1_485b_b3ae_7b0d9854bad1" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_RAUTATIEN_TASORISTEYS_ddf665f1_6f0d_41c9_bbe4_16b98e8edb8a" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_25ebc544_955e_4e32_a0bf_026ed40303d9" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEMAARA_d24d5b0c_3443_4aea_bfc9_9ad0ab4037d8" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIIKENNEVALO_62e5f401_83c7_4c26_bb91_dda58bc0c11a" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VAK_RAJOITUS_33626f37_6b2f_43cb_b4f6_3cfda9f23c74" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TIEKUNNALLISET_YKSITYISTIET_835d789f_2c27_4952_8988_e24180334377" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KELIRIKKO_7349f73a_b89c_42a2_bc19_0980855481f7" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_AKSELIMASSA_8ebb95bb_9fb2_4d9c_ac97_1f6a3c05f00c" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LEVEYS_73f2e2dd_49ff_485a_a36b_d3aa99ef7828" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIITTYMANRO_d8c04da9_79ec_420b_8ebe_6932c9313c73" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_AJONEUVOKOHTAINEN_RAJOITUS_87f7da2e_b147_4f0d_bc94_59f67e1140e1" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PAALLYSTETTY_TIE_da13668f_b3d3_4dc2_9f01_492b217a87fc" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_PITUUS_158efe39_936c_476d_8cdf_afed64c0ca34" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LIITTYMANRO_da65e81e_71bb_4983_a593_7f956753e59c" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_LEVEYS_f920b6c1_2c76_45b9_ac24_7a0aaf5c16e3" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_VAK_RAJOITUS_003d9590_1869_46eb_a1b9_cbd404722d26" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_OPASTUSTAULU_267d9ed4_77d7_47ae_91c7_b95f4da63cea" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_JOUKKOLIIKENNEKAISTA_5388253b_d20c_4cf4_ba4a_db5ff7de98c0" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_TALVINOPEUSRAJOITUS_04868c40_e45b_4647_bc42_3af439fef910" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_SUURIN_SALLITTU_LEVEYS_fe647343_3b6f_4eee_92c6_b67c90e42c8e" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_KAANTYMISRAJOITUS_a5054de3_4299_4d81_a98b_6c1c45c4b3eb" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_YHDISTELMAN_SUURIN_SALLITTU_MASSA_d0b3fe6c_6296_44fd_a319_0e0246becdfb" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_PYSAKOINTIKIELTO_fb2ee4bc_b19e_407b_958e_f096b49b0ff1" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_HOITOLUOKAT_cb20df4d_bfa3_4362_9102_e47757664e1e" minScale="0"/>
+      <layer-setting enabled="0" type="1" tolerance="12" units="1" maxScale="0" id="DR_EUROOPPATIENRO_8afe0a13_babe_4714_8dcd_3e8fb04a35de" minScale="0"/>
     </individual-layer-settings>
   </snapping-settings>
   <relations/>
@@ -33185,16 +33185,16 @@ def my_form_open(dialog, layer, feature):
     </maplayer>
     <maplayer maxScale="0" labelsEnabled="0" symbologyReferenceScale="-1" geometry="Line" readOnly="0" autoRefreshTime="0" simplifyDrawingTol="1" type="vector" simplifyLocal="1" wkbType="LineStringZM" simplifyDrawingHints="1" simplifyAlgorithm="0" minScale="100000000" autoRefreshEnabled="0" styleCategories="AllStyleCategories" simplifyMaxScale="1" refreshOnNotifyMessage="" legendPlaceholderImage="" hasScaleBasedVisibilityFlag="0" refreshOnNotifyEnabled="0">
       <extent>
-        <xmin>385546.25171187601517886</xmin>
-        <ymin>6672126.66799999959766865</ymin>
-        <xmax>385622.34600000001955777</xmax>
-        <ymax>6672224.78600000031292439</ymax>
+        <xmin>385546.25</xmin>
+        <ymin>6672126.5</ymin>
+        <xmax>385622.40625</xmax>
+        <ymax>6672225</ymax>
       </extent>
       <wgs84extent>
-        <xmin>24.93716836023280692</xmin>
-        <ymin>60.16995613087610906</ymin>
-        <xmax>24.93859396788414529</xmax>
-        <ymax>60.17085789263180828</ymax>
+        <xmin>24.9371682089757094</xmin>
+        <ymin>60.16995462289699503</ymin>
+        <xmax>24.93859514740892536</xmax>
+        <ymax>60.17085982978175451</ymax>
       </wgs84extent>
       <id>add_link_e28c3518_4f5d_4439_a95d_b721dd33a87a</id>
       <datasource>./digiroad/fixup.gpkg|layername=add_link</datasource>
@@ -33460,13 +33460,6 @@ def my_form_open(dialog, layer, feature):
             </config>
           </editWidget>
         </field>
-        <field name="link_id" configurationFlags="None">
-          <editWidget type="TextEdit">
-            <config>
-              <Option/>
-            </config>
-          </editWidget>
-        </field>
         <field name="kuntakoodi" configurationFlags="None">
           <editWidget type="Range">
             <config>
@@ -33554,23 +33547,21 @@ def my_form_open(dialog, layer, feature):
       </fieldConfiguration>
       <aliases>
         <alias field="fid" name="" index="0"/>
-        <alias field="link_id" name="" index="1"/>
-        <alias field="kuntakoodi" name="" index="2"/>
-        <alias field="linkkityyp" name="" index="3"/>
-        <alias field="ajosuunta" name="" index="4"/>
-        <alias field="silta_alik" name="" index="5"/>
-        <alias field="tienimi_su" name="" index="6"/>
-        <alias field="tienimi_ru" name="" index="7"/>
-        <alias field="is_generic_bus" name="" index="8"/>
-        <alias field="is_tall_electric_bus" name="" index="9"/>
-        <alias field="is_tram" name="" index="10"/>
-        <alias field="is_train" name="" index="11"/>
-        <alias field="is_metro" name="" index="12"/>
-        <alias field="is_ferry" name="" index="13"/>
+        <alias field="kuntakoodi" name="" index="1"/>
+        <alias field="linkkityyp" name="" index="2"/>
+        <alias field="ajosuunta" name="" index="3"/>
+        <alias field="silta_alik" name="" index="4"/>
+        <alias field="tienimi_su" name="" index="5"/>
+        <alias field="tienimi_ru" name="" index="6"/>
+        <alias field="is_generic_bus" name="" index="7"/>
+        <alias field="is_tall_electric_bus" name="" index="8"/>
+        <alias field="is_tram" name="" index="9"/>
+        <alias field="is_train" name="" index="10"/>
+        <alias field="is_metro" name="" index="11"/>
+        <alias field="is_ferry" name="" index="12"/>
       </aliases>
       <defaults>
         <default expression="" applyOnUpdate="0" field="fid"/>
-        <default expression="" applyOnUpdate="0" field="link_id"/>
         <default expression="" applyOnUpdate="0" field="kuntakoodi"/>
         <default expression="" applyOnUpdate="0" field="linkkityyp"/>
         <default expression="" applyOnUpdate="0" field="ajosuunta"/>
@@ -33586,10 +33577,9 @@ def my_form_open(dialog, layer, feature):
       </defaults>
       <constraints>
         <constraint field="fid" exp_strength="0" unique_strength="1" notnull_strength="1" constraints="3"/>
-        <constraint field="link_id" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
         <constraint field="kuntakoodi" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
         <constraint field="linkkityyp" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="ajosuunta" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
+        <constraint field="ajosuunta" exp_strength="0" unique_strength="0" notnull_strength="1" constraints="1"/>
         <constraint field="silta_alik" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
         <constraint field="tienimi_su" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
         <constraint field="tienimi_ru" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
@@ -33602,7 +33592,6 @@ def my_form_open(dialog, layer, feature):
       </constraints>
       <constraintExpressions>
         <constraint desc="" field="fid" exp=""/>
-        <constraint desc="" field="link_id" exp=""/>
         <constraint desc="" field="kuntakoodi" exp=""/>
         <constraint desc="" field="linkkityyp" exp=""/>
         <constraint desc="" field="ajosuunta" exp=""/>
@@ -33623,7 +33612,6 @@ def my_form_open(dialog, layer, feature):
       <attributetableconfig sortExpression="&quot;fid&quot;" actionWidgetStyle="dropDown" sortOrder="0">
         <columns>
           <column width="-1" name="fid" type="field" hidden="0"/>
-          <column width="-1" name="link_id" type="field" hidden="0"/>
           <column width="-1" name="kuntakoodi" type="field" hidden="0"/>
           <column width="-1" name="linkkityyp" type="field" hidden="0"/>
           <column width="-1" name="ajosuunta" type="field" hidden="0"/>

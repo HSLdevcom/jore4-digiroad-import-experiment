@@ -1,20 +1,29 @@
--- `text` type is used consistently for `link_id` column.
-ALTER TABLE :schema.fix_layer_link ALTER COLUMN link_id TYPE text USING link_id::text;
+-- Add `link_id` attribute whose value is derived from the primary key of GeoPackage layer (`fid`).
+ALTER TABLE :schema.fix_layer_link ADD COLUMN link_id text;
 
--- Add internal ID for SQL view. Values will be derived from GeoPackage IDs.
+-- Add internal ID for SQL view. Values will be derived from the primary key of GeoPackage layer
+-- (`fid`).
 ALTER TABLE :schema.fix_layer_link ADD COLUMN internal_id int;
 
 -- Force separate ID value spaces for custom fixup links.
+-- 
+-- `link_id` attribute is changed to be derived from the `fid` column of GeoPackage (primary key).
+-- Hence, there is no need to verify uniqueness separately. However, this might introduce an issue
+-- where removing a link (perhaps accidentally) from QGIS layer and recreating it will assign a
+-- different `fid` value for the original link. This can cause problems when updating more recent
+-- revisions of infrastructure links to JORE4.
 -- 
 -- By adding 1_000_000_000 (one US billion) to `internal_id` value it is tried to keep ID spaces for
 -- (1) Digiroad-originated and (2) HSL-custom links apart from each other. Currently, `internal_id`
 -- is used e.g. as the internal primary key in JORE4 map-matching service.
 -- 
 UPDATE :schema.fix_layer_link
-SET link_id     = 'hsl_' || link_id,
+SET link_id     = 'hsl_' || fid,
     internal_id =  1000000000 + fid;
 
-ALTER TABLE :schema.fix_layer_link ALTER COLUMN internal_id SET NOT NULL;
+ALTER TABLE :schema.fix_layer_link
+    ALTER COLUMN link_id SET NOT NULL,
+    ALTER COLUMN internal_id SET NOT NULL;
 
 -- 
 -- Create link table between tables `dr_linkki` and `fix_layer_link_exclusion_geometry`.
