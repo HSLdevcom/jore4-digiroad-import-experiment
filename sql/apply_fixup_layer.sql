@@ -1,15 +1,18 @@
--- `text` type is used consistently for `link_id` column.
-ALTER TABLE :schema.fix_layer_link ALTER COLUMN link_id TYPE text USING link_id::text;
+-- Add `link_id` attribute whose value is derived from the primary key of GeoPackage layer (`fid`).
+ALTER TABLE :schema.fix_layer_link ADD COLUMN link_id text;
 
--- Add internal ID for SQL view. Values will be derived from GeoPackage IDs.
+-- Add internal ID for SQL view. Values will be derived from the primary key of GeoPackage layer
+-- (`fid`).
 ALTER TABLE :schema.fix_layer_link ADD COLUMN internal_id int;
 
 -- Force separate ID value spaces for fixup data.
 UPDATE :schema.fix_layer_link
-SET link_id     = 'hsl_' || link_id,
+SET link_id     = 'hsl_' || fid,
     internal_id =  1000000000 + fid;  -- add one billion (US)
 
-ALTER TABLE :schema.fix_layer_link ALTER COLUMN internal_id SET NOT NULL;
+ALTER TABLE :schema.fix_layer_link
+    ALTER COLUMN link_id SET NOT NULL,
+    ALTER COLUMN internal_id SET NOT NULL;
 
 -- 
 -- Create link table between tables `dr_linkki` and `fix_layer_link_exclusion_geometry`.
