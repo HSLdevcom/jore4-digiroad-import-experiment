@@ -2,47 +2,51 @@
 
 ## Overview
 
-This repository provides scripts to download Digiroad shapefiles for road and
-stop geometries and make transformations required by JORE4 components/services.
+This repository provides scripts to download
+[Digiroad](https://vayla.fi/en/transport-network/data/digiroad) shapefiles for
+road and public transport stop geometries and make transformations required by
+JORE4 microservices.
 
-Firstly, Digiroad links and other related information is downloaded and imported
-from shapefiles into a PostGIS database (contained in a Docker container) by
-executing `import_digiroad_shapefiles.sh` script. Within script execution the
-data is further processed in the database after which the data can be exported
-in a couple of formats relevant to various JORE4 services.
+Firstly, Digiroad road links, public transport stops and other related data is
+downloaded and imported from shapefiles into a PostGIS database (contained in a
+Docker container) by executing the import script
+(`import_digiroad_shapefiles.sh`). During execution of the import script data is
+further processed in the database after which the data can be exported in a
+couple of formats relevant to various JORE4 services.
 
-The database is used only locally for processing data. Each invocation of main
+The database is used only locally for processing data. Each invocation of the
 import script will recreate the Docker container and reset the state of
-database.
+database used for data processing.
 
 ## Building Docker image
 
 Almost all the of the data processing will be done inside a Docker container.
-The Docker container contains a PostGIS database.
+The Docker container contains a PostGIS database enabled with pgRouting
+extension.
 
 The Docker image for the container is built with:
 
-```
+```sh
 ./build_docker_image.sh
 ```
 
-## Importing data
+## Importing data from Digiroad
 
 Initially, Digiroad shapefiles are downloaded and imported into PostGIS database
-of the Docker container:
+of the Docker container by running:
 
-```
+```sh
 ./import_digiroad_shapefiles.sh
 ```
 
 The shapefiles are, by default, imported into a database schema named `digiroad`.
-The schema name can be altered in `set_env_vars.sh` script.
+The schema name can be changed in `set_env_vars.sh` script.
 
 Within the script execution further processing for Digiroad data is done as well.
 
-## Exporting Digiroad schema
+## Exporting Digiroad data
 
-```
+```sh
 ./export_pgdump_digiroad.sh
 ```
 
@@ -51,7 +55,7 @@ database must have `postgis` extension. E.g. the following commands create
 a database and user named `digiroad` and add `postgis` extension to the
 newly-created database. Remember to set up passwords as you wish.
 
-```
+```sql
 CREATE DATABASE digiroad;
 CREATE USER digiroad;
 GRANT ALL PRIVILEGES ON DATABASE digiroad TO digiroad;
@@ -82,7 +86,7 @@ below. An active Azure subscription associated with JORE4 is required. Azure CLI
 is also required to be installed. In addition, the SQL dump file needs to be
 created on current day.
 
-```
+```sh
 ./upload_routing_dump_to_azure.sh
 ```
 
@@ -111,14 +115,14 @@ The target database is required to have `postgis` and `pgrouting` extensions.
 
 To export a CSV containing intrastructure network links' data, run:
 
-```
+```sh
 ./export_infra_network_csv.sh
 ```
 
-You may import this CSV data into an existing database, using the command below.
-Note that the `infrastructure_network.infrastructure_link` table schema has to
-exist in the target database. Also note that the importer user must have
-read-write access to this table.
+You may import this CSV data into an existing database adhering to JORE4 schema,
+using the command below. Note that `infrastructure_network.infrastructure_link`
+table (and schema) has to exist in the target database. Also note that the
+importer user must have read-write permissions to this table.
 
 The script will interactively ask for the connection parameters of the target
 database. They default to the parameters defined in the `jore4-flux` repository
@@ -129,35 +133,38 @@ Note: This script is currently only a proof of concept. It will create new links
 if they didn't exist or update them if they do. But links deleted in digiroad
 won't be deleted here.
 
-```
+```sh
 ./import_infra_network_csv.sh
 ```
 
-## Exporting Stops for Jore3 Importer
+## Exporting stops for JORE3 Importer
 
-If you want to export the stop data as a CSV file, you have to run:
+If you want to export Digiroad public transport stops as a CSV file to used with
+[JORE3 Importer](https://github.com/HSLdevcom/jore4-jore3-importer), you have to
+run:
 
-```
+```sh
 ./export_stops_csv.sh
 
 ```
 
-This command reads the stop data imported from Digiroad and writes it to the _workdir/csv/digiroad_stops.csv_ file.
-
+This command reads selected data items from filtered public transport stop data
+imported from Digiroad and writes it to the _workdir/csv/digiroad_stops.csv_
+file.
 
 ## Exporting vector tiles
 
-An MBTiles files containing road links can be exported with (given that Digiroad
-shapefiles have already been imported):
+An MBTiles files containing filtered Digiroad road links can be exported with
+(assuming Digiroad shapefiles have already been imported):
 
-```
+```sh
 ./export_mbtiles_dr_linkki.sh
 ```
 
-An MBTiles files containing stops can be exported with (given that Digiroad
-shapefiles have already been imported):
+An MBTiles files containing filtered Digiroad public transport stops can be
+exported with (assuming Digiroad shapefiles have already been imported):
 
-```
+```sh
 ./export_mbtiles_dr_pysakki.sh
 ```
 
@@ -165,6 +172,8 @@ shapefiles have already been imported):
 
 The project license is in [`LICENSE`](./LICENSE).
 
-Digiroad data has been licensed with Creative Commons BY 4.0 license by the [Finnish Transport Infrastructure Agency](https://vayla.fi/en/transport-network/data/digiroad/data).
+Digiroad data has been licensed with Creative Commons BY 4.0 license by the
+[Finnish Transport Infrastructure Agency](https://vayla.fi/en/transport-network/data/digiroad/data).
 
-The Jore4 fix layer in [`./fixup`](./fixup) is licensed under Creative Commons BY 4.0 by Helsinki Regional Transport Authority (HSL).
+The Jore4 fix layer in [`./fixup`](./fixup) is licensed under Creative Commons
+BY 4.0 by Helsinki Regional Transport Authority (HSL).
