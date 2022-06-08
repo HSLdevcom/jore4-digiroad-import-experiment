@@ -11,7 +11,10 @@ ALTER TABLE :schema.dr_pysakki_out
     ALTER COLUMN valtak_id TYPE int,
     ALTER COLUMN kuntakoodi TYPE int,
     ALTER COLUMN vaik_suunt TYPE int,
+    ALTER COLUMN nimi_su TYPE text,
+    ALTER COLUMN nimi_ru TYPE text,
     ALTER COLUMN yllapitaja TYPE int,
+    ALTER COLUMN matk_tunn TYPE text,
     ALTER COLUMN aikataulu TYPE int,
     ALTER COLUMN katos TYPE int,
     ALTER COLUMN penkki TYPE int,
@@ -45,3 +48,4 @@ ALTER TABLE :schema.dr_pysakki
     ADD CONSTRAINT fk_dr_pysakki_link_id FOREIGN KEY (link_id) REFERENCES :schema.dr_linkki (link_id);
 
 CREATE INDEX dr_pysakki_link_id_idx ON :schema.dr_pysakki (link_id);
+CREATE INDEX dr_pysakki_valtak_id_idx ON :schema.dr_pysakki (valtak_id);

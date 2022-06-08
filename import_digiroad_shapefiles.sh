@@ -79,6 +79,9 @@ if [ -f ${CWD}/fixup/digiroad/fixup.gpkg ]; then
 
   docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
     sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_link_exclusion_geometry remove_link"
+
+  docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
+    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_stop_point add_stop_point"
 fi
 
 # Load DR_PYSAKKI shapefile into database.

@@ -22,8 +22,6 @@ SELECT
     src.id,
     src.link_id,
     src.kuntakoodi,
-    src.koord_x,
-    src.koord_y,
     src.geom AS geom_orig
 FROM :source_schema.dr_pysakki_fixup src;
 
@@ -44,8 +42,6 @@ ALTER TABLE :schema.dr_linkki ADD CONSTRAINT uk_dr_linkki_link_id UNIQUE (link_i
 ALTER TABLE :schema.dr_pysakki ALTER COLUMN id SET NOT NULL;
 ALTER TABLE :schema.dr_pysakki ALTER COLUMN link_id SET NOT NULL;
 ALTER TABLE :schema.dr_pysakki ALTER COLUMN kuntakoodi SET NOT NULL;
-ALTER TABLE :schema.dr_pysakki ALTER COLUMN koord_x SET NOT NULL;
-ALTER TABLE :schema.dr_pysakki ALTER COLUMN koord_y SET NOT NULL;
 ALTER TABLE :schema.dr_pysakki ALTER COLUMN geom SET NOT NULL;
 
 ALTER TABLE :schema.dr_pysakki ADD CONSTRAINT dr_pysakki_pkey PRIMARY KEY (id);

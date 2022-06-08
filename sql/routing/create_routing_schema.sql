@@ -253,7 +253,7 @@ SELECT
     src.id::bigint AS public_transport_stop_id,
     src.valtak_id AS public_transport_stop_national_id,
     link.infrastructure_link_id AS located_on_infrastructure_link_id,
-    link.infrastructure_source_id,  -- inherit from link
+    isrc.infrastructure_source_id,
     CASE
         WHEN src.vaik_suunt = 2 THEN true
         WHEN src.vaik_suunt = 3 THEN false
@@ -266,7 +266,8 @@ SELECT
     )::jsonb AS name,
     src.geom
 FROM :source_schema.dr_pysakki_fixup src
-INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id;
+INNER JOIN :schema.infrastructure_link link ON link.external_link_id = src.link_id
+INNER JOIN :schema.infrastructure_source isrc ON isrc.infrastructure_source_name = src.hsl_infra_source;
 
 COMMENT ON TABLE :schema.public_transport_stop IS
     'The public transport stops imported from Digiroad export';
