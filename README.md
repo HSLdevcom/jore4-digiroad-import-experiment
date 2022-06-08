@@ -67,10 +67,11 @@ layers is stored in and read from a separate GeoPackage file
 (`fixup/digiroad/fixup.gpkg`). This GeoPackage file will be updated and
 maintained in the daily operational use of JORE4 "ecosystem".
 
-| QGIS layer    | Description |
-| ------------- | ----------- |
-| `add_link`    | Contains data for HSL-specific infrastructure links to be added on top of or to replace existing Digiroad links (the latter case in tandem with `remove_link` layer). A `LINESTRING` geometry is a mandatory part of each link to be added. All the geometries defined on this layer must seamlessly join to each other and/or existing Digiroad links. Seamlessness can be achieved by using the _Snapping Tool_ in QGIS while drawing line features. |
-| `remove_link` | Contains geometries that are used to mark intersecting Digiroad links for removal. The links marked for removal will be filtered out when exporting data in later stages. The Digiroad public transport stops along the links marked for removal are also filtered out in data exports. It is recommended to use `LINESTRING` type in intersection geometries but currently this is not strictly required. |
+| QGIS layer       | Description |
+| ---------------- | ----------- |
+| `add_link`       | Contains data for HSL-specific infrastructure links to be added on top of or to replace existing Digiroad links (the latter case in tandem with `remove_link` layer). A `LINESTRING` geometry is a mandatory part of each link to be added. All the geometries defined on this layer must seamlessly join to each other and/or existing Digiroad links. Seamlessness can be achieved by using the _Snapping Tool_ in QGIS while drawing line features. |
+| `remove_link`    | Contains geometries that are used to mark intersecting Digiroad links for removal. The links marked for removal will be filtered out when exporting data in later stages. The Digiroad public transport stops along the links marked for removal are also filtered out in data exports. It is recommended to use `LINESTRING` type in intersection geometries but currently this is not strictly required. |
+| `add_stop_point` | Contains data for HSL-defined public transport stop points that are mainly used to replace the ones available in Digiroad. A `POINT` geometry is a mandatory part of each stop point to be added as well as `valtak_id` attribute that denotes so called _ELY number_. The closest infrastructure link to each stop point and other information is resolved automatically during import process. |
 
 ### GeoPackage _add_link_ layer contents
 
@@ -103,6 +104,20 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 | ----------- | --------- | -------- | ----------- |
 | `fid`       | INTEGER   | X        | The primary key generated internally in GeoPackage |
 | `geom`      | GEOMETRY  | -        | The geometry used to find all infrastructure links whose geometry intersects with it. The affected infrastructure links will be marked for removal and will not be included in data exports. | 
+
+### GeoPackage _add_stop_point_ layer contents
+
+The table below describes the columns of the `add_stop_point` layer in the QGIS
+project. The data types are as they appear in the GeoPackage format (SQLite).
+
+| Column name | Data type  | Not null | Description |
+| ----------- | ---------- | -------- | ----------- |
+| `fid`       | INTEGER    | X        | The primary key generated internally in GeoPackage. |
+| `geom`      | POINT      | X        | The `POINT` geometry describing the location of this public transport stop point |
+| `valtak_id` | INTEGER    | X        | The national ID for the stop point that is also known as _ELY number_ |
+| `matk_tunn` | TEXT       | -        | The passenger ID for the stop point e.g. H1234 |
+| `nimi_su`   | TEXT       | -        | The name of stop point in Finnish |
+| `nimi_ru`   | TEXT       | -        | The name of stop point in Swedish |
 
 ## Exporting Digiroad data
 
