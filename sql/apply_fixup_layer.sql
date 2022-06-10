@@ -207,6 +207,9 @@ WHERE
     valtak_id NOT IN (
         SELECT valtak_id
         FROM :schema.fix_layer_stop_point
+        WHERE
+            vaik_suunt IN (2, 3)
+            AND sijainti_m IS NOT NULL
     )
 UNION
 SELECT
