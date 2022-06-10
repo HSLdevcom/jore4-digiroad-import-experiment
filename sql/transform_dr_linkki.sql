@@ -65,3 +65,5 @@ ALTER TABLE :schema.dr_linkki
 
     ADD CONSTRAINT dr_linkki_pkey PRIMARY KEY (id),
     ADD CONSTRAINT uk_dr_linkki_link_id UNIQUE (link_id);
+
+CREATE INDEX dr_linkki_geom_idx ON :schema.dr_linkki USING gist(geom);

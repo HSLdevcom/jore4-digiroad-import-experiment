@@ -49,3 +49,4 @@ ALTER TABLE :schema.dr_pysakki
 
 CREATE INDEX dr_pysakki_link_id_idx ON :schema.dr_pysakki (link_id);
 CREATE INDEX dr_pysakki_valtak_id_idx ON :schema.dr_pysakki (valtak_id);
+CREATE INDEX dr_pysakki_geom_idx ON :schema.dr_pysakki USING gist (geom);

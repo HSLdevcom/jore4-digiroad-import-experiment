@@ -25,6 +25,8 @@ ALTER TABLE :schema.fix_layer_link
     ALTER COLUMN link_id SET NOT NULL,
     ALTER COLUMN internal_id SET NOT NULL;
 
+CREATE INDEX fix_layer_link_link_id_idx ON :schema.fix_layer_link (link_id);
+
 -- 
 -- Create link table between tables `dr_linkki` and `fix_layer_link_exclusion_geometry`.
 -- 
@@ -124,6 +126,9 @@ ALTER TABLE :schema.fix_layer_stop_point
     ADD COLUMN vaik_suunt int,
     ADD COLUMN sijainti_m double precision,
     ADD COLUMN kuntakoodi int;
+
+CREATE INDEX fix_layer_stop_point_link_id_idx ON :schema.fix_layer_stop_point (link_id);
+CREATE INDEX fix_layer_stop_point_valtak_id_idx ON :schema.fix_layer_stop_point (valtak_id);
 
 -- `internal_id` is for SQL view in order to distinguish custom HSL-defined stop
 -- points from ones defined in Digiroad. ID value will be derived from the
