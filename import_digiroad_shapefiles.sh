@@ -70,18 +70,18 @@ do
       sh -c "for SUB_AREA in ${SUB_AREAS}; do $SHP2PGSQL -a /tmp/shp/\${SUB_AREA}/${SUB_AREA_SHP_TYPE}.shp $TABLE_NAME | $PSQL -v ON_ERROR_STOP=1; done"
 done
 
-# Import "add_link" and "remove_link" layers from GeoPackage fixup file if it exists.
+# Import "add_links" and "remove_links" layers from GeoPackage fixup file if it exists.
 if [ -f ${CWD}/fixup/digiroad/fixup.gpkg ]; then
   OGR2OGR="exec ogr2ogr -f PostgreSQL \"PG:host=\$POSTGRES_PORT_5432_TCP_ADDR port=\$POSTGRES_PORT_5432_TCP_PORT dbname=$DB_NAME user=digiroad schemas=$DB_IMPORT_SCHEMA_NAME\""
 
   docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
-    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_link add_link"
+    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_link add_links"
 
   docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
-    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_link_exclusion_geometry remove_link"
+    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_link_exclusion_geometry remove_links"
 
   docker run --rm --link "${DOCKER_CONTAINER_NAME}":postgres -v ${CWD}/fixup/digiroad:/tmp/gpkg $DOCKER_IMAGE \
-    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_stop_point add_stop_point"
+    sh -c "$OGR2OGR /tmp/gpkg/fixup.gpkg -nln fix_layer_stop_point add_stop_points"
 fi
 
 # Load DR_PYSAKKI shapefile into database.
