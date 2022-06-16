@@ -43,7 +43,7 @@ docker kill $DOCKER_CONTAINER_NAME &> /dev/null || true
 docker rm -v $DOCKER_CONTAINER_NAME &> /dev/null || true
 
 # Create and start new Docker container.
-docker run --name $DOCKER_CONTAINER_NAME -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
+docker run --name $DOCKER_CONTAINER_NAME -p 127.0.0.1:21000:5432 -e POSTGRES_HOST_AUTH_METHOD=trust -d $DOCKER_IMAGE
 
 # Wait for PostgreSQL to start.
 docker exec "${DOCKER_CONTAINER_NAME}" sh -c "$PG_WAIT_LOCAL"
