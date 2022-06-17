@@ -85,7 +85,7 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 | `kuntakoodi`           | MEDIUMINT  | -        | Official Finnish municipality code |
 | `linkkityyp`           | MEDIUMINT  | -        | The link type as code value from the corresponding Digiroad code set |
 | `ajosuunta`            | MEDIUMINT  | X        | The direction of traffic flow as code value from the corresponding Digiroad code set |
-| `silta_alik`           | MEDIUMINT  | -        | Is this infrastructure link a bridge, tunnel or underpass? The code value must be selected from the ones available in the corresponding Digiroad code set. |
+| `silta_alik`           | MEDIUMINT  | -        | Is this infrastructure link a bridge, tunnel or underpass? The value must be selected from the corresponding Digiroad code set. |
 | `tienimi_su`           | TEXT       | -        | The name of infrastructure link in Finnish |
 | `tienimi_ru`           | TEXT       | -        | The name of infrastructure link in Swedish |
 | `is_generic_bus`       | BOOLEAN    | -        | Is this infrastructure link safely traversable by _generic_bus_ vehicle type? |
@@ -103,7 +103,7 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 | Column name | Data type | Not null | Description |
 | ----------- | --------- | -------- | ----------- |
 | `fid`       | INTEGER   | X        | The primary key generated internally in GeoPackage |
-| `geom`      | GEOMETRY  | -        | The geometry used to find all infrastructure links whose geometry intersects with it. The affected infrastructure links will be marked for removal and will not be included in data exports. | 
+| `geom`      | GEOMETRY  | X        | The geometry used to find all infrastructure links whose geometry intersects with it. The affected infrastructure links will be marked for removal and will not be included in data exports. | 
 
 ### GeoPackage _add_stop_point_ layer contents
 
