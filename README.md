@@ -119,6 +119,7 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 | `matk_tunn` | TEXT       | -        | The passenger ID for the stop point e.g. H1234 |
 | `nimi_su`   | TEXT       | -        | The name of stop point in Finnish |
 | `nimi_ru`   | TEXT       | -        | The name of stop point in Swedish |
+| `notes`     | TEXT       | -        | Notes for/from traffic planner |
 
 ## Exporting Digiroad data
 
