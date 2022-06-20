@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis saveDateTime="2022-06-21T12:51:17" projectname="" saveUserFull="Jarkko Kaura" version="3.26.0-Buenos Aires" saveUser="jarkko.kaura">
+<qgis saveDateTime="2022-06-21T12:53:41" projectname="" saveUserFull="Jarkko Kaura" version="3.26.0-Buenos Aires" saveUser="jarkko.kaura">
   <homePath path=""/>
   <title></title>
   <transaction mode="Disabled"/>
@@ -52117,7 +52117,7 @@ def my_form_open(dialog, layer, feature):
                 <Option value="MM" name="dash_pattern_offset_unit" type="QString"/>
                 <Option value="0" name="draw_inside_polygon" type="QString"/>
                 <Option value="bevel" name="joinstyle" type="QString"/>
-                <Option value="183,72,75,255" name="line_color" type="QString"/>
+                <Option value="114,155,111,255" name="line_color" type="QString"/>
                 <Option value="solid" name="line_style" type="QString"/>
                 <Option value="0.6" name="line_width" type="QString"/>
                 <Option value="MM" name="line_width_unit" type="QString"/>
@@ -52145,7 +52145,7 @@ def my_form_open(dialog, layer, feature):
               <prop v="MM" k="dash_pattern_offset_unit"/>
               <prop v="0" k="draw_inside_polygon"/>
               <prop v="bevel" k="joinstyle"/>
-              <prop v="183,72,75,255" k="line_color"/>
+              <prop v="114,155,111,255" k="line_color"/>
               <prop v="solid" k="line_style"/>
               <prop v="0.6" k="line_width"/>
               <prop v="MM" k="line_width_unit"/>
@@ -52184,24 +52184,24 @@ def my_form_open(dialog, layer, feature):
             <layer pass="0" enabled="1" class="SimpleFill" locked="0">
               <Option type="Map">
                 <Option value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale" type="QString"/>
-                <Option value="183,72,75,255" name="color" type="QString"/>
+                <Option value="114,155,111,255" name="color" type="QString"/>
                 <Option value="bevel" name="joinstyle" type="QString"/>
                 <Option value="0,0" name="offset" type="QString"/>
                 <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
                 <Option value="MM" name="offset_unit" type="QString"/>
-                <Option value="131,51,54,255" name="outline_color" type="QString"/>
+                <Option value="81,111,79,255" name="outline_color" type="QString"/>
                 <Option value="solid" name="outline_style" type="QString"/>
                 <Option value="0.2" name="outline_width" type="QString"/>
                 <Option value="MM" name="outline_width_unit" type="QString"/>
                 <Option value="solid" name="style" type="QString"/>
               </Option>
               <prop v="3x:0,0,0,0,0,0" k="border_width_map_unit_scale"/>
-              <prop v="183,72,75,255" k="color"/>
+              <prop v="114,155,111,255" k="color"/>
               <prop v="bevel" k="joinstyle"/>
               <prop v="0,0" k="offset"/>
               <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
               <prop v="MM" k="offset_unit"/>
-              <prop v="131,51,54,255" k="outline_color"/>
+              <prop v="81,111,79,255" k="outline_color"/>
               <prop v="solid" k="outline_style"/>
               <prop v="0.2" k="outline_width"/>
               <prop v="MM" k="outline_width_unit"/>
@@ -52229,14 +52229,14 @@ def my_form_open(dialog, layer, feature):
               <Option type="Map">
                 <Option value="0" name="angle" type="QString"/>
                 <Option value="square" name="cap_style" type="QString"/>
-                <Option value="183,72,75,255" name="color" type="QString"/>
+                <Option value="114,155,111,255" name="color" type="QString"/>
                 <Option value="1" name="horizontal_anchor_point" type="QString"/>
                 <Option value="bevel" name="joinstyle" type="QString"/>
                 <Option value="diamond" name="name" type="QString"/>
                 <Option value="0,0" name="offset" type="QString"/>
                 <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
                 <Option value="MM" name="offset_unit" type="QString"/>
-                <Option value="131,51,54,255" name="outline_color" type="QString"/>
+                <Option value="81,111,79,255" name="outline_color" type="QString"/>
                 <Option value="solid" name="outline_style" type="QString"/>
                 <Option value="0.2" name="outline_width" type="QString"/>
                 <Option value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale" type="QString"/>
@@ -52249,14 +52249,14 @@ def my_form_open(dialog, layer, feature):
               </Option>
               <prop v="0" k="angle"/>
               <prop v="square" k="cap_style"/>
-              <prop v="183,72,75,255" k="color"/>
+              <prop v="114,155,111,255" k="color"/>
               <prop v="1" k="horizontal_anchor_point"/>
               <prop v="bevel" k="joinstyle"/>
               <prop v="diamond" k="name"/>
               <prop v="0,0" k="offset"/>
               <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
               <prop v="MM" k="offset_unit"/>
-              <prop v="131,51,54,255" k="outline_color"/>
+              <prop v="81,111,79,255" k="outline_color"/>
               <prop v="solid" k="outline_style"/>
               <prop v="0.2" k="outline_width"/>
               <prop v="3x:0,0,0,0,0,0" k="outline_width_map_unit_scale"/>
@@ -52287,6 +52287,139 @@ def my_form_open(dialog, layer, feature):
                 <Option value="collection" name="type" type="QString"/>
               </Option>
             </data_defined_properties>
+            <layer pass="0" enabled="1" class="MarkerLine" locked="0">
+              <Option type="Map">
+                <Option value="4" name="average_angle_length" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="average_angle_map_unit_scale" type="QString"/>
+                <Option value="MM" name="average_angle_unit" type="QString"/>
+                <Option value="3" name="interval" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="interval_map_unit_scale" type="QString"/>
+                <Option value="MapUnit" name="interval_unit" type="QString"/>
+                <Option value="0" name="offset" type="QString"/>
+                <Option value="0" name="offset_along_line" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="offset_along_line_map_unit_scale" type="QString"/>
+                <Option value="MapUnit" name="offset_along_line_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
+                <Option value="MapUnit" name="offset_unit" type="QString"/>
+                <Option value="true" name="place_on_every_part" type="bool"/>
+                <Option value="CentralPoint" name="placements" type="QString"/>
+                <Option value="0" name="ring_filter" type="QString"/>
+                <Option value="1" name="rotate" type="QString"/>
+              </Option>
+              <prop v="4" k="average_angle_length"/>
+              <prop v="3x:0,0,0,0,0,0" k="average_angle_map_unit_scale"/>
+              <prop v="MM" k="average_angle_unit"/>
+              <prop v="3" k="interval"/>
+              <prop v="3x:0,0,0,0,0,0" k="interval_map_unit_scale"/>
+              <prop v="MapUnit" k="interval_unit"/>
+              <prop v="0" k="offset"/>
+              <prop v="0" k="offset_along_line"/>
+              <prop v="3x:0,0,0,0,0,0" k="offset_along_line_map_unit_scale"/>
+              <prop v="MapUnit" k="offset_along_line_unit"/>
+              <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
+              <prop v="MapUnit" k="offset_unit"/>
+              <prop v="true" k="place_on_every_part"/>
+              <prop v="CentralPoint" k="placements"/>
+              <prop v="0" k="ring_filter"/>
+              <prop v="1" k="rotate"/>
+              <data_defined_properties>
+                <Option type="Map">
+                  <Option value="" name="name" type="QString"/>
+                  <Option name="properties" type="Map">
+                    <Option name="offsetAlongLine" type="Map">
+                      <Option value="true" name="active" type="bool"/>
+                      <Option value="$length * 0.6" name="expression" type="QString"/>
+                      <Option value="3" name="type" type="int"/>
+                    </Option>
+                  </Option>
+                  <Option value="collection" name="type" type="QString"/>
+                </Option>
+              </data_defined_properties>
+              <symbol force_rhr="0" clip_to_extent="1" name="@0@0" alpha="1" is_animated="0" type="marker" frame_rate="10">
+                <data_defined_properties>
+                  <Option type="Map">
+                    <Option value="" name="name" type="QString"/>
+                    <Option name="properties"/>
+                    <Option value="collection" name="type" type="QString"/>
+                  </Option>
+                </data_defined_properties>
+                <layer pass="0" enabled="1" class="SimpleMarker" locked="0">
+                  <Option type="Map">
+                    <Option value="0" name="angle" type="QString"/>
+                    <Option value="square" name="cap_style" type="QString"/>
+                    <Option value="225,89,137,255" name="color" type="QString"/>
+                    <Option value="1" name="horizontal_anchor_point" type="QString"/>
+                    <Option value="bevel" name="joinstyle" type="QString"/>
+                    <Option value="filled_arrowhead" name="name" type="QString"/>
+                    <Option value="0,0" name="offset" type="QString"/>
+                    <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
+                    <Option value="MapUnit" name="offset_unit" type="QString"/>
+                    <Option value="225,89,137,255" name="outline_color" type="QString"/>
+                    <Option value="solid" name="outline_style" type="QString"/>
+                    <Option value="0.4" name="outline_width" type="QString"/>
+                    <Option value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale" type="QString"/>
+                    <Option value="MapUnit" name="outline_width_unit" type="QString"/>
+                    <Option value="diameter" name="scale_method" type="QString"/>
+                    <Option value="8" name="size" type="QString"/>
+                    <Option value="3x:0,0,0,0,0,0" name="size_map_unit_scale" type="QString"/>
+                    <Option value="MapUnit" name="size_unit" type="QString"/>
+                    <Option value="1" name="vertical_anchor_point" type="QString"/>
+                  </Option>
+                  <prop v="0" k="angle"/>
+                  <prop v="square" k="cap_style"/>
+                  <prop v="225,89,137,255" k="color"/>
+                  <prop v="1" k="horizontal_anchor_point"/>
+                  <prop v="bevel" k="joinstyle"/>
+                  <prop v="filled_arrowhead" k="name"/>
+                  <prop v="0,0" k="offset"/>
+                  <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
+                  <prop v="MapUnit" k="offset_unit"/>
+                  <prop v="225,89,137,255" k="outline_color"/>
+                  <prop v="solid" k="outline_style"/>
+                  <prop v="0.4" k="outline_width"/>
+                  <prop v="3x:0,0,0,0,0,0" k="outline_width_map_unit_scale"/>
+                  <prop v="MapUnit" k="outline_width_unit"/>
+                  <prop v="diameter" k="scale_method"/>
+                  <prop v="8" k="size"/>
+                  <prop v="3x:0,0,0,0,0,0" k="size_map_unit_scale"/>
+                  <prop v="MapUnit" k="size_unit"/>
+                  <prop v="1" k="vertical_anchor_point"/>
+                  <data_defined_properties>
+                    <Option type="Map">
+                      <Option value="" name="name" type="QString"/>
+                      <Option name="properties" type="Map">
+                        <Option name="angle" type="Map">
+                          <Option value="true" name="active" type="bool"/>
+                          <Option value="CASE&#xa;WHEN AJOSUUNTA = 3 THEN 180&#xa;ELSE 0&#xa;END" name="expression" type="QString"/>
+                          <Option value="3" name="type" type="int"/>
+                        </Option>
+                        <Option name="fillColor" type="Map">
+                          <Option value="false" name="active" type="bool"/>
+                          <Option value="1" name="type" type="int"/>
+                          <Option value="" name="val" type="QString"/>
+                        </Option>
+                        <Option name="name" type="Map">
+                          <Option value="true" name="active" type="bool"/>
+                          <Option value="CASE&#xa;WHEN AJOSUUNTA = 2 THEN 'diamond'&#xa;ELSE 'arrowhead'&#xa;END" name="expression" type="QString"/>
+                          <Option value="3" name="type" type="int"/>
+                        </Option>
+                        <Option name="outlineWidth" type="Map">
+                          <Option value="true" name="active" type="bool"/>
+                          <Option value="CASE&#xa;WHEN AJOSUUNTA = 2 THEN 0&#xa;ELSE 2&#xa;END" name="expression" type="QString"/>
+                          <Option value="3" name="type" type="int"/>
+                        </Option>
+                        <Option name="size" type="Map">
+                          <Option value="true" name="active" type="bool"/>
+                          <Option value="CASE&#xa;WHEN AJOSUUNTA = 2 THEN 8&#xa;ELSE 8&#xa;END" name="expression" type="QString"/>
+                          <Option value="3" name="type" type="int"/>
+                        </Option>
+                      </Option>
+                      <Option value="collection" name="type" type="QString"/>
+                    </Option>
+                  </data_defined_properties>
+                </layer>
+              </symbol>
+            </layer>
             <layer pass="0" enabled="1" class="SimpleLine" locked="0">
               <Option type="Map">
                 <Option value="0" name="align_dash_pattern" type="QString"/>
@@ -52347,7 +52480,18 @@ def my_form_open(dialog, layer, feature):
               <data_defined_properties>
                 <Option type="Map">
                   <Option value="" name="name" type="QString"/>
-                  <Option name="properties"/>
+                  <Option name="properties" type="Map">
+                    <Option name="outlineColor" type="Map">
+                      <Option value="true" name="active" type="bool"/>
+                      <Option value="CASE&#xa;WHEN SILTA_ALIK &lt; 0 THEN '#88e15989'&#xa;ELSE '#ffe15989'&#xa;END" name="expression" type="QString"/>
+                      <Option value="3" name="type" type="int"/>
+                    </Option>
+                    <Option name="outlineStyle" type="Map">
+                      <Option value="true" name="active" type="bool"/>
+                      <Option value="CASE&#xa;WHEN LINKKITYYP IN (8, 9) THEN 'dot'&#xa;ELSE 'solid'&#xa;END" name="expression" type="QString"/>
+                      <Option value="3" name="type" type="int"/>
+                    </Option>
+                  </Option>
                   <Option value="collection" name="type" type="QString"/>
                 </Option>
               </data_defined_properties>
@@ -52497,70 +52641,70 @@ def my_form_open(dialog, layer, feature):
           </editWidget>
         </field>
         <field name="silta_alik" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="Range">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="link_tila" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="Range">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="tienimi_su" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="tienimi_ru" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="is_generic_bus" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="CheckBox">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="is_tall_electric_bus" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="CheckBox">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="is_tram" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="CheckBox">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="is_train" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="CheckBox">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="is_metro" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="CheckBox">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="is_ferry" configurationFlags="None">
-          <editWidget type="">
+          <editWidget type="CheckBox">
             <config>
               <Option/>
             </config>
