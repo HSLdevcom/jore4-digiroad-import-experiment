@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis saveUserFull="Jarkko Kaura" saveDateTime="2022-06-20T12:51:37" version="3.24.3-Tisler" saveUser="jarkko.kaura" projectname="">
+<qgis saveUserFull="Jarkko Kaura" saveDateTime="2022-06-20T14:06:40" version="3.24.3-Tisler" saveUser="jarkko.kaura" projectname="">
   <homePath path=""/>
   <title></title>
   <autotransaction active="0"/>
@@ -34011,6 +34011,13 @@ def my_form_open(dialog, layer, feature):
             </config>
           </editWidget>
         </field>
+        <field name="link_id" configurationFlags="None">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
         <field name="notes" configurationFlags="None">
           <editWidget type="">
             <config>
@@ -34020,12 +34027,13 @@ def my_form_open(dialog, layer, feature):
         </field>
       </fieldConfiguration>
       <aliases>
-        <alias field="fid" name="" index="0"/>
-        <alias field="valtak_id" name="" index="1"/>
-        <alias field="matk_tunn" name="" index="2"/>
-        <alias field="nimi_su" name="" index="3"/>
-        <alias field="nimi_ru" name="" index="4"/>
-        <alias field="notes" name="" index="5"/>
+        <alias name="" index="0" field="fid"/>
+        <alias name="" index="1" field="valtak_id"/>
+        <alias name="" index="2" field="matk_tunn"/>
+        <alias name="" index="3" field="nimi_su"/>
+        <alias name="" index="4" field="nimi_ru"/>
+        <alias name="" index="5" field="link_id"/>
+        <alias name="" index="6" field="notes"/>
       </aliases>
       <defaults>
         <default expression="" applyOnUpdate="0" field="fid"/>
@@ -34033,37 +34041,41 @@ def my_form_open(dialog, layer, feature):
         <default expression="" applyOnUpdate="0" field="matk_tunn"/>
         <default expression="" applyOnUpdate="0" field="nimi_su"/>
         <default expression="" applyOnUpdate="0" field="nimi_ru"/>
+        <default expression="" applyOnUpdate="0" field="link_id"/>
         <default expression="" applyOnUpdate="0" field="notes"/>
       </defaults>
       <constraints>
-        <constraint field="fid" exp_strength="0" unique_strength="1" notnull_strength="1" constraints="3"/>
-        <constraint field="valtak_id" exp_strength="0" unique_strength="0" notnull_strength="1" constraints="1"/>
-        <constraint field="matk_tunn" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="nimi_su" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="nimi_ru" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="notes" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
+        <constraint unique_strength="1" notnull_strength="1" constraints="3" exp_strength="0" field="fid"/>
+        <constraint unique_strength="1" notnull_strength="1" constraints="3" exp_strength="0" field="valtak_id"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="matk_tunn"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="nimi_su"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="nimi_ru"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="link_id"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="notes"/>
       </constraints>
       <constraintExpressions>
-        <constraint desc="" field="fid" exp=""/>
-        <constraint desc="" field="valtak_id" exp=""/>
-        <constraint desc="" field="matk_tunn" exp=""/>
-        <constraint desc="" field="nimi_su" exp=""/>
-        <constraint desc="" field="nimi_ru" exp=""/>
-        <constraint desc="" field="notes" exp=""/>
+        <constraint exp="" desc="" field="fid"/>
+        <constraint exp="" desc="" field="valtak_id"/>
+        <constraint exp="" desc="" field="matk_tunn"/>
+        <constraint exp="" desc="" field="nimi_su"/>
+        <constraint exp="" desc="" field="nimi_ru"/>
+        <constraint exp="" desc="" field="link_id"/>
+        <constraint exp="" desc="" field="notes"/>
       </constraintExpressions>
       <expressionfields/>
       <attributeactions>
-        <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
+        <defaultAction key="Canvas" value="{00000000-0000-0000-0000-000000000000}"/>
       </attributeactions>
-      <attributetableconfig sortExpression="&quot;fid&quot;" actionWidgetStyle="dropDown" sortOrder="0">
+      <attributetableconfig actionWidgetStyle="dropDown" sortOrder="0" sortExpression="&quot;fid&quot;">
         <columns>
-          <column width="-1" name="fid" type="field" hidden="0"/>
-          <column width="-1" name="valtak_id" type="field" hidden="0"/>
-          <column width="-1" name="matk_tunn" type="field" hidden="0"/>
-          <column width="-1" name="nimi_su" type="field" hidden="0"/>
-          <column width="-1" name="nimi_ru" type="field" hidden="0"/>
-          <column width="-1" name="notes" type="field" hidden="0"/>
-          <column width="-1" type="actions" hidden="1"/>
+          <column hidden="0" width="-1" name="fid" type="field"/>
+          <column hidden="0" width="-1" name="valtak_id" type="field"/>
+          <column hidden="0" width="-1" name="matk_tunn" type="field"/>
+          <column hidden="0" width="-1" name="link_id" type="field"/>
+          <column hidden="0" width="-1" name="nimi_su" type="field"/>
+          <column hidden="0" width="-1" name="nimi_ru" type="field"/>
+          <column hidden="0" width="-1" name="notes" type="field"/>
+          <column hidden="1" width="-1" type="actions"/>
         </columns>
       </attributetableconfig>
       <conditionalstyles>
