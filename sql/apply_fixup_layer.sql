@@ -134,7 +134,7 @@ CREATE INDEX fix_layer_stop_point_valtak_id_idx ON :schema.fix_layer_stop_point 
 -- points from ones defined in Digiroad. ID value will be derived from the
 -- primary key of GeoPackage layer (`fid`). A separate ID value space is forced
 -- by adding 1_000_000_000.
-UPDATE :schema.fix_layer_stop_point SET internal_id =  1000000000 + fid;
+UPDATE :schema.fix_layer_stop_point SET internal_id = 1000000000 + fid;
 ALTER TABLE :schema.fix_layer_stop_point ALTER COLUMN internal_id SET NOT NULL;
 
 -- Resolve `link_id` and `kuntakoodi` attribute values.
@@ -174,7 +174,7 @@ SET (vaik_suunt, sijainti_m) = (
             WHEN ST_Contains(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=left'), s.geom) THEN 3
             ELSE NULL
         END AS vaik_suunt,
-        -- First, resolve the fraction (0..1), then multiply it by the length of the link.
+        -- First, resolve the fraction (0..1), then multiply it by the 3D length of the link.
         ST_LineLocatePoint(ST_Force2D(l.geom), s.geom) * ST_3DLength(l.geom) AS sijainti_m
     FROM :schema.dr_linkki_fixup l
     WHERE l.link_id = s.link_id
