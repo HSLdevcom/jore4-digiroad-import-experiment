@@ -115,7 +115,7 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 | ----------- | ---------- | -------- | ----------- |
 | `fid`       | INTEGER    | X        | The primary key generated internally in GeoPackage. |
 | `geom`      | POINT      | X        | The `POINT` geometry describing the location of this public transport stop point |
-| `valtak_id` | INTEGER    | X        | The national ID for the stop point that is also known as _ELY number_ |
+| `valtak_id` | INTEGER    | X        | The national ID for the stop point that is also known as _ELY number_. The column has a unique constraint. |
 | `matk_tunn` | TEXT       | -        | The passenger ID for the stop point e.g. H1234 |
 | `nimi_su`   | TEXT       | -        | The name of stop point in Finnish |
 | `nimi_ru`   | TEXT       | -        | The name of stop point in Swedish |
