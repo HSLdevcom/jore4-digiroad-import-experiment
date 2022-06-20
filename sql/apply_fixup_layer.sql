@@ -122,8 +122,6 @@ WHERE
 
 ALTER TABLE :schema.fix_layer_stop_point
     ADD COLUMN internal_id int,
-    ADD COLUMN vaik_suunt int,
-    ADD COLUMN sijainti_m double precision,
     ADD COLUMN kuntakoodi int;
 
 CREATE INDEX fix_layer_stop_point_link_id_idx ON :schema.fix_layer_stop_point (link_id);
@@ -167,19 +165,36 @@ WHERE
         SELECT 1 FROM :schema.dr_linkki_fixup l WHERE l.link_id = s.link_id
     );
 
--- Resolve values for `vaik_suunt`, `sijainti_m` and `kuntakoodi` attributes.
+-- Compute values for `vaik_suunt` attribute in case of NULL values.
 UPDATE :schema.fix_layer_stop_point AS s
-SET (vaik_suunt, sijainti_m, kuntakoodi) = (
+SET vaik_suunt = (
     SELECT
         -- reusing Digiroad code values with regard to directionality of stop
         CASE
             WHEN ST_Covers(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=right'), s.geom) THEN 2
             WHEN ST_Covers(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=left'), s.geom) THEN 3
             ELSE NULL
-        END AS vaik_suunt,
+        END AS vaik_suunt
+    FROM :schema.dr_linkki_fixup l
+    WHERE l.link_id = s.link_id
+)
+WHERE s.vaik_suunt IS NULL;
+
+-- Compute values for `sijainti_m` attribute in case of NULL values.
+UPDATE :schema.fix_layer_stop_point AS s
+SET sijainti_m = (
+    SELECT
         -- First, resolve the fraction (0..1), then multiply it by the 3D length of the link.
-        ST_LineLocatePoint(ST_Force2D(l.geom), s.geom) * ST_3DLength(l.geom) AS sijainti_m,
-        l.kuntakoodi
+        ST_LineLocatePoint(ST_Force2D(l.geom), s.geom) * ST_3DLength(l.geom) AS sijainti_m
+    FROM :schema.dr_linkki_fixup l
+    WHERE l.link_id = s.link_id
+)
+WHERE s.sijainti_m IS NULL;
+
+-- Resolve values for `kuntakoodi` attribute.
+UPDATE :schema.fix_layer_stop_point AS s
+SET kuntakoodi = (
+    SELECT l.kuntakoodi
     FROM :schema.dr_linkki_fixup l
     WHERE l.link_id = s.link_id
 );

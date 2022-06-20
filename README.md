@@ -111,16 +111,18 @@ project. The data types are as they appear in the GeoPackage format (SQLite).
 The table below describes the columns of the `add_stop_points` layer in the QGIS
 project. The data types are as they appear in the GeoPackage format (SQLite).
 
-| Column name | Data type  | Not null | Description |
-| ----------- | ---------- | -------- | ----------- |
-| `fid`       | INTEGER    | X        | The primary key generated internally in GeoPackage. |
-| `geom`      | POINT      | X        | The `POINT` geometry describing the location of this public transport stop point |
-| `valtak_id` | INTEGER    | X        | The national ID for the stop point that is also known as _ELY number_. The column has a unique constraint. |
-| `matk_tunn` | TEXT       | -        | The passenger ID for the stop point e.g. H1234 |
-| `nimi_su`   | TEXT       | -        | The name of stop point in Finnish |
-| `nimi_ru`   | TEXT       | -        | The name of stop point in Swedish |
-| `link_id`   | TEXT       | -        | An optional reference to the infrastructure link along which the stop point is located. In case of `NULL` or unknown link ID, the link association will be calculated automatically during the import process. |
-| `notes`     | TEXT       | -        | Notes for/from traffic planner |
+| Column name  | Data type  | Not null | Description |
+| ------------ | ---------- | -------- | ----------- |
+| `fid`        | INTEGER    | X        | The primary key generated internally in GeoPackage. |
+| `geom`       | POINT      | X        | The `POINT` geometry describing the location of this public transport stop point |
+| `valtak_id`  | INTEGER    | X        | The national ID for the stop point that is also known as _ELY number_. The column has a unique constraint. |
+| `matk_tunn`  | TEXT       | -        | The passenger ID for the stop point e.g. H1234 |
+| `nimi_su`    | TEXT       | -        | The name of stop point in Finnish |
+| `nimi_ru`    | TEXT       | -        | The name of stop point in Swedish |
+| `link_id`    | TEXT       | -        | An optional reference to the infrastructure link along which the stop point is located. In case of `NULL` or unknown link ID, the link association will be calculated automatically during the import process. |
+| `vaik_suunt` | INTEGER    | -        | Whether the stop point is effective in the direction of the `LINESTRING` of the associated infrastructure link or its inverse. The value must be selected from the corresponding Digiroad code set. The field is optional. In case of `NULL` value, the direction code is computed automatically during the import process. |
+| `sijainti_m` | REAL       | -        | The distance in meters from the location of the stop point to the start point of the associated infrastructure link. The field is optional. In case of `NULL` value, the distance is calculated automatically during the import process. |
+| `notes`      | TEXT       | -        | Notes for/from traffic planner |
 
 ## Exporting Digiroad data
 
