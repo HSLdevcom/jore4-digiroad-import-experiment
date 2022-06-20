@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis saveDateTime="2022-06-17T13:52:50" saveUser="jarkko.kaura" version="3.24.3-Tisler" saveUserFull="Jarkko Kaura" projectname="">
+<qgis saveUserFull="Jarkko Kaura" saveDateTime="2022-06-20T12:51:37" version="3.24.3-Tisler" saveUser="jarkko.kaura" projectname="">
   <homePath path=""/>
   <title></title>
   <autotransaction active="0"/>
@@ -33500,6 +33500,13 @@ def my_form_open(dialog, layer, feature):
             </config>
           </editWidget>
         </field>
+        <field name="link_tila" configurationFlags="None">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
         <field name="tienimi_su" configurationFlags="None">
           <editWidget type="">
             <config>
@@ -33556,29 +33563,22 @@ def my_form_open(dialog, layer, feature):
             </config>
           </editWidget>
         </field>
-        <field name="link_tila" configurationFlags="None">
-          <editWidget type="">
-            <config>
-              <Option/>
-            </config>
-          </editWidget>
-        </field>
       </fieldConfiguration>
       <aliases>
-        <alias field="fid" name="" index="0"/>
-        <alias field="kuntakoodi" name="" index="1"/>
-        <alias field="linkkityyp" name="" index="2"/>
-        <alias field="ajosuunta" name="" index="3"/>
-        <alias field="silta_alik" name="" index="4"/>
-        <alias field="tienimi_su" name="" index="5"/>
-        <alias field="tienimi_ru" name="" index="6"/>
-        <alias field="is_generic_bus" name="" index="7"/>
-        <alias field="is_tall_electric_bus" name="" index="8"/>
-        <alias field="is_tram" name="" index="9"/>
-        <alias field="is_train" name="" index="10"/>
-        <alias field="is_metro" name="" index="11"/>
-        <alias field="is_ferry" name="" index="12"/>
-        <alias field="link_tila" name="" index="13"/>
+        <alias name="" index="0" field="fid"/>
+        <alias name="" index="1" field="kuntakoodi"/>
+        <alias name="" index="2" field="linkkityyp"/>
+        <alias name="" index="3" field="ajosuunta"/>
+        <alias name="" index="4" field="silta_alik"/>
+        <alias name="" index="5" field="link_tila"/>
+        <alias name="" index="6" field="tienimi_su"/>
+        <alias name="" index="7" field="tienimi_ru"/>
+        <alias name="" index="8" field="is_generic_bus"/>
+        <alias name="" index="9" field="is_tall_electric_bus"/>
+        <alias name="" index="10" field="is_tram"/>
+        <alias name="" index="11" field="is_train"/>
+        <alias name="" index="12" field="is_metro"/>
+        <alias name="" index="13" field="is_ferry"/>
       </aliases>
       <defaults>
         <default expression="" applyOnUpdate="0" field="fid"/>
@@ -33586,6 +33586,7 @@ def my_form_open(dialog, layer, feature):
         <default expression="" applyOnUpdate="0" field="linkkityyp"/>
         <default expression="" applyOnUpdate="0" field="ajosuunta"/>
         <default expression="" applyOnUpdate="0" field="silta_alik"/>
+        <default expression="" applyOnUpdate="0" field="link_tila"/>
         <default expression="" applyOnUpdate="0" field="tienimi_su"/>
         <default expression="" applyOnUpdate="0" field="tienimi_ru"/>
         <default expression="" applyOnUpdate="0" field="is_generic_bus"/>
@@ -33594,61 +33595,60 @@ def my_form_open(dialog, layer, feature):
         <default expression="" applyOnUpdate="0" field="is_train"/>
         <default expression="" applyOnUpdate="0" field="is_metro"/>
         <default expression="" applyOnUpdate="0" field="is_ferry"/>
-        <default expression="" applyOnUpdate="0" field="link_tila"/>
       </defaults>
       <constraints>
-        <constraint field="fid" exp_strength="0" unique_strength="1" notnull_strength="1" constraints="3"/>
-        <constraint field="kuntakoodi" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="linkkityyp" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="ajosuunta" exp_strength="0" unique_strength="0" notnull_strength="1" constraints="1"/>
-        <constraint field="silta_alik" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="tienimi_su" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="tienimi_ru" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="is_generic_bus" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="is_tall_electric_bus" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="is_tram" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="is_train" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="is_metro" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="is_ferry" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
-        <constraint field="link_tila" exp_strength="0" unique_strength="0" notnull_strength="0" constraints="0"/>
+        <constraint unique_strength="1" notnull_strength="1" constraints="3" exp_strength="0" field="fid"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="kuntakoodi"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="linkkityyp"/>
+        <constraint unique_strength="0" notnull_strength="1" constraints="1" exp_strength="0" field="ajosuunta"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="silta_alik"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="link_tila"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="tienimi_su"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="tienimi_ru"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="is_generic_bus"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="is_tall_electric_bus"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="is_tram"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="is_train"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="is_metro"/>
+        <constraint unique_strength="0" notnull_strength="0" constraints="0" exp_strength="0" field="is_ferry"/>
       </constraints>
       <constraintExpressions>
-        <constraint desc="" field="fid" exp=""/>
-        <constraint desc="" field="kuntakoodi" exp=""/>
-        <constraint desc="" field="linkkityyp" exp=""/>
-        <constraint desc="" field="ajosuunta" exp=""/>
-        <constraint desc="" field="silta_alik" exp=""/>
-        <constraint desc="" field="tienimi_su" exp=""/>
-        <constraint desc="" field="tienimi_ru" exp=""/>
-        <constraint desc="" field="is_generic_bus" exp=""/>
-        <constraint desc="" field="is_tall_electric_bus" exp=""/>
-        <constraint desc="" field="is_tram" exp=""/>
-        <constraint desc="" field="is_train" exp=""/>
-        <constraint desc="" field="is_metro" exp=""/>
-        <constraint desc="" field="is_ferry" exp=""/>
-        <constraint desc="" field="link_tila" exp=""/>
+        <constraint exp="" desc="" field="fid"/>
+        <constraint exp="" desc="" field="kuntakoodi"/>
+        <constraint exp="" desc="" field="linkkityyp"/>
+        <constraint exp="" desc="" field="ajosuunta"/>
+        <constraint exp="" desc="" field="silta_alik"/>
+        <constraint exp="" desc="" field="link_tila"/>
+        <constraint exp="" desc="" field="tienimi_su"/>
+        <constraint exp="" desc="" field="tienimi_ru"/>
+        <constraint exp="" desc="" field="is_generic_bus"/>
+        <constraint exp="" desc="" field="is_tall_electric_bus"/>
+        <constraint exp="" desc="" field="is_tram"/>
+        <constraint exp="" desc="" field="is_train"/>
+        <constraint exp="" desc="" field="is_metro"/>
+        <constraint exp="" desc="" field="is_ferry"/>
       </constraintExpressions>
       <expressionfields/>
       <attributeactions>
         <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
       </attributeactions>
-      <attributetableconfig sortExpression="&quot;fid&quot;" actionWidgetStyle="dropDown" sortOrder="0">
+      <attributetableconfig actionWidgetStyle="dropDown" sortOrder="0" sortExpression="&quot;fid&quot;">
         <columns>
-          <column width="-1" name="fid" type="field" hidden="0"/>
-          <column width="-1" name="kuntakoodi" type="field" hidden="0"/>
-          <column width="-1" name="linkkityyp" type="field" hidden="0"/>
-          <column width="-1" name="ajosuunta" type="field" hidden="0"/>
-          <column width="-1" name="silta_alik" type="field" hidden="0"/>
-          <column width="-1" name="tienimi_su" type="field" hidden="0"/>
-          <column width="-1" name="tienimi_ru" type="field" hidden="0"/>
-          <column width="-1" name="is_generic_bus" type="field" hidden="0"/>
-          <column width="-1" name="is_tall_electric_bus" type="field" hidden="0"/>
-          <column width="-1" name="is_tram" type="field" hidden="0"/>
-          <column width="-1" name="is_train" type="field" hidden="0"/>
-          <column width="-1" name="is_metro" type="field" hidden="0"/>
-          <column width="-1" name="is_ferry" type="field" hidden="0"/>
-          <column width="-1" name="link_tila" type="field" hidden="0"/>
-          <column width="-1" type="actions" hidden="1"/>
+          <column hidden="0" width="-1" name="fid" type="field"/>
+          <column hidden="0" width="-1" name="kuntakoodi" type="field"/>
+          <column hidden="0" width="-1" name="linkkityyp" type="field"/>
+          <column hidden="0" width="-1" name="ajosuunta" type="field"/>
+          <column hidden="0" width="-1" name="silta_alik" type="field"/>
+          <column hidden="0" width="-1" name="link_tila" type="field"/>
+          <column hidden="0" width="-1" name="tienimi_su" type="field"/>
+          <column hidden="0" width="-1" name="tienimi_ru" type="field"/>
+          <column hidden="0" width="-1" name="is_generic_bus" type="field"/>
+          <column hidden="0" width="-1" name="is_tall_electric_bus" type="field"/>
+          <column hidden="0" width="-1" name="is_tram" type="field"/>
+          <column hidden="0" width="-1" name="is_train" type="field"/>
+          <column hidden="0" width="-1" name="is_metro" type="field"/>
+          <column hidden="0" width="-1" name="is_ferry" type="field"/>
+          <column hidden="1" width="-1" type="actions"/>
         </columns>
       </attributetableconfig>
       <conditionalstyles>
