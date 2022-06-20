@@ -154,11 +154,11 @@ SET (link_id, kuntakoodi) = (
             OR
                 -- in the direction of LINESTRING
                 l.ajosuunta = 4
-                AND ST_Contains(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=right'), s.geom)
+                AND ST_Covers(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=right'), s.geom)
             OR
                 -- against the direction of LINESTRING
                 l.ajosuunta = 3
-                AND ST_Contains(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=left'), s.geom)
+                AND ST_Covers(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=left'), s.geom)
         )
     ORDER BY l.geom <-> s.geom ASC
     LIMIT 1
@@ -170,8 +170,8 @@ SET (vaik_suunt, sijainti_m) = (
     SELECT
         -- reusing Digiroad code values with regard to directionality of stop
         CASE
-            WHEN ST_Contains(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=right'), s.geom) THEN 2
-            WHEN ST_Contains(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=left'), s.geom) THEN 3
+            WHEN ST_Covers(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=right'), s.geom) THEN 2
+            WHEN ST_Covers(ST_Buffer(ST_Force2D(l.geom), 50.0, 'side=left'), s.geom) THEN 3
             ELSE NULL
         END AS vaik_suunt,
         -- First, resolve the fraction (0..1), then multiply it by the 3D length of the link.
