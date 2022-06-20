@@ -121,7 +121,6 @@ WHERE
 -- 
 
 ALTER TABLE :schema.fix_layer_stop_point
-    ADD COLUMN link_id text,
     ADD COLUMN internal_id int,
     ADD COLUMN vaik_suunt int,
     ADD COLUMN sijainti_m double precision,
@@ -136,14 +135,14 @@ CREATE INDEX fix_layer_stop_point_link_id_idx ON :schema.fix_layer_stop_point (l
 UPDATE :schema.fix_layer_stop_point SET internal_id = 1000000000 + fid;
 ALTER TABLE :schema.fix_layer_stop_point ALTER COLUMN internal_id SET NOT NULL;
 
--- Resolve `link_id` and `kuntakoodi` attribute values.
+-- Resolve values for `link_id` attribute.
 -- `link_id` is resolved as being the ID of the closest infrastructure link
 -- (either from Digiroad or fix layer). In case of one-way streets, a stop point
 -- must reside on the right-hand side with regard to the direction of traffic
 -- flow on the link.
 UPDATE :schema.fix_layer_stop_point AS s
-SET (link_id, kuntakoodi) = (
-    SELECT l.link_id, l.kuntakoodi
+SET link_id = (
+    SELECT l.link_id
     FROM :schema.dr_linkki_fixup l
     WHERE
         ST_DWithin(l.geom, s.geom, 50.0)
@@ -161,11 +160,16 @@ SET (link_id, kuntakoodi) = (
         )
     ORDER BY l.geom <-> s.geom ASC
     LIMIT 1
-);
+)
+WHERE
+    s.link_id IS NULL
+    OR NOT EXISTS (
+        SELECT 1 FROM :schema.dr_linkki_fixup l WHERE l.link_id = s.link_id
+    );
 
--- Resolve `vaik_suunt` and `sijainti_m` attribute values.
+-- Resolve values for `vaik_suunt`, `sijainti_m` and `kuntakoodi` attributes.
 UPDATE :schema.fix_layer_stop_point AS s
-SET (vaik_suunt, sijainti_m) = (
+SET (vaik_suunt, sijainti_m, kuntakoodi) = (
     SELECT
         -- reusing Digiroad code values with regard to directionality of stop
         CASE
@@ -174,7 +178,8 @@ SET (vaik_suunt, sijainti_m) = (
             ELSE NULL
         END AS vaik_suunt,
         -- First, resolve the fraction (0..1), then multiply it by the 3D length of the link.
-        ST_LineLocatePoint(ST_Force2D(l.geom), s.geom) * ST_3DLength(l.geom) AS sijainti_m
+        ST_LineLocatePoint(ST_Force2D(l.geom), s.geom) * ST_3DLength(l.geom) AS sijainti_m,
+        l.kuntakoodi
     FROM :schema.dr_linkki_fixup l
     WHERE l.link_id = s.link_id
 );
