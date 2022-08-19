@@ -9,7 +9,7 @@ INNER JOIN :schema.dr_linkki link USING (link_id);
 ALTER TABLE :schema.dr_pysakki_out
     ALTER COLUMN link_id TYPE text,
     ALTER COLUMN valtak_id TYPE int,
-    ALTER COLUMN kuntakoodi TYPE int,
+    ALTER COLUMN kuntakoodi TYPE int USING kuntakoodi::int,
     ALTER COLUMN vaik_suunt TYPE int,
     ALTER COLUMN nimi_su TYPE text,
     ALTER COLUMN nimi_ru TYPE text,
@@ -22,8 +22,7 @@ ALTER TABLE :schema.dr_pysakki_out
     ALTER COLUMN pyoratelin TYPE int,
     ALTER COLUMN s_aikataul TYPE int,
     ALTER COLUMN valaistus TYPE int,
-    ALTER COLUMN saattomahd TYPE int,
-    ALTER COLUMN irti_geom TYPE int;
+    ALTER COLUMN saattomahd TYPE int;
 
 ALTER TABLE :schema.dr_pysakki_out RENAME COLUMN gid TO id;
 

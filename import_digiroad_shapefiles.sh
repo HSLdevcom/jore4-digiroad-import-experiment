@@ -8,7 +8,7 @@ source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 
 AREA="UUSIMAA"
 
-SHP_URL="https://ava.vaylapilvi.fi/ava/Tie/Digiroad/Aineistojulkaisut/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/${AREA}.zip"
+SHP_URL="https://ava.vaylapilvi.fi/ava/Tie/Digiroad/Aineistojulkaisut/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/Maakuntajako_digiroad_R_EUREF-FIN/${AREA}.zip"
 
 DOWNLOAD_TARGET_DIR="${WORK_DIR}/zip"
 DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/${AREA}_R.zip"
@@ -30,10 +30,9 @@ do
 done
 
 # Extract shapefile for public transport stops (common to all sub-areas of Uusimaa).
-unzip -u $DOWNLOAD_TARGET_FILE PYSAKIT.zip -d $DOWNLOAD_TARGET_DIR/$AREA
-unzip -u $DOWNLOAD_TARGET_DIR/${AREA}/PYSAKIT.zip -d $SHP_FILE_DIR
-rm $DOWNLOAD_TARGET_DIR/${AREA}/PYSAKIT.zip
-rmdir $DOWNLOAD_TARGET_DIR/${AREA}
+unzip -u $DOWNLOAD_TARGET_FILE PYSAKIT/PYSAKIT.zip -d $DOWNLOAD_TARGET_DIR/$AREA
+unzip -u $DOWNLOAD_TARGET_DIR/${AREA}/PYSAKIT/PYSAKIT.zip -d $SHP_FILE_DIR
+rm -fr $DOWNLOAD_TARGET_DIR/${AREA}
 
 # Extract general Digiroad documents.
 unzip -u $DOWNLOAD_TARGET_FILE Dokumentit/* -d $DOWNLOAD_TARGET_DIR
