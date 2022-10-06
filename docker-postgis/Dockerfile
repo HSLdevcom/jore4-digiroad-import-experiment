@@ -12,8 +12,8 @@ RUN set -ex \
     gdal-bin \
  && rm -rf /var/lib/apt/lists/*
 
-ENV PGROUTING_VERSION 3.3.1
-ENV PGROUTING_SHA256 70b97a7abab1813984706dffafe29aeb3ad98fbe160fda074fd792590db106b6
+ENV PGROUTING_VERSION 3.4.0
+ENV PGROUTING_SHA256 bdc7917574419ebaef00ea3f6cb485101e00a718dd0edb50f18776f3911975a1
 
 # Build and install pgRouting from source.
 RUN set -ex \
