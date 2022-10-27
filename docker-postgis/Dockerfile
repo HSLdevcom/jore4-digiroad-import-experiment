@@ -20,7 +20,7 @@ RUN set -ex \
     ca-certificates \
     cmake \
     libboost-graph1.74.0 \
-    libboost-graph-dev \
+    libboost-graph1.74-dev \
     libcgal-dev \
     postgresql-server-dev-${PG_MAJOR} \
     wget \
@@ -46,7 +46,7 @@ RUN set -ex \
     ca-certificates \
     cmake \
     libboost-graph1.74.0 \
-    libboost-graph-dev \
+    libboost-graph1.74-dev \
     libcgal-dev \
     postgresql-server-dev-${PG_MAJOR} \
     wget \
