@@ -205,7 +205,7 @@ table (and schema) has to exist in the target database. Also note that the
 importer user must have read-write permissions to this table.
 
 The script will interactively ask for the connection parameters of the target
-database. They default to the parameters defined in the `jore4-flux` repository
+database. They default to the parameters defined in the `jore4-tools` repository
 for the `jore4e2e` database. You may set up the `jore4e2e` database locally with
 the `./start_dependencies.sh` script.
 
