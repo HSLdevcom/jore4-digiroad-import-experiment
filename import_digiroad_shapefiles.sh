@@ -8,7 +8,7 @@ source "$(cd "$(dirname "$0")"; pwd -P)/set_env_vars.sh"
 
 AREA="UUSIMAA"
 
-SHP_URL="https://ava.vaylapilvi.fi/ava/Tie/Digiroad/Aineistojulkaisut/latest/Maakuntajako_DIGIROAD_R_EUREF-FIN/${AREA}.zip"
+SHP_URL="https://ava.vaylapilvi.fi/ava/Tie/Digiroad/Aineistojulkaisut/latest/Maakuntajako_Digiroad_R/${AREA}.zip"
 
 DOWNLOAD_TARGET_DIR="${WORK_DIR}/zip"
 DOWNLOAD_TARGET_FILE="${DOWNLOAD_TARGET_DIR}/${AREA}_R.zip"
