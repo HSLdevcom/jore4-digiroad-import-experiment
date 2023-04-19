@@ -46,8 +46,7 @@ WHERE
 ALTER TABLE :schema.dr_linkki_out
     ALTER COLUMN link_id TYPE text,
     ALTER COLUMN tienimi_su TYPE text,
-    ALTER COLUMN tienimi_ru TYPE text,
-    ALTER COLUMN tienimi_sa TYPE text;
+    ALTER COLUMN tienimi_ru TYPE text;
 
 ALTER TABLE :schema.dr_linkki_out RENAME column gid TO id;
 
