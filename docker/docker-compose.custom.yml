@@ -1,6 +1,6 @@
 services:
   jore4-hasura:
-    image: "hsldevcom/jore4-hasura:main--e04e05996bf41fe7b3e75942f865b1f321e411b9"
+    image: "hsldevcom/jore4-hasura:hsl-main--20230418-ef6ce5740b17e02c7c75fd88bd4fb29d59b301f0"
     secrets:
       - source: db-jore3importer-username
         target: /mnt/secrets-store/db-jore3importer-username
